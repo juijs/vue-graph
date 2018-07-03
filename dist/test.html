@@ -1,0 +1,27 @@
+<html>
+<head>
+    <script src="build.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="title">{{ name }}</div>
+        <div class="row">
+            <div class="col">
+                <graph-line
+                        :width="600"
+                        :height="400"
+                        :shape="'curve'"
+                        :axis-min="0"
+                        :axis-reverse="false"
+                        :axis-x-style="'gradient'"
+                        :axis-y-style="'solid'"
+                        :labels="labels"
+                        :values="values"
+                >
+                    <note :text="title"></note>
+                </graph-line>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
