@@ -8,6 +8,7 @@
     "dist"
   ],
   "scripts": {
+    "start": "npm run dev",
     "dev": "webpack-dev-server --env dev",
     "prod": "webpack --env prod"
   },
@@ -28,6 +29,7 @@
   "author": "alvin.h <seogi777@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "compression-webpack-plugin": "^1.1.11",
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
