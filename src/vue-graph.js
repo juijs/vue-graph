@@ -1,5 +1,5 @@
-import GraphLine from './components/line.vue'
-import WidgetNote from './components/widgets/note.vue'
+import GraphLine from './components/line.js'
+import WidgetNote from './components/widgets/note.js'
 
 export default {
     install: function(Vue, options) {
@@ -9,4 +9,4 @@ export default {
         // 2. 위젯 추가 영역
         Vue.component(WidgetNote.name, WidgetNote);
     }
-}
+};

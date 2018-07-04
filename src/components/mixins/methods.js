@@ -3,13 +3,13 @@ import jui from 'juijs-chart'
 export default {
     methods: {
         convertToData: function(values) {
-            let _ = jui.include('util.base');
+            let util = jui.include('util.base');
             let data = [];
 
             for(let i = 0; i < values.length; i++) {
                 let val = values[i];
 
-                if(_.typeCheck('array', val)) {
+                if(util.typeCheck('array', val)) {
                     let row = {};
 
                     for(let j = 0; j < val.length; j++) {
@@ -17,7 +17,7 @@ export default {
                     }
 
                     data.push(row);
-                } else if(_.typeCheck('number', val)) {
+                } else if(util.typeCheck('number', val)) {
                     data.push({ 'col0' : val });
                 }
             }

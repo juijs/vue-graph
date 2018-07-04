@@ -1,0 +1,1 @@
+/* bundling type : vue + vue-graph + juijs */

@@ -1,4 +1,4 @@
-import jui from "juijs-chart";
+import jui from 'juijs-chart'
 
 export default {
     mounted: function() {
