@@ -40,6 +40,7 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "juijs-chart": "^2.1.0-rc.12"
+    "juijs-chart": "^2.1.0-rc.12",
+    "vue": "^2.5.16"
   }
 }
