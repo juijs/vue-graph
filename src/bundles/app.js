@@ -5,7 +5,7 @@ import VueGraph from '../main.js'
 
 Vue.use(VueGraph)
 
-new Vue({
+window.vm = new Vue({
     el: "#app",
     data: {
         name : "[Simple Dashboard]",

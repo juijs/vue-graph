@@ -23,6 +23,23 @@
                 </graph-line>
             </div>
         </div>
+        <br/>
+        <div class="row">
+            <div class="col">
+                <graph-bar
+                        :width="600"
+                        :height="400"
+                        :axis-min="0"
+                        :axis-reverse="true"
+                        :axis-x-style="'gradient'"
+                        :axis-y-style="'solid'"
+                        :labels="labels"
+                        :values="values"
+                >
+                    <note :text="title"></note>
+                </graph-bar>
+            </div>
+        </div>
     </div>
 </body>
 </html>
