@@ -13,12 +13,12 @@ export default {
                     let row = {};
 
                     for(let j = 0; j < val.length; j++) {
-                        row['col'+j] = val[j];
+                        row[''+j] = val[j];
                     }
 
                     data.push(row);
                 } else if(util.typeCheck('number', val)) {
-                    data.push({ 'col0' : val });
+                    data.push({ '0' : val });
                 }
             }
 
@@ -46,38 +46,8 @@ export default {
                 this.chart.addWidget(widget);
             }
         },
-        createBlockAndRangeAxes: function() {
-            let xAxis = {
-                type : 'block',
-                domain : this.labels,
-                line : this.axisXStyle,
-                orient : this.axisXPosition
-            }
 
-            let yAxis = {
-                type : 'range',
-                domain : this.getAxisMinAndMax(),
-                step : this.axisStep,
-                line : this.axisYStyle,
-                orient : this.axisXPosition
-            }
-
-            return {
-                width : this.width,
-                height : this.height,
-                padding : {
-                    top : this.paddingTop,
-                    right : this.paddingRight,
-                    bottom : this.paddingBottom,
-                    left : this.paddingLeft
-                },
-                axis : {
-                    x : (this.axisReverse) ? yAxis : xAxis,
-                    y : (this.axisReverse) ? xAxis : yAxis,
-                    data : this.convertToData(this.values)
-                },
-                render : false
-            }
-        }
+        // TODO: 인터페이스 함수, 타입별로 따로 구현해야 함
+        initGraphAxes: function() {}
     }
 }

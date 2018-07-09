@@ -1,5 +1,18 @@
 export default {
     props: {
+        colors: {
+            type: [ Array, Function ],
+            required: false
+        },
+        clip: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        format: {
+            type: Function,
+            required: false
+        },
         width: {
             type: Number,
             required: true
@@ -16,62 +29,62 @@ export default {
             type: Array,
             required: false
         },
-        'padding-top': {
+        paddingTop: {
             type: Number,
             required: false,
             default: 50
         },
-        'padding-right': {
+        paddingRight: {
             type: Number,
             required: false,
             default: 50
         },
-        'padding-bottom': {
+        paddingBottom: {
             type: Number,
             required: false,
             default: 50
         },
-        'padding-left': {
+        paddingLeft: {
             type: Number,
             required: false,
             default: 50
         },
-        'axis-min': {
+        axisMin: {
             type: Number,
             required: false,
             default: 0
         },
-        'axis-max': {
+        axisMax: {
             type: Number,
             required: false,
             default: 0
         },
-        'axis-step': {
+        axisStep: {
             type: Number,
             required: false,
             default: 10
         },
-        'axis-reverse': {
+        axisReverse: {
             type: Boolean,
             required: false,
             default: false
         },
-        'axis-x-style': {
+        axisXStyle: {
             type: String,
             required: false,
             default: 'solid' // or dotted, gradient
         },
-        'axis-y-style': {
+        axisYStyle: {
             type: String,
             required: false,
             default: 'solid' // or dotted, gradient
         },
-        'axis-x-position': {
+        axisXPosition: {
             type: String,
             required: false,
             default: 'bottom'
         },
-        'axis-y-position': {
+        axisYPosition: {
             type: String,
             required: false,
             default: 'left'

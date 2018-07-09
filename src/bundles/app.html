@@ -11,13 +11,17 @@
                 <graph-line
                         :width="600"
                         :height="400"
-                        :shape="'curve'"
+                        :shape="'normal'"
                         :axis-min="0"
                         :axis-reverse="false"
                         :axis-x-style="'gradient'"
                         :axis-y-style="'solid'"
                         :labels="labels"
                         :values="values"
+                        :display="'max'"
+                        :active-event="'click'"
+                        :colors="customColors"
+                        @click="testtest"
                 >
                     <note :text="title"></note>
                 </graph-line>
@@ -30,7 +34,7 @@
                         :width="600"
                         :height="400"
                         :axis-min="0"
-                        :axis-reverse="true"
+                        :axis-reverse="false"
                         :axis-x-style="'gradient'"
                         :axis-y-style="'solid'"
                         :labels="labels"
