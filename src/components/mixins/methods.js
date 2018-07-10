@@ -10,13 +10,14 @@ export default {
                 let val = values[i];
 
                 if(util.typeCheck('array', val)) {
-                    let row = {};
-
                     for(let j = 0; j < val.length; j++) {
-                        row[''+j] = val[j];
-                    }
+                        if(i == 0) {
+                            data.push({});
+                        }
 
-                    data.push(row);
+                        let row = data[j];
+                        row[''+i] = val[j]
+                    }
                 } else if(util.typeCheck('number', val)) {
                     data.push({ '0' : val });
                 }

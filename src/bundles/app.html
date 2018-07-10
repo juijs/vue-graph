@@ -8,14 +8,34 @@
         <div class="title">{{ name }}</div>
         <div class="row">
             <div class="col">
-                <graph-line
+                <!--<graph-line-dateblock-->
+                        <!--:width="600"-->
+                        <!--:height="400"-->
+                        <!--:shape="'normal'"-->
+                        <!--:axis-min="0"-->
+                        <!--:axis-reverse="false"-->
+                        <!--:axis-x-style="'gradient'"-->
+                        <!--:axis-y-style="'solid'"-->
+                        <!--:axis-interval="3600000"-->
+                        <!--:axis-format="'HH'"-->
+                        <!--:labels="labels"-->
+                        <!--:values="values"-->
+                        <!--:display="'max'"-->
+                        <!--:active-event="'click'"-->
+                        <!--:colors="customColors"-->
+                        <!--@click="testtest"-->
+                <!--&gt;-->
+                    <!--<note :text="title"></note>-->
+                <!--</graph-line-dateblock>-->
+
+                <graph-scatter
                         :width="600"
                         :height="400"
                         :shape="'normal'"
                         :axis-min="0"
-                        :axis-reverse="false"
-                        :axis-x-style="'gradient'"
-                        :axis-y-style="'solid'"
+                        :axis-max="100"
+                        :axis-interval="3600000"
+                        :axis-format="'HH'"
                         :labels="labels"
                         :values="values"
                         :display="'max'"
@@ -24,24 +44,13 @@
                         @click="testtest"
                 >
                     <note :text="title"></note>
-                </graph-line>
+                </graph-scatter>
             </div>
         </div>
         <br/>
         <div class="row">
             <div class="col">
-                <graph-bar
-                        :width="600"
-                        :height="400"
-                        :axis-min="0"
-                        :axis-reverse="false"
-                        :axis-x-style="'gradient'"
-                        :axis-y-style="'solid'"
-                        :labels="labels"
-                        :values="values"
-                >
-                    <note :text="title"></note>
-                </graph-bar>
+
             </div>
         </div>
     </div>

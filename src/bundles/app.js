@@ -5,12 +5,24 @@ import VueGraph from '../main.js'
 
 Vue.use(VueGraph)
 
+
 window.vm = new Vue({
     el: "#app",
     data: {
         name : "[Simple Dashboard]",
-        labels: [ "1qqq", "2q", "3q", "4q" ],
-        values: [ [ 35, 28, 10 ], [ -20, 10, 30 ], [ -20, 10, 30 ], [ -20, 10, 30 ] ],
+        labels: [ new Date('2018-07-09 00:00:00'), new Date('2018-07-10 00:00:00') ],
+        // values: [
+        //     [ 35, 5, 10, 15 ],
+        //     [ 28, 10, 5, 15 ],
+        //     [ 10, 30, 15, 35 ]
+        // ],
+        values: [
+            [ new Date('2018-07-09 05:23:00'), 20 ],
+            [ new Date('2018-07-09 12:00:00'), 15 ],
+            [ new Date('2018-07-09 15:55:00'), 12 ],
+            [ new Date('2018-07-09 19:01:00'), 30 ]
+        ]
+        ,
         title: "Line Test"
     },
     // computed: {
@@ -23,10 +35,10 @@ window.vm = new Vue({
             console.log(obj)
         },
         customColors: function(data, index) {
-            console.log(data)
-            var colors = [ "red", "blue", "yellow" ];
+            // var colors = [ "red", "blue", "yellow" ];
+            // return colors[index];
 
-            return colors[index];
+            return [ 0, 1, 2, 3, 4, 5 ];
         }
     }
 });

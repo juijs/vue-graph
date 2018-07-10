@@ -1,14 +1,14 @@
 import props from './mixins/props.js'
 import watch from './mixins/watch.js'
-import methods from './mixins/methods.js'
-import methods_axes from './mixins/methods.block-and-range.js'
 import created from './mixins/created.js'
 import mounted from './mixins/mounted.js'
+import methods from './mixins/methods.js'
+import methods_axes from './mixins/methods.block.js'
 
 export default {
     name: 'graph-bar',
     template: '<div><slot></slot></div>',
-    mixins: [ props, watch, methods, methods_axes, created, mounted ],
+    mixins: [ props, watch, created, mounted, methods, methods_axes ],
     props: {
         size: {
             type: Number,
