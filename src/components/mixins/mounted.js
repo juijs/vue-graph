@@ -94,8 +94,10 @@ export default {
             render: false,
             axis: this.initGraphAxes()
         });
+
         this.initGraphBrushes();
         this.initGraphWidgets();
+
         this.chart.render(true);
     }
 }

@@ -1,3 +1,4 @@
+import graph_base from './base.js'
 import props from './mixins/props.js'
 import watch from './mixins/watch.js'
 import created from './mixins/created.js'
@@ -7,8 +8,7 @@ import methods_axes from './mixins/methods.block.js'
 
 export default {
     name: 'graph-bar',
-    template: '<div><slot></slot></div>',
-    mixins: [ props, watch, created, mounted, methods, methods_axes ],
+    mixins: [ graph_base, props, watch, created, mounted, methods, methods_axes ],
     props: {
         size: {
             type: Number,
@@ -44,7 +44,7 @@ export default {
         }
     },
     beforeMount: function() {
-        this.brushes.push({
+        this.brushes = [{
             type: this.axisReverse ? 'bar' : 'column',
             clip: this.clip,
             colors: this.colors,
@@ -55,6 +55,6 @@ export default {
             minSize: this.minSize,
             outerPadding: this.margin,
             innerPadding: this.padding
-        });
+        }];
     }
 }

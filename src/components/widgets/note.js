@@ -1,11 +1,41 @@
+import graph_base from './base.js'
+
 export default {
     name: 'note',
-    template: '<span style="display: none;"></span>',
+    mixins: [ graph_base ],
     props: {
         text: {
             type: String,
             required: true,
             default: ''
+        },
+        align: {
+            type: String,
+            required: false,
+            default: 'center' // or left, right
+        },
+        verticalAlign: {
+            typ: String,
+            required: false,
+            default: 'top' // or bottom, middle
+        },
+        dx: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        dy: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        size: {
+            type: Number,
+            required: false
+        },
+        color: {
+            type: String,
+            required: false
         }
     },
     watch: {
@@ -18,12 +48,27 @@ export default {
         }
     },
     beforeMount: function(e) {
-        if(this.$root == this.$parent) return;
+        const ORIENT_MAP = {
+            top: 'top',
+            middle: 'center',
+            bottom: 'bottom'
+        };
 
-        this.index = this.$parent.widgets.length;
+        const ALIGN_MAP = {
+            left: 'start',
+            center: 'middle',
+            right: 'end'
+        }
+
         this.$parent.widgets.push({
             type: 'title',
-            text: this.text
+            text: this.text,
+            orient: ORIENT_MAP[this.verticalAlign],
+            align: ALIGN_MAP[this.align],
+            dx: this.dx,
+            dy: this.dy,
+            size: this.size,
+            color: this.color
         });
     }
 }

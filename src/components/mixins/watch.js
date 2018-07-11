@@ -16,5 +16,5 @@ export default {
             this.chart.axis(0).update(this.convertToData(newVal));
             this.chart.render();
         }
-    },
+    }
 }

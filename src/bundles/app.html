@@ -28,7 +28,7 @@
                     <!--<note :text="title"></note>-->
                 <!--</graph-line-dateblock>-->
 
-                <graph-scatter
+                <graph-line-timerange
                         :width="600"
                         :height="400"
                         :shape="'normal'"
@@ -43,8 +43,8 @@
                         :colors="customColors"
                         @click="testtest"
                 >
-                    <note :text="title"></note>
-                </graph-scatter>
+                    <note :text="title" :align="'left'"></note>
+                </graph-line-timerange>
             </div>
         </div>
         <br/>

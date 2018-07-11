@@ -1,3 +1,4 @@
+import graph_base from './base.js'
 import watch from './mixins/watch.js'
 import created from './mixins/created.js'
 import mounted from './mixins/mounted.js'
@@ -8,13 +9,12 @@ import methods_axes from './mixins/methods.timerange.js'
 
 export default {
     name: 'graph-scatter',
-    template: '<div><slot></slot></div>',
-    mixins: [ props, pros_axes, watch, created, mounted, methods, methods_axes ],
+    mixins: [ graph_base, props, pros_axes, watch, created, mounted, methods, methods_axes ],
     props: {
         shape: {
-            type: String, // "normal", "curve", "step"
+            type: String, // circle", "triangle", "rectangle", "cross"
             required: false,
-            default: 'normal'
+            default: 'circle'
         },
         activeEvent: {
             type: String, // "click", "dblclick", ...
@@ -27,10 +27,25 @@ export default {
         opacity: {
             type: Number,
             required: false
+        },
+        size: {
+            type: Number,
+            required: false,
+            size: 7
+        },
+        hide: {
+            type: Boolean,
+            required: false,
+            size: false
+        },
+        hideZero: {
+            type: Boolean,
+            required: false,
+            size: false
         }
     },
     beforeMount: function() {
-        this.brushes.push({
+        this.brushes = [{
             type: 'scatter',
             target: [ '1' ],
             clip: this.clip,
@@ -38,7 +53,10 @@ export default {
             symbol: this.shape,
             activeEvent: this.activeEvent,
             display: this.display,
-            opacity: this.opacity
-        });
+            opacity: this.opacity,
+            size: this.size,
+            hide: this.hide,
+            hideZero: this.hideZero
+        }];
     }
 }
