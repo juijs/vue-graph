@@ -48,46 +48,6 @@ export default {
             type: Number,
             required: false,
             default: 50
-        },
-        axisMin: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        axisMax: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        axisStep: {
-            type: Number,
-            required: false,
-            default: 10
-        },
-        axisReverse: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        axisXStyle: {
-            type: String,
-            required: false,
-            default: 'solid' // or dotted, gradient
-        },
-        axisYStyle: {
-            type: String,
-            required: false,
-            default: 'solid' // or dotted, gradient
-        },
-        axisXPosition: {
-            type: String,
-            required: false,
-            default: 'bottom'
-        },
-        axisYPosition: {
-            type: String,
-            required: false,
-            default: 'left'
         }
     }
 }

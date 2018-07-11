@@ -26,6 +26,7 @@ export default {
                 interval : this.axisInterval,
                 format : this.axisFormat,
                 line : this.axisXStyle,
+                hide : this.axisXStyle == "hidden",
                 orient : this.axisXPosition,
                 key : '0'
             }
@@ -35,7 +36,8 @@ export default {
                 domain : [ this.axisMin, this.axisMax ],
                 step : this.axisStep,
                 line : this.axisYStyle,
-                orient : this.axisXPosition
+                hide : this.axisYStyle == "hidden",
+                orient : this.axisYPosition
             }
 
             return {

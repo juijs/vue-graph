@@ -8,7 +8,7 @@ export default {
         axisMax: {
             type: Number,
             required: false,
-            default: 100
+            default: 0
         },
         axisStep: {
             type: Number,
@@ -40,17 +40,6 @@ export default {
             type: Boolean,
             required: false,
             default: false
-        },
-
-        axisInterval: {
-            type: Number,
-            required: true,
-            default: 1000 * 60 * 60 // 1시간
-        },
-        axisFormat: {
-            type: [ String, Function ],
-            required: true,
-            default: 'HH' // 1시간
         }
     }
 }

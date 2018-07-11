@@ -8,7 +8,7 @@ export default {
         axisMax: {
             type: Number,
             required: false,
-            default: 100
+            default: 0
         },
         axisStep: {
             type: Number,
@@ -19,38 +19,42 @@ export default {
         axisXStyle: {
             type: String,
             required: false,
-            default: 'solid' // or dotted, gradient, hidden
+            default: 'solid' // or hidden
         },
         axisYStyle: {
             type: String,
             required: false,
-            default: 'solid' // or dotted, gradient, hidden
+            default: 'solid' // or hidden
         },
-        axisXPosition: {
+        axisZStyle: {
             type: String,
             required: false,
-            default: 'bottom'
+            default: 'solid' // or hidden
         },
-        axisYPosition: {
-            type: String,
+        angleX: {
+            type: Number,
             required: false,
-            default: 'left'
+            default: 30
         },
-        axisReverse: {
-            type: Boolean,
+        angleY: {
+            type: Number,
             required: false,
-            default: false
+            default: 20
+        },
+        angleZ: {
+            type: Number,
+            required: false,
+            default: 0
         },
 
-        axisInterval: {
+        depth: {
             type: Number,
-            required: true,
-            default: 1000 * 60 * 60 // 1시간
+            required: true
         },
-        axisFormat: {
-            type: [ String, Function ],
-            required: true,
-            default: 'HH' // 1시간
+        perspective: {
+            type: Number,
+            required: false,
+            default: 0.6
         }
     }
 }

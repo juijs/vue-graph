@@ -9,7 +9,7 @@ import methods_axes from './mixins/methods-timerange.js'
 
 export default {
     name: 'graph-scatter',
-    mixins: [ graph_base, props, pros_axes, watch, created, mounted, methods, methods_axes ],
+    mixins: [ graph_base, watch, created, mounted, props, pros_axes, methods, methods_axes ],
     props: {
         shape: {
             type: String, // circle", "triangle", "rectangle", "cross"

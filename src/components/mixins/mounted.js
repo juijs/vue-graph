@@ -3,6 +3,7 @@ import jui from 'juijs-chart'
 export default {
     mounted: function() {
         var self = this;
+
         if(this.brushes.length == 0) {
             throw new Error('[Vue Graph error]: At least one brush must be added to \'brushes\' variable.')
         }
