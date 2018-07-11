@@ -3,9 +3,9 @@ import watch from './mixins/watch.js'
 import created from './mixins/created.js'
 import mounted from './mixins/mounted.js'
 import props from './mixins/props.js'
-import pros_axes from './mixins/props.timerange.js'
+import pros_axes from './mixins/props-timerange.js'
 import methods from './mixins/methods.js'
-import methods_axes from './mixins/methods.timerange.js'
+import methods_axes from './mixins/methods-timerange.js'
 
 export default {
     name: 'graph-scatter',

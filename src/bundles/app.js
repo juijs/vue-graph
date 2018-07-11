@@ -23,7 +23,9 @@ window.vm = new Vue({
             [ new Date('2018-07-09 19:01:00'), 30 ]
         ]
         ,
-        title: "Line Test"
+        title: "Line Test",
+        min: 10,
+        max: 50
     },
     // computed: {
     //     customColors: function() {

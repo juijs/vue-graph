@@ -8,21 +8,22 @@
         <div class="title">{{ name }}</div>
         <div class="row">
             <div class="col">
-                <graph-line
+                <graph-line-dateblock
                         :width="600"
                         :height="400"
-                        :shape="'curve'"
                         :axis-min="0"
                         :axis-max="100"
                         :axis-reverse="false"
                         :axis-x-style="'gradient'"
                         :axis-y-style="'solid'"
+                        :axis-format="'HH:mm'"
+                        :axis-interval="1000 * 60 * 60 * 8"
                         :labels="labels"
                         :values="values"
                 >
                     <notes :text="title"></notes>
                     <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
-                </graph-line>
+                </graph-line-dateblock>
             </div>
         </div>
     </div>
@@ -31,11 +32,11 @@
             el: "#app",
             data: {
                 name : "[Simple Dashboard]",
-                labels: [ "1q", "2q", "3q", "4q" ],
+                labels: [ new Date("2018-07-07 00:00:00"), new Date("2018-07-08 00:00:00") ],
                 values: [
-                    [ 10, 5, 5, 5 ],
+                    [ 10, 0, 5, 5 ],
                     [ 40, 10, 10, 10 ],
-                    [ 30, 30, 30, 30 ]
+                    [ 30, 25, 35, 30 ]
                 ],
                 title: "Line Test"
             }

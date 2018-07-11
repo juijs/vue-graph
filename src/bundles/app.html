@@ -8,32 +8,12 @@
         <div class="title">{{ name }}</div>
         <div class="row">
             <div class="col">
-                <!--<graph-line-dateblock-->
-                        <!--:width="600"-->
-                        <!--:height="400"-->
-                        <!--:shape="'normal'"-->
-                        <!--:axis-min="0"-->
-                        <!--:axis-reverse="false"-->
-                        <!--:axis-x-style="'gradient'"-->
-                        <!--:axis-y-style="'solid'"-->
-                        <!--:axis-interval="3600000"-->
-                        <!--:axis-format="'HH'"-->
-                        <!--:labels="labels"-->
-                        <!--:values="values"-->
-                        <!--:display="'max'"-->
-                        <!--:active-event="'click'"-->
-                        <!--:colors="customColors"-->
-                        <!--@click="testtest"-->
-                <!--&gt;-->
-                    <!--<note :text="title"></note>-->
-                <!--</graph-line-dateblock>-->
-
                 <graph-line-timerange
                         :width="600"
                         :height="400"
                         :shape="'normal'"
-                        :axis-min="0"
-                        :axis-max="100"
+                        :axis-min="min"
+                        :axis-max="max"
                         :axis-interval="3600000"
                         :axis-format="'HH'"
                         :labels="labels"
@@ -43,7 +23,8 @@
                         :colors="customColors"
                         @click="testtest"
                 >
-                    <note :text="title" :align="'left'"></note>
+                    <notes :text="title" :align="'left'"></notes>
+                    <legends :names="[ 'Date', 'Value' ]"></legends>
                 </graph-line-timerange>
             </div>
         </div>

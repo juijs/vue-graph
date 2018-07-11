@@ -8,7 +8,7 @@
         <div class="title">{{ name }}</div>
         <div class="row">
             <div class="col">
-                <graph-line
+                <graph-bar
                         :width="600"
                         :height="400"
                         :shape="'curve'"
@@ -21,8 +21,8 @@
                         :values="values"
                 >
                     <notes :text="title"></notes>
-                    <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
-                </graph-line>
+                    <legends :names="[ 'MS', 'Apple', 'Google' ]" :filter="true"></legends>
+                </graph-bar>
             </div>
         </div>
     </div>

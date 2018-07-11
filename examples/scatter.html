@@ -1,0 +1,61 @@
+<html>
+<head>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="title">{{ name }}</div>
+        <div class="row">
+            <div class="col">
+                <graph-scatter
+                        :width="600"
+                        :height="400"
+                        :shape="'normal'"
+                        :axis-min="0"
+                        :axis-max="50"
+                        :axis-interval="3600000"
+                        :axis-format="'HH'"
+                        :labels="labels"
+                        :values="values"
+                        :display="'max'"
+                        :active-event="'click'"
+                        :colors="customColors"
+                        @click="testtest"
+                >
+                    <notes :text="title" :align="'left'"></notes>
+                    <legends :names="[ 'Date', 'Value' ]"></legends>
+                </graph-scatter>
+            </div>
+        </div>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                name : "[Simple Dashboard]",
+                labels: [ new Date('2018-07-09 00:00:00'), new Date('2018-07-10 00:00:00') ],
+                values: [
+                    [ new Date('2018-07-09 05:23:00'), 20 ],
+                    [ new Date('2018-07-09 12:00:00'), 15 ],
+                    [ new Date('2018-07-09 15:55:00'), 12 ],
+                    [ new Date('2018-07-09 19:01:00'), 30 ]
+                ]
+                ,
+                title: "Line Test"
+            },
+            methods: {
+                testtest: function(obj, e) {
+                    console.log(obj)
+                },
+                customColors: function(data, index) {
+                    // var colors = [ "red", "blue", "yellow" ];
+                    // return colors[index];
+
+                    return [ 0, 1, 2, 3, 4, 5 ];
+                }
+            }
+        });
+    </script>
+</body>
+</html>

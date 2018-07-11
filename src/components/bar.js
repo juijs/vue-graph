@@ -4,7 +4,7 @@ import watch from './mixins/watch.js'
 import created from './mixins/created.js'
 import mounted from './mixins/mounted.js'
 import methods from './mixins/methods.js'
-import methods_axes from './mixins/methods.block.js'
+import methods_axes from './mixins/methods-block.js'
 
 export default {
     name: 'graph-bar',

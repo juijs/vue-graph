@@ -1,6 +1,6 @@
 import graph_line from './line.js'
-import props_axes from "./mixins/props.timerange";
-import methods_axes from "./mixins/methods.timerange";
+import props_axes from "./mixins/props-timerange";
+import methods_axes from "./mixins/methods-timerange";
 
 export default {
     name: 'graph-line-timerange',
