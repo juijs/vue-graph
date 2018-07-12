@@ -5,6 +5,8 @@ import GraphLine3d from './components/line3d.js'
 import GraphLineForDateBlock from './components/line-dateblock.js'
 import GraphLineForTimeRange from './components/line-timerange.js'
 import GraphScatter from './components/scatter.js'
+import GraphBubble from './components/bubble.js'
+import GraphArea from './components/area.js'
 import WidgetNote from './components/widgets/note.js'
 import WidgetTooltip from './components/widgets/tooltip.js'
 import WidgetGuideline from './components/widgets/guideline.js'
@@ -21,6 +23,8 @@ export default {
         Vue.component(GraphLineForDateBlock.name, GraphLineForDateBlock);
         Vue.component(GraphLineForTimeRange.name, GraphLineForTimeRange);
         Vue.component(GraphScatter.name, GraphScatter);
+        Vue.component(GraphBubble.name, GraphBubble);
+        Vue.component(GraphArea.name, GraphArea);
 
         // 2. 위젯 추가 영역
         Vue.component(WidgetNote.name, WidgetNote);

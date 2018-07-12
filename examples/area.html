@@ -1,0 +1,40 @@
+<html>
+<head>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+    <div id="app">
+        <graph-area
+            :width="800"
+            :height="400"
+            :shape="'normal'"
+            :axis-x-style="'gradient'"
+            :axis-y-style="'solid'"
+            :labels="labels"
+            :values="values"
+            :opacity="0.6"
+            :borderline="true"
+        >
+        <note :text="title"></note>
+        <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
+        <guideline :tooltip-y="true"></guideline>
+    </graph-area>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                name : "[Simple Dashboard]",
+                labels: [ "1q", "2q", "3q", "4q" ],
+                values: [
+                    [ 10, 5, 5, 5 ],
+                    [ 40, 10, 10, 10 ],
+                    [ 30, 30, 30, 30 ]
+                ],
+                title: "Area Test"
+            }
+        });
+    </script>
+</body>
+</html>

@@ -6,6 +6,7 @@ export default {
     beforeMount: function() {
         this.brushes = [{
             type: 'polygon.line3d',
+            colors: this.colors,
             padding: this.padding
         }];
     }

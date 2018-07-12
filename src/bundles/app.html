@@ -5,34 +5,21 @@
 </head>
 <body>
     <div id="app">
-        <div class="title">{{ name }}</div>
-        <div class="row">
-            <div class="col">
-                <graph-line3d
-                        :width="800"
-                        :height="600"
-                        :axis-min="0"
-                        :axis-max="50"
-                        :padding-top="100"
-                        :padding-bottom="100"
-                        :depth="180"
-                        :labels="labels"
-                        :values="values"
-                        :names="names"
-                >
-                    <note :text="title" :align="'left'"></note>
-                    <tooltip :names="names" :position="'left'"></tooltip>
-                    <legends :names="names"></legends>
-                    <rotate3d></rotate3d>
-                </graph-line3d>
-            </div>
-        </div>
-        <br/>
-        <div class="row">
-            <div class="col">
-
-            </div>
-        </div>
+        <graph-area
+                :width="800"
+                :height="400"
+                :shape="'normal'"
+                :axis-x-style="'gradient'"
+                :axis-y-style="'solid'"
+                :labels="labels"
+                :values="values"
+                :opacity="0.6"
+                :borderline="true"
+        >
+            <note :text="title"></note>
+            <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
+            <guideline :tooltip-y="true"></guideline>
+        </graph-area>
     </div>
 </body>
 </html>

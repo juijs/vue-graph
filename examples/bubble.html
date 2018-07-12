@@ -8,7 +8,7 @@
         <div class="title">{{ name }}</div>
         <div class="row">
             <div class="col">
-                <graph-scatter
+                <graph-bubble
                         :width="600"
                         :height="400"
                         :shape="'normal'"
@@ -20,12 +20,13 @@
                         :values="values"
                         :display="'max'"
                         :active-event="'click'"
+                        :show-text="true"
                         :colors="customColors"
                         @click="testtest"
                 >
                     <note :text="title" :align="'left'"></note>
                     <legends :names="[ 'Date', 'Value' ]"></legends>
-                </graph-scatter>
+                </graph-bubble>
             </div>
         </div>
     </div>
@@ -49,10 +50,8 @@
                     console.log(obj)
                 },
                 customColors: function(data, index) {
-                    // var colors = [ "red", "blue", "yellow" ];
-                    // return colors[index];
-
-                    return [ "red", 1, 2, 3, 4, 5 ];
+                    if(data[1] > 15) return "red";
+                    return "blue";
                 }
             }
         });

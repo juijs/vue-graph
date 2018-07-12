@@ -24,6 +24,7 @@ export default {
     beforeMount: function() {
         this.brushes = [{
             type: 'polygon.column3d',
+            colors: this.colors,
             padding: this.padding
         }];
     }
