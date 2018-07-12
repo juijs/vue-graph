@@ -20,7 +20,8 @@
                         :labels="labels"
                         :values="values"
                 >
-                    <notes :text="title"></notes>
+                    <note :text="title"></note>
+                    <tooltip :names="[ 'MS', 'Apple', 'Google' ]" :position="'left'"></tooltip>
                     <legends :names="[ 'MS', 'Apple', 'Google' ]" :filter="true"></legends>
                 </graph-bar>
             </div>

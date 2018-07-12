@@ -1,7 +1,7 @@
 import graph_base from './base.js'
 
 export default {
-    name: 'notes',
+    name: 'note',
     mixins: [ graph_base ],
     props: {
         text: {

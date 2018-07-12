@@ -20,8 +20,10 @@
                         :labels="labels"
                         :values="values"
                 >
-                    <notes :text="title"></notes>
+                    <note :text="title"></note>
+                    <tooltip :names="[ 'MS', 'Apple', 'Google' ]" :position="'right'"></tooltip>
                     <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
+                    <guideline :tooltip-y="true"></guideline>
                 </graph-line>
             </div>
         </div>
