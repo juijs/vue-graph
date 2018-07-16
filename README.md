@@ -73,6 +73,6 @@ var vm = new Vue({
 ## Props
 
 ### Common
-| Name             | Type           | Default     | Description                                                                                                                                                                                                                                       | Example                                                                      |
+| Name | Type | Required | Default | Description
 | ---------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| data             | Number\|Object | `undefined` | The data accepted by Vue Trend is incredibly simple: An array of y-axis values to graph.   
+| label             | Array | true | `undefined` | test |
