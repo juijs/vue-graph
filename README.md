@@ -82,10 +82,10 @@ var vm = new Vue({
 | format             | Function | false | true | `undefined` | A callback function that allows you to customize the axis values of the chart |
 | width             | Number | true | true | `undefined` | The width of the chart |
 | height             | Number | true | true | `undefined` | The height of the chart |
-| paddingTop             | Number | false | false | 50 | |
-| paddingRight             | Number | false | false | 50 | |
-| paddingBottom             | Number | false | false | 50 | |
-| paddingLeft             | Number | false | false | 50 | |
+| paddingTop             | Number | false | false | 50 | Top padding of the chart |
+| paddingRight             | Number | false | false | 50 | Right padding of the chart |
+| paddingBottom             | Number | false | false | 50 | Bottom padding of the chart |
+| paddingLeft             | Number | false | false | 50 | Left padding of the chart |
 | labels            | Array | true | true | `undefined` | Label of chart data |
 | values             | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 | names             | Array | false | false | `undefined` | It is a chart data value, and the format may be different for each chart type |
