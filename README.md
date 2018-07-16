@@ -108,8 +108,13 @@ There are many charts that have not yet been migrated. We are going to continue.
 | values             | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 | names             | Array | false | false | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
-### Charts
+### Props by chart
 Preparing...
 
-### Widgets
+### Props by widget
+preparing...
+
+
+## Events
+
 preparing...
