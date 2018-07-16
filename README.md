@@ -27,7 +27,7 @@ Just download `dist/vue-graph.js` and include it in your HTML file:
 
 ```js
 import Vue from 'vue'
-import VueGraph from 'vue-graph/src/vue-graph.js'
+import VueGraph from '/src/vue-graph.js'
 
 Vue.use(VueGraph)
 ```
