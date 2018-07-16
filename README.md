@@ -89,3 +89,5 @@ var vm = new Vue({
 | labels            | Array | true | true | `undefined` | Label of chart data |
 | values             | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 | names             | Array | false | false | `undefined` | It is a chart data value, and the format may be different for each chart type |
+
+## Implemented chart list
