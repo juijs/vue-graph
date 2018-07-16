@@ -15,6 +15,9 @@ window.vm = new Vue({
             [ 40, 10, 10, 10 ],
             [ 30, 30, 30, 30 ]
         ],
-        title: "Area Test"
+        title: "Area Test",
+        css: {
+            colors: [ "red", "blue", "yellow" ]
+        }
     }
 });

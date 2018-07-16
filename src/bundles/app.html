@@ -8,6 +8,8 @@
         <graph-area
                 :width="800"
                 :height="400"
+                :axis-min="0"
+                :axis-max="100"
                 :shape="'normal'"
                 :axis-x-style="'gradient'"
                 :axis-y-style="'solid'"
@@ -15,6 +17,8 @@
                 :values="values"
                 :opacity="0.6"
                 :borderline="true"
+                :styles="css"
+                :theme="'dark'"
         >
             <note :text="title"></note>
             <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>

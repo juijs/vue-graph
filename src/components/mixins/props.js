@@ -1,5 +1,14 @@
 export default {
     props: {
+        theme: {
+            type: String,
+            required: false,
+            default: "jennifer"
+        },
+        styles: {
+            type: Object,
+            required: false
+        },
         colors: {
             type: [ Array, Function ],
             required: false
