@@ -1,6 +1,6 @@
 # vue-graph
 
-> A vue component library based on the [jui](http://jui.io/?p=gallery) charts available in vuejs.
+> A vue component library based on the [jui charts](http://jui.io/?p=chart) available in vuejs.
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/made-with-vue.svg)](http://forthebadge.com)
