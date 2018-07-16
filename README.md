@@ -69,3 +69,5 @@ var vm = new Vue({
     }
 });
 ```
+
+### Props
