@@ -76,7 +76,10 @@ var vm = new Vue({
 | Name | Type | Required | Watch | Default | Description
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | theme             | String | false | false | `jennifer` | Supports a total of five themes (jennifer, dark, pastel, gradient, pattern) |
-| styles             | Object | false | false | `undefined` | Options to customize chart theme properties ([Link](http://chartplay.jui.io/)) |
+| styles             | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
+| colors             | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
+| clip             | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
+| format             | Function | false | true | `undefined` | A callback function that allows you to customize the axis values of the chart |
 | width             | Number | true | true | `undefined` | The width of the chart |
 | height             | Number | true | true | `undefined` | The height of the chart |
 | paddingTop             | Number | false | false | 50 | |
