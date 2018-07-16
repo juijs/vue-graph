@@ -78,4 +78,4 @@ var vm = new Vue({
 | width             | Number | true | true | `undefined` | The width of the chart |
 | height             | Number | true | true | `undefined` | The height of the chart |
 | labels            | Array | true | true | `undefined` | Label of chart data |
-| values             | Array | false | true | `undefined` | Chart data, chart types may be different formats |
+| values             | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
