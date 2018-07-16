@@ -53,9 +53,7 @@ The following is a link you can test with [CodePen](https://codepen.io/collectio
     </graph-bar>
 </div>
 ```
-In the following code, the chart is prefixed with 'graph-' for each type.
-
-The widget can be added as a child node of the chart, unlike a chart, was named without a prefix.
+In the following code, the chart is prefixed with 'graph-' for each type. The widget can be added as a child node of the chart, unlike a chart, was named without a prefix.
 
 ```js
 var vm = new Vue({
