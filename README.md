@@ -93,4 +93,6 @@ var vm = new Vue({
 ## Implemented chart list
 
 There are many charts that have not yet been migrated. We are going to continue.
- - test
+ - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
+ - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva)
+ - 
