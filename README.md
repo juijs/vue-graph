@@ -32,8 +32,7 @@ Vue.use(VueGraph)
 
 ## Usage
 ```html
-<body>
-  <div id="app">
+<div id="app">
     <graph-bar
             :width="600"
             :height="400"
@@ -45,23 +44,8 @@ Vue.use(VueGraph)
         <tooltip :names="names" :position="'left'"></tooltip>
         <legends :names="names" :filter="true"></legends>
     </graph-bar>
-  </div>
-  <script type="text/javascript">
-    var vm = new Vue({
-        el: "#app",
-        data: {
-            names: [ "MS", "Apple", "Google" ],
-            values: [
-                [ 10, 5, 5, 5 ],
-                [ 40, 10, 10, 10 ],
-                [ 30, 30, 30, 30 ]
-            ]
-        }
-    });
-  </script>
-</body>
-```
-```js
+</div>
+<script>
 var vm = new Vue({
     el: "#app",
     data: {
@@ -73,4 +57,5 @@ var vm = new Vue({
         ]
     }
 });
+</script>
 ```
