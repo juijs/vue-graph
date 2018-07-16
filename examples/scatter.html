@@ -11,7 +11,7 @@
                 <graph-scatter
                         :width="600"
                         :height="400"
-                        :shape="'normal'"
+                        :shape="'cross'"
                         :axis-min="0"
                         :axis-max="50"
                         :axis-interval="3600000"
@@ -21,8 +21,7 @@
                         :display="'max'"
                         :active-event="'click'"
                         :colors="customColors"
-                        @click="testtest"
-                >
+                        @click="clickTest">
                     <note :text="title" :align="'left'"></note>
                     <legends :names="[ 'Date', 'Value' ]"></legends>
                 </graph-scatter>
@@ -33,7 +32,7 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                name : "[Simple Dashboard]",
+                title: "Scatter Chart",
                 labels: [ new Date('2018-07-09 00:00:00'), new Date('2018-07-10 00:00:00') ],
                 values: [
                     [ new Date('2018-07-09 05:23:00'), 20 ],
@@ -41,17 +40,13 @@
                     [ new Date('2018-07-09 15:55:00'), 12 ],
                     [ new Date('2018-07-09 19:01:00'), 30 ]
                 ]
-                ,
-                title: "Line Test"
             },
             methods: {
-                testtest: function(obj, e) {
-                    console.log(obj)
+                clickTest: function() {
+                    console.log("Click Event", arguments);
+                    alert("click");
                 },
                 customColors: function(data, index) {
-                    // var colors = [ "red", "blue", "yellow" ];
-                    // return colors[index];
-
                     return [ "red", 1, 2, 3, 4, 5 ];
                 }
             }

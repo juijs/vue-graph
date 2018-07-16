@@ -1,5 +1,6 @@
 import GraphBar from './components/bar.js'
 import GraphBar3d from './components/bar3d.js'
+import GraphStackBar from './components/stackbar.js'
 import GraphLine from './components/line.js'
 import GraphLine3d from './components/line3d.js'
 import GraphLineForDateBlock from './components/line-dateblock.js'
@@ -18,6 +19,7 @@ export default {
         // 1. 브러쉬 추가 영역
         Vue.component(GraphBar.name, GraphBar);
         Vue.component(GraphBar3d.name, GraphBar3d);
+        Vue.component(GraphStackBar.name, GraphStackBar);
         Vue.component(GraphLine.name, GraphLine);
         Vue.component(GraphLine3d.name, GraphLine3d);
         Vue.component(GraphLineForDateBlock.name, GraphLineForDateBlock);

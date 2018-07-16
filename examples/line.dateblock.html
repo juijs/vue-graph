@@ -5,43 +5,36 @@
 </head>
 <body>
     <div id="app">
-        <div class="title">{{ name }}</div>
-        <div class="row">
-            <div class="col">
-                <graph-line-dateblock
-                        :width="600"
-                        :height="400"
-                        :axis-min="0"
-                        :axis-max="100"
-                        :axis-reverse="false"
-                        :axis-x-style="'gradient'"
-                        :axis-y-style="'solid'"
-                        :axis-format="'HH:mm'"
-                        :axis-interval="1000 * 60 * 60 * 8"
-                        :labels="labels"
-                        :values="values"
-                >
-                    <note :text="title"></note>
-                    <legends :names="names"></legends>
-                    <tooltip :names="names" :position="'right'"></tooltip>
-                    <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
-                </graph-line-dateblock>
-            </div>
-        </div>
+        <graph-line-dateblock
+                :width="600"
+                :height="400"
+                :axis-min="0"
+                :axis-max="100"
+                :axis-reverse="false"
+                :axis-x-style="'gradient'"
+                :axis-y-style="'solid'"
+                :axis-format="'HH:mm'"
+                :axis-interval="1000 * 60 * 60 * 8"
+                :labels="labels"
+                :values="values">
+            <note :text="title"></note>
+            <legends :names="names"></legends>
+            <tooltip :names="names" :position="'right'"></tooltip>
+            <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
+        </graph-line-dateblock>
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                name : "[Simple Dashboard]",
+                title: "Line Chart",
                 labels: [ new Date("2018-07-07 00:00:00"), new Date("2018-07-08 00:00:00") ],
+                names: [ "MS", "Apple", "Google" ],
                 values: [
                     [ 10, 0, 5, 5 ],
                     [ 40, 10, 10, 10 ],
                     [ 30, 25, 35, 30 ]
-                ],
-                names: [ 'MS', 'Apple', 'Google' ],
-                title: "Line Test"
+                ]
             }
         });
     </script>

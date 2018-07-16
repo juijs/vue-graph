@@ -5,34 +5,32 @@
 </head>
 <body>
     <div id="app">
-        <graph-line3d
-                :width="800"
-                :height="600"
+        <graph-bar
+                :width="600"
+                :height="400"
                 :axis-min="0"
                 :axis-max="50"
-                :padding-top="100"
-                :padding-bottom="100"
-                :depth="180"
+                :axis-reverse="true"
+                :axis-x-style="'gradient'"
+                :axis-y-style="'solid'"
                 :labels="labels"
-                :names="names"
                 :values="values">
-            <note :text="title" :align="'left'"></note>
+            <note :text="title"></note>
             <tooltip :names="names" :position="'left'"></tooltip>
-            <legends :names="names"></legends>
-            <rotate3d></rotate3d>
-        </graph-line3d>
+            <legends :names="names" :filter="true"></legends>
+        </graph-bar>
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "3D-Line Chart",
+                title: "Bar Chart",
                 labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 names: [ "MS", "Apple", "Google" ],
                 values: [
-                    [ 0, 15, 8, 18 ],
-                    [ 15, 6, 10, 5 ],
-                    [ 20, 20, 20, 20 ]
+                    [ 10, 5, 5, 5 ],
+                    [ 40, 10, 10, 10 ],
+                    [ 30, 30, 30, 30 ]
                 ]
             }
         });

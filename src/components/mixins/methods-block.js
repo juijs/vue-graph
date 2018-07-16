@@ -2,7 +2,7 @@ export default {
     methods: {
         initGraphAxes: function() {
             let xAxis = {
-                type : 'block',
+                type : this.axisFullMode ? 'fullblock' : 'block',
                 domain : this.labels,
                 line : this.axisXStyle,
                 hide : this.axisXStyle == "hidden",

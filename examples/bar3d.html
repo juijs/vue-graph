@@ -5,41 +5,35 @@
 </head>
 <body>
     <div id="app">
-        <div class="title">{{ name }}</div>
-        <div class="row">
-            <div class="col">
-                <graph-bar3d
-                        :width="800"
-                        :height="600"
-                        :axis-min="0"
-                        :axis-max="50"
-                        :padding-top="100"
-                        :padding-bottom="100"
-                        :depth="180"
-                        :labels="labels"
-                        :values="values"
-                        :names="names"
-                >
-                    <note :text="title" :align="'left'"></note>
-                    <tooltip :names="names" :position="'left'"></tooltip>
-                    <legends :names="names"></legends>
-                </graph-bar3d>
-            </div>
-        </div>
+        <graph-bar3d
+                :width="800"
+                :height="600"
+                :axis-min="0"
+                :axis-max="50"
+                :padding-top="100"
+                :padding-bottom="100"
+                :depth="180"
+                :labels="labels"
+                :names="names"
+                :values="values">
+            <note :text="title" :align="'left'"></note>
+            <tooltip :names="names" :position="'left'"></tooltip>
+            <legends :names="names"></legends>
+            <rotate3d></rotate3d>
+        </graph-bar3d>
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                name : "[Simple Dashboard]",
-                labels: [ "1q", "2q", "3q", "4q" ],
-                names: [ "ms", "apple", "google" ],
+                title: "3D-Bar Chart",
+                labels: [ "1Q", "2Q", "3Q", "4Q" ],
+                names: [ "MS", "Apple", "Google" ],
                 values: [
                     [ 0, 15, 8, 18 ],
                     [ 15, 6, 10, 5 ],
                     [ 20, 20, 20, 20 ]
-                ],
-                title: "Bar Test"
+                ]
             }
         });
     </script>

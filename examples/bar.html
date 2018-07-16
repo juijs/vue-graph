@@ -5,40 +5,33 @@
 </head>
 <body>
     <div id="app">
-        <div class="title">{{ name }}</div>
-        <div class="row">
-            <div class="col">
-                <graph-bar
-                        :width="600"
-                        :height="400"
-                        :shape="'curve'"
-                        :axis-min="0"
-                        :axis-max="100"
-                        :axis-reverse="false"
-                        :axis-x-style="'gradient'"
-                        :axis-y-style="'solid'"
-                        :labels="labels"
-                        :values="values"
-                >
-                    <note :text="title"></note>
-                    <tooltip :names="[ 'MS', 'Apple', 'Google' ]" :position="'left'"></tooltip>
-                    <legends :names="[ 'MS', 'Apple', 'Google' ]" :filter="true"></legends>
-                </graph-bar>
-            </div>
-        </div>
+        <graph-bar
+                :width="600"
+                :height="400"
+                :axis-min="0"
+                :axis-max="50"
+                :axis-reverse="false"
+                :axis-x-style="'gradient'"
+                :axis-y-style="'solid'"
+                :labels="labels"
+                :values="values">
+            <note :text="title"></note>
+            <tooltip :names="names" :position="'left'"></tooltip>
+            <legends :names="names" :filter="true"></legends>
+        </graph-bar>
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                name : "[Simple Dashboard]",
-                labels: [ "1q", "2q", "3q", "4q" ],
+                title: "Bar Chart",
+                labels: [ "1Q", "2Q", "3Q", "4Q" ],
+                names: [ "MS", "Apple", "Google" ],
                 values: [
                     [ 10, 5, 5, 5 ],
                     [ 40, 10, 10, 10 ],
                     [ 30, 30, 30, 30 ]
-                ],
-                title: "Line Test"
+                ]
             }
         });
     </script>

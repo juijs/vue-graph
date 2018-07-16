@@ -5,30 +5,28 @@
 </head>
 <body>
     <div id="app">
-        <graph-line
+        <graph-stackbar
                 :width="600"
                 :height="400"
-                :shape="'curve'"
-                :axis-min="0"
-                :axis-max="50"
                 :axis-reverse="false"
                 :axis-x-style="'gradient'"
                 :axis-y-style="'solid'"
-                :axis-full-mode="true"
                 :labels="labels"
                 :names="names"
-                :values="values">
+                :values="values"
+                :full-mode="true"
+                :show-text="true"
+        >
             <note :text="title"></note>
-            <tooltip :names="names" :position="'right'"></tooltip>
             <legends :names="names"></legends>
-            <guideline :tooltip-y="true"></guideline>
-        </graph-line>
+            <tooltip :names="names" :position="'right'"></tooltip>
+        </graph-stackbar>
     </div>
     <script>
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "Line Chart",
+                title: "StackBar Chart",
                 labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 names: [ 'MS', 'Apple', 'Google' ],
                 values: [
