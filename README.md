@@ -55,7 +55,7 @@ The following is a link you can test with [CodePen](https://codepen.io/collectio
 ```
 In the following code, the chart is prefixed with 'graph-' for each type. The widget can be added as a child node of the chart, unlike a chart, was named without a prefix.
 
-The vue-graph is a combination of a chart and a widget. This is a very flexible and scalable structure.
+The vue-graph can be combined with charts and widgets for a variety of visualizations. This is a very flexible and scalable structure.
 ```js
 var vm = new Vue({
     el: "#app",
