@@ -4,32 +4,32 @@
     <script src="../dist/vue-graph.js"></script>
 </head>
 <body>
-    <div id="app">
-        <graph-area
-                :width="800"
-                :height="400"
-                :axis-full-mode="true"
-                :shape="'normal'"
-                :opacity="0.6"
-                :borderline="true"
-                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-                :values="values">
-            <note :text="'Area Chart'"></note>
-            <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
-            <guideline :tooltip-y="true"></guideline>
-        </graph-area>
-    </div>
-    <script>
-        var vm = new Vue({
-            el: "#app",
-            data: {
-                values: [
-                    [ 10, 5, 5, 5 ],
-                    [ 40, 10, 10, 10 ],
-                    [ 30, 30, 30, 30 ]
-                ]
-            }
-        });
-    </script>
+<div id="app">
+    <graph-area
+            :width="800"
+            :height="400"
+            :axis-full-mode="true"
+            :shape="'normal'"
+            :opacity="0.6"
+            :borderline="true"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :values="values">
+        <note :text="'Area Chart'"></note>
+        <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
+        <guideline :tooltip-y="true"></guideline>
+    </graph-area>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        values: [
+            [ 10, 5, 5, 5 ],
+            [ 40, 10, 10, 10 ],
+            [ 30, 30, 30, 30 ]
+        ]
+    }
+});
+</script>
 </body>
 </html>

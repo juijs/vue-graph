@@ -4,36 +4,36 @@
     <script src="../dist/vue-graph.js"></script>
 </head>
 <body>
-    <div id="app">
-        <graph-line
-                :width="600"
-                :height="400"
-                :shape="'curve'"
-                :axis-min="0"
-                :axis-max="50"
-                :axis-reverse="true"
-                :axis-full-mode="true"
-                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-                :names="names"
-                :values="values">
-            <note :text="'Line Chart'"></note>
-            <tooltip :names="names" :position="'right'"></tooltip>
-            <legends :names="names"></legends>
-            <guideline :tooltip-y="true"></guideline>
-        </graph-line>
-    </div>
-    <script>
-        var vm = new Vue({
-            el: "#app",
-            data: {
-                names: [ 'MS', 'Apple', 'Google' ],
-                values: [
-                    [ 10, 5, 5, 5 ],
-                    [ 40, 10, 10, 10 ],
-                    [ 30, 30, 30, 30 ]
-                ]
-            }
-        });
-    </script>
+<div id="app">
+    <graph-line
+            :width="600"
+            :height="400"
+            :shape="'curve'"
+            :axis-min="0"
+            :axis-max="50"
+            :axis-reverse="true"
+            :axis-full-mode="true"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :names="names"
+            :values="values">
+        <note :text="'Line Chart'"></note>
+        <tooltip :names="names" :position="'right'"></tooltip>
+        <legends :names="names"></legends>
+        <guideline :tooltip-y="true"></guideline>
+    </graph-line>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        names: [ 'MS', 'Apple', 'Google' ],
+        values: [
+            [ 10, 5, 5, 5 ],
+            [ 40, 10, 10, 10 ],
+            [ 30, 30, 30, 30 ]
+        ]
+    }
+});
+</script>
 </body>
 </html>

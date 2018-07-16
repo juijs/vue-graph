@@ -4,36 +4,36 @@
     <script src="../dist/vue-graph.js"></script>
 </head>
 <body>
-    <div id="app">
-        <graph-bar3d
-                :width="800"
-                :height="600"
-                :axis-min="0"
-                :axis-max="50"
-                :padding-top="100"
-                :padding-bottom="100"
-                :depth="180"
-                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-                :names="names"
-                :values="values">
-            <note :text="'3D-Bar Chart'" :align="'left'"></note>
-            <tooltip :names="names" :position="'left'"></tooltip>
-            <legends :names="names"></legends>
-            <rotate3d></rotate3d>
-        </graph-bar3d>
-    </div>
-    <script>
-        var vm = new Vue({
-            el: "#app",
-            data: {
-                names: [ "MS", "Apple", "Google" ],
-                values: [
-                    [ 0, 15, 8, 18 ],
-                    [ 15, 6, 10, 5 ],
-                    [ 20, 20, 20, 20 ]
-                ]
-            }
-        });
-    </script>
+<div id="app">
+    <graph-bar3d
+            :width="800"
+            :height="600"
+            :axis-min="0"
+            :axis-max="50"
+            :padding-top="100"
+            :padding-bottom="100"
+            :depth="180"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :names="names"
+            :values="values">
+        <note :text="'3D-Bar Chart'" :align="'left'"></note>
+        <tooltip :names="names" :position="'left'"></tooltip>
+        <legends :names="names"></legends>
+        <rotate3d></rotate3d>
+    </graph-bar3d>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        names: [ "MS", "Apple", "Google" ],
+        values: [
+            [ 0, 15, 8, 18 ],
+            [ 15, 6, 10, 5 ],
+            [ 20, 20, 20, 20 ]
+        ]
+    }
+});
+</script>
 </body>
 </html>

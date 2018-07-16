@@ -4,32 +4,32 @@
     <script src="../dist/vue-graph.js"></script>
 </head>
 <body>
-    <div id="app">
-        <graph-stackbar
-                :width="600"
-                :height="400"
-                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-                :full-mode="true"
-                :show-text="true"
-                :names="names"
-                :values="values">
-            <note :text="'StackBar Chart'"></note>
-            <legends :names="names"></legends>
-            <tooltip :names="names" :position="'right'"></tooltip>
-        </graph-stackbar>
-    </div>
-    <script>
-        var vm = new Vue({
-            el: "#app",
-            data: {
-                names: [ 'MS', 'Apple', 'Google' ],
-                values: [
-                    [ 10, 5, 5, 5 ],
-                    [ 40, 10, 10, 10 ],
-                    [ 30, 30, 30, 30 ]
-                ]
-            }
-        });
-    </script>
+<div id="app">
+    <graph-stackbar
+            :width="600"
+            :height="400"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :full-mode="true"
+            :show-text="true"
+            :names="names"
+            :values="values">
+        <note :text="'StackBar Chart'"></note>
+        <legends :names="names"></legends>
+        <tooltip :names="names" :position="'right'"></tooltip>
+    </graph-stackbar>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        names: [ 'MS', 'Apple', 'Google' ],
+        values: [
+            [ 10, 5, 5, 5 ],
+            [ 40, 10, 10, 10 ],
+            [ 30, 30, 30, 30 ]
+        ]
+    }
+});
+</script>
 </body>
 </html>
