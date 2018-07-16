@@ -76,7 +76,7 @@ var vm = new Vue({
 | Name | Type | Required | Watch | Default | Description
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | theme             | String | false | false | `jennifer` | Supports a total of five themes (jennifer, dark, pastel, gradient, pattern) |
-| styles             | Object | false | false | `undefined` | You can customize the properties of chart themes ([Link](http://chartplay.jui.io/)) |
+| styles             | Object | false | false | `undefined` | Options to customize chart theme properties ([Link](http://chartplay.jui.io/)) |
 | width             | Number | true | true | `undefined` | The width of the chart |
 | height             | Number | true | true | `undefined` | The height of the chart |
 | paddingTop             | Number | false | false | 50 | |
