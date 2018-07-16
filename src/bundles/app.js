@@ -1,7 +1,7 @@
 /* bundling type : vue + vue-graph + juijs */
 
 import Vue from 'vue'
-import VueGraph from '../main.js'
+import VueGraph from '../vue-graph.js'
 
 Vue.use(VueGraph)
 
