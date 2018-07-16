@@ -9,13 +9,12 @@
                 :width="600"
                 :height="400"
                 :axis-reverse="true"
-                :labels="labels"
-                :names="names"
-                :values="values"
+                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
                 :full-mode="false"
                 :show-text="true"
-        >
-            <note :text="title"></note>
+                :names="names"
+                :values="values">
+            <note :text="'StackBar Chart'"></note>
             <legends :names="names"></legends>
             <tooltip :names="names" :position="'right'"></tooltip>
         </graph-stackbar>
@@ -24,8 +23,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "StackBar Chart",
-                labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 names: [ 'MS', 'Apple', 'Google' ],
                 values: [
                     [ 10, 5, 5, 5 ],

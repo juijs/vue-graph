@@ -11,9 +11,9 @@
                 :axis-min="0"
                 :axis-max="50"
                 :axis-reverse="true"
-                :labels="labels"
+                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
                 :values="values">
-            <note :text="title"></note>
+            <note :text="'Bar Chart'"></note>
             <tooltip :names="names" :position="'left'"></tooltip>
             <legends :names="names" :filter="true"></legends>
         </graph-bar>
@@ -22,8 +22,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "Bar Chart",
-                labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 names: [ "MS", "Apple", "Google" ],
                 values: [
                     [ 10, 5, 5, 5 ],

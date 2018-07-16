@@ -13,10 +13,10 @@
                 :axis-max="50"
                 :axis-reverse="true"
                 :axis-full-mode="true"
-                :labels="labels"
+                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
                 :names="names"
                 :values="values">
-            <note :text="title"></note>
+            <note :text="'Line Chart'"></note>
             <tooltip :names="names" :position="'right'"></tooltip>
             <legends :names="names"></legends>
             <guideline :tooltip-y="true"></guideline>
@@ -26,8 +26,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "Line Chart",
-                labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 names: [ 'MS', 'Apple', 'Google' ],
                 values: [
                     [ 10, 5, 5, 5 ],

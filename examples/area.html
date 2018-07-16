@@ -9,12 +9,12 @@
                 :width="800"
                 :height="400"
                 :axis-full-mode="true"
-                :labels="labels"
-                :values="values"
                 :shape="'normal'"
                 :opacity="0.6"
-                :borderline="true">
-            <note :text="title"></note>
+                :borderline="true"
+                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+                :values="values">
+            <note :text="'Area Chart'"></note>
             <legends :names="[ 'MS', 'Apple', 'Google' ]"></legends>
             <guideline :tooltip-y="true"></guideline>
         </graph-area>
@@ -23,8 +23,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "Area Chart",
-                labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 values: [
                     [ 10, 5, 5, 5 ],
                     [ 40, 10, 10, 10 ],

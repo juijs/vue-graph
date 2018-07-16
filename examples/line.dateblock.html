@@ -15,7 +15,7 @@
                 :axis-interval="1000 * 60 * 60 * 8"
                 :labels="labels"
                 :values="values">
-            <note :text="title"></note>
+            <note :text="'Line Chart'"></note>
             <legends :names="names"></legends>
             <tooltip :names="names" :position="'right'"></tooltip>
             <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
@@ -25,7 +25,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "Line Chart",
                 labels: [ new Date("2018-07-07 00:00:00"), new Date("2018-07-08 00:00:00") ],
                 names: [ "MS", "Apple", "Google" ],
                 values: [

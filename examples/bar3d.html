@@ -13,10 +13,10 @@
                 :padding-top="100"
                 :padding-bottom="100"
                 :depth="180"
-                :labels="labels"
+                :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
                 :names="names"
                 :values="values">
-            <note :text="title" :align="'left'"></note>
+            <note :text="'3D-Bar Chart'" :align="'left'"></note>
             <tooltip :names="names" :position="'left'"></tooltip>
             <legends :names="names"></legends>
             <rotate3d></rotate3d>
@@ -26,8 +26,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "3D-Bar Chart",
-                labels: [ "1Q", "2Q", "3Q", "4Q" ],
                 names: [ "MS", "Apple", "Google" ],
                 values: [
                     [ 0, 15, 8, 18 ],

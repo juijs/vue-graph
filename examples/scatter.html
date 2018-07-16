@@ -16,13 +16,13 @@
                         :axis-max="50"
                         :axis-interval="3600000"
                         :axis-format="'HH'"
-                        :labels="labels"
-                        :values="values"
                         :display="'max'"
                         :active-event="'click'"
+                        :labels="labels"
+                        :values="values"
                         :colors="customColors"
                         @click="clickTest">
-                    <note :text="title" :align="'left'"></note>
+                    <note :text="'Scatter Chart'" :align="'left'"></note>
                     <legends :names="[ 'Date', 'Value' ]"></legends>
                 </graph-scatter>
             </div>
@@ -32,7 +32,6 @@
         var vm = new Vue({
             el: "#app",
             data: {
-                title: "Scatter Chart",
                 labels: [ new Date('2018-07-09 00:00:00'), new Date('2018-07-10 00:00:00') ],
                 values: [
                     [ new Date('2018-07-09 05:23:00'), 20 ],
