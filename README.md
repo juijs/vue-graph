@@ -31,6 +31,7 @@ Vue.use(VueGraph)
 ```
 
 ## Usage
+![https://codepen.io/seogi1004/pen/WKrVLx](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/1.png)  
 ```html
 <div id="app">
     <graph-bar
@@ -59,5 +60,3 @@ var vm = new Vue({
 });
 </script>
 ```
-- Bar Chart
-![](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/1.png)  
