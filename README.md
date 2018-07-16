@@ -20,3 +20,14 @@ Just download `dist/vue-graph.js` and include it in your HTML file:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
 <script src="https://cdn.rawgit.com/juijs/vue-graph/2216ae2f/dist/vue-graph.js"></script>
 ```
+
+## Usage
+
+### ES Modules with npm
+
+```js
+import Vue from 'vue'
+import VueGraph from 'vue-graph/src/vue-graph.js'
+
+Vue.use(VueGraph)
+```
