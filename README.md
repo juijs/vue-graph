@@ -21,9 +21,7 @@ Just download `dist/vue-graph.js` and include it in your HTML file:
 <script src="https://cdn.rawgit.com/juijs/vue-graph/2216ae2f/dist/vue-graph.js"></script>
 ```
 
-## Usage
-
-### ES Modules with npm
+### ES Modules
 
 ```js
 import Vue from 'vue'
@@ -31,3 +29,5 @@ import VueGraph from '/src/vue-graph.js'
 
 Vue.use(VueGraph)
 ```
+
+## Usage
