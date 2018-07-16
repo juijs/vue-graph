@@ -70,6 +70,24 @@ var vm = new Vue({
 });
 ```
 
+## Implemented chart list
+
+There are many charts that have not yet been migrated. We are going to continue.
+
+ - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
+ - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva)
+ - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE)
+ - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR)
+ - [Stack Bar Cahrt (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
+ - [Line Chart](https://codepen.io/seogi1004/pen/jpqNPm)
+ - [Line Chart (Reverse)](https://codepen.io/seogi1004/pen/MBygar)
+ - [Line Chart (Date+Block)](https://codepen.io/seogi1004/pen/qyZWEL)
+ - [3D-Bar Chart](https://codepen.io/seogi1004/pen/GBoVPV)
+ - [3D-Line Chart](https://codepen.io/seogi1004/pen/PBZMEr)
+ - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym)
+ - [Bubble Chart](https://codepen.io/seogi1004/pen/qyZWBL)
+ - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
+ 
 ## Props
 
 ### Common
@@ -90,21 +108,8 @@ var vm = new Vue({
 | values             | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 | names             | Array | false | false | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
-## Implemented chart list
+### Charts
+Preparing...
 
-There are many charts that have not yet been migrated. We are going to continue.
-
- - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
- - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva)
- - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE)
- - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR)
- - [Stack Bar Cahrt (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
- - [Line Chart](https://codepen.io/seogi1004/pen/jpqNPm)
- - [Line Chart (Reverse)](https://codepen.io/seogi1004/pen/MBygar)
- - [Line Chart (Date+Block)](https://codepen.io/seogi1004/pen/qyZWEL)
- - [3D-Bar Chart](https://codepen.io/seogi1004/pen/GBoVPV)
- - [3D-Line Chart](https://codepen.io/seogi1004/pen/PBZMEr)
- - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym)
- - [Bubble Chart](https://codepen.io/seogi1004/pen/qyZWBL)
- - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
- 
+### Widgets
+preparing...
