@@ -75,6 +75,6 @@ var vm = new Vue({
 ### Common
 | Name | Type | Required | Default | Description
 | ---------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| width             | Number | true | `undefined` | The width of the chart
-| height             | Number | true | `undefined` | The height of the chart
-| label             | Array | true | `undefined` | Label of chart data
+| width             | Number | true | `undefined` | The width of the chart |
+| height             | Number | true | `undefined` | The height of the chart |
+| label             | Array | true | `undefined` | Label of chart data |
