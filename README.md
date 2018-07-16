@@ -91,3 +91,6 @@ var vm = new Vue({
 | names             | Array | false | false | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
 ## Implemented chart list
+
+There are many charts that have not yet been migrated. We are going to continue.
+ - test
