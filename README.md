@@ -46,6 +46,19 @@ Vue.use(VueGraph)
         <legends :names="names" :filter="true"></legends>
     </graph-bar>
   </div>
+  <script type="text/javascript">
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            names: [ "MS", "Apple", "Google" ],
+            values: [
+                [ 10, 5, 5, 5 ],
+                [ 40, 10, 10, 10 ],
+                [ 30, 30, 30, 30 ]
+            ]
+        }
+    });
+  </script>
 </body>
 ```
 ```js
