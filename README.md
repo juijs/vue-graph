@@ -126,8 +126,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 ### Props by charts
 
-#### graph-area
- - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
+#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
@@ -135,8 +134,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
 | borderline | Boolean | false | false | true | Show lines on the border of the area chart |
 
-#### graph-bar
- - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
+#### [graph-bar](https://codepen.io/seogi1004/pen/WKrVLx)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
