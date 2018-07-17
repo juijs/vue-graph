@@ -133,6 +133,17 @@ There are many charts that have not yet been migrated. We are going to continue.
 | opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
 | borderline | Boolean | false | false | true | Show lines on the border of the area chart |
 
+#### graph-area
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| size | Number | false | false | 0 | Fixed width of bar (or height) |
+| minSize | Number | false | false | 0 | When the value is very small, the minimum size of the bar  |
+| margin | Number | false | false | 2 | Margins between bars and bars |
+| padding | Number | false | false | 1 | Inside padding inside the bar |
+| activeIndex | Number | false | false | `undefined` | The index of the bar to activate |
+| activeEvent | String | false | false | `undefined` | Event type to activate the bar |
+| display | String | false | false | `undefined` | Options that display the value of the bar (**max**, **min**, **all**) |
+
 
 ### Props by widgets
 preparing...
