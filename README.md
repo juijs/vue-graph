@@ -119,6 +119,8 @@ There are many charts that have not yet been migrated. We are going to continue.
 | axisYPosition | String | false | false | `left` | Chart y-axis position (left, right) |
 | axisReverse | Boolean | false | false | false | Replace the x and y axis positions |
 | axisFullMode | Boolean | false | false | false | Draw a chart drawing element full of the axis label area. |
+| axisInterval | Number | false | false | 1000 * 60 * 60 | It is the label value display interval of the date type (Unit: ms) |
+| axisFormat | String, Function | false | false | `HH` | It is the label value display format of the date type |
 
 ### Props by chart
 Preparing...
