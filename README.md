@@ -124,10 +124,10 @@ There are many charts that have not yet been migrated. We are going to continue.
 | axisInterval | Number | false | false | 1000 * 60 * 60 | It is the label value display interval of the date type (Unit: ms) |
 | axisFormat | String, Function | false | false | `HH` | It is the label value display format of the date type |
 
-### Props by chart
+### Props by charts
 preparing...
 
-### Props by widget
+### Props by widgets
 preparing...
 
 
