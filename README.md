@@ -93,20 +93,32 @@ There are many charts that have not yet been migrated. We are going to continue.
 ### Common
 | Name | Type | Required | Watch | Default | Description
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| theme             | String | false | false | `jennifer` | Supports a total of five themes (jennifer, dark, pastel, gradient, pattern) |
-| styles             | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
-| colors             | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
-| clip             | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
-| format             | Function | false | true | `undefined` | A callback function that allows you to customize the axis values of the chart |
-| width             | Number | true | true | `undefined` | The width of the chart |
-| height             | Number | true | true | `undefined` | The height of the chart |
-| paddingTop             | Number | false | false | 50 | Top padding of the chart |
-| paddingRight             | Number | false | false | 50 | Right padding of the chart |
-| paddingBottom             | Number | false | false | 50 | Bottom padding of the chart |
-| paddingLeft             | Number | false | false | 50 | Left padding of the chart |
-| labels            | Array | true | true | `undefined` | Label of chart data |
-| values             | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
-| names             | Array | false | false | `undefined` | It is a chart data value, and the format may be different for each chart type |
+| theme | String | false | false | `jennifer` | Supports a total of five themes (jennifer, dark, pastel, gradient, pattern) |
+| styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
+| colors | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
+| clip | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
+| format | Function | false | true | `undefined` | A callback function that allows you to customize the axis values of the chart |
+| width | Number | true | true | `undefined` | The width of the chart |
+| height | Number | true | true | `undefined` | The height of the chart |
+| paddingTop | Number | false | false | 50 | Top padding of the chart |
+| paddingRight | Number | false | false | 50 | Right padding of the chart |
+| paddingBottom | Number | false | false | 50 | Bottom padding of the chart |
+| paddingLeft | Number | false | false | 50 | Left padding of the chart |
+| labels | Array | true | true | `undefined` | Label of chart data |
+| values | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
+
+### Common (Axes)
+| Name | Type | Required | Watch | Default | Description
+| ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| axisMin | Number | false | false | 0 | Miniimum value for the chart axis |
+| axisMax | Number | false | false | 0 | Maximum value for the chart axis |
+| axisStep | Number | false | false | 10 | Display interval of chart axis value |
+| axisXStyle | String | false | false | `solid` | Line style for chart x-axis area (solid, dotted, gradient, hidden) |
+| axisYStyle | String | false | false | `solid` | Line style for chart y-axis area (solid, dotted, gradient, hidden) 
+| axisXPosition | String | false | false | `bottom` | Chart x-axis position (bottom, top) |
+| axisYPosition | String | false | false | `left` | Chart y-axis position (left, right) |
+| axisReverse | Boolean | false | false | false | Replace the x and y axis positions |
+| axisFullMode | Boolean | false | false | false | Draw a chart drawing element full of the axis label area. |
 
 ### Props by chart
 Preparing...
