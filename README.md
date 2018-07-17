@@ -178,6 +178,9 @@ var vm = new Vue({
 });
 </script>
 ```
+
+Common events are shown in the table below.
+
 | Outside axis | Inside axis | Drawing object | Description |
 | ---------------- | -------------- | -------------- | ----------- |
 | outside#click | inside#click | click | |
