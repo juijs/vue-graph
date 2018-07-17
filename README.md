@@ -125,7 +125,14 @@ There are many charts that have not yet been migrated. We are going to continue.
 | axisFormat | String, Function | false | false | `HH` | It is the label value display format of the date type |
 
 ### Props by charts
-preparing...
+
+#### graph-area
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| shape | String | false | false | `normal` | It is the shape of the area chart (**normal**, **curve**, **step**) |
+| opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
+| borderline | Boolean | false | false | true | Show lines on the border of the area chart |
+
 
 ### Props by widgets
 preparing...
