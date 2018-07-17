@@ -127,6 +127,8 @@ There are many charts that have not yet been migrated. We are going to continue.
 ### Props by charts
 
 #### graph-area
+ - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
+ 
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | shape | String | false | false | `normal` | It is the shape of the area chart (**normal**, **curve**, **step**) |
@@ -134,6 +136,8 @@ There are many charts that have not yet been migrated. We are going to continue.
 | borderline | Boolean | false | false | true | Show lines on the border of the area chart |
 
 #### graph-bar
+ - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
+ 
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | size | Number | false | false | 0 | Fixed width of bar (or height) |
