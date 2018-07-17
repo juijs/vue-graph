@@ -1,6 +1,6 @@
 # vue-graph
 
-> A vue component library based on the [jui charts](http://jui.io/?p=chart) available in vuejs.
+> A vue component library based on the [jui charts](http://jui.io/?p=chart){:target="_blank"} available in vuejs.
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/made-with-vue.svg)](http://forthebadge.com)
@@ -34,7 +34,7 @@ Vue.use(VueGraph)
 
 Unlike other chart components, vue-graphs have child nodes in the chart called widgets. The widget is used as an additional function of charts such as chart title, legend, tooltip.
 
-The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
+The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/){:target="_blank"}.
 
 ![](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/1.png)
 
@@ -74,19 +74,19 @@ var vm = new Vue({
 
 There are many charts that have not yet been migrated. We are going to continue.
 
- - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
- - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva)
- - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE)
- - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR)
- - [Stack Bar Cahrt (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
- - [Line Chart](https://codepen.io/seogi1004/pen/jpqNPm)
- - [Line Chart (Reverse)](https://codepen.io/seogi1004/pen/MBygar)
- - [Line Chart (Date+Block)](https://codepen.io/seogi1004/pen/qyZWEL)
- - [3D-Bar Chart](https://codepen.io/seogi1004/pen/GBoVPV)
- - [3D-Line Chart](https://codepen.io/seogi1004/pen/PBZMEr)
- - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym)
- - [Bubble Chart](https://codepen.io/seogi1004/pen/qyZWBL)
- - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
+ - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx){:target="_blank"}
+ - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva){:target="_blank"}
+ - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE){:target="_blank"}
+ - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR){:target="_blank"}
+ - [Stack Bar Cahrt (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm){:target="_blank"}
+ - [Line Chart](https://codepen.io/seogi1004/pen/jpqNPm){:target="_blank"}
+ - [Line Chart (Reverse)](https://codepen.io/seogi1004/pen/MBygar){:target="_blank"}
+ - [Line Chart (Date+Block)](https://codepen.io/seogi1004/pen/qyZWEL){:target="_blank"}
+ - [3D-Bar Chart](https://codepen.io/seogi1004/pen/GBoVPV){:target="_blank"}
+ - [3D-Line Chart](https://codepen.io/seogi1004/pen/PBZMEr){:target="_blank"}
+ - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym){:target="_blank"}
+ - [Bubble Chart](https://codepen.io/seogi1004/pen/qyZWBL){:target="_blank"}
+ - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy){:target="_blank"}
  
 ## Props
 
