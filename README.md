@@ -149,15 +149,16 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 #### note
 A widget that can display text in a chart.
+
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | text | String | true | true |  | Text to display |
-| align | String | false | false | `center` | Horizontal alignment (**center**) |
-| verticalAlign | String | false | false | `top` |  |
-| dx | Number | false | false | 0 |  |
-| dy | Number | false | false | 9 |  |
-| size | Number | false | false | `undefined` |  |
-| color | String | false | false | `undefined` |  |
+| align | String | false | false | `center` | Horizontal alignment (**center**, **left**, **right**) |
+| verticalAlign | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
+| dx | Number | false | false | 0 | x-axis position adjustment value |
+| dy | Number | false | false | 9 | y-axis position adjustment value |
+| size | Number | false | false | `undefined` | Font size |
+| color | String | false | false | `undefined` | Font color |
 
 
 ## Events
