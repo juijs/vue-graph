@@ -134,6 +134,7 @@ preparing...
 ## Events
 
 There are three types of events for the drawing object, outside and inside the axis area.
+ - [Bar Chart (+Event)](https://codepen.io/seogi1004/pen/XBdErQ)
 
 ```html
 <div id="app">
