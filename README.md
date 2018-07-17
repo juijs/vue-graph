@@ -107,7 +107,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | labels | Array | true | true | `undefined` | Label of chart data |
 | values | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
-### Common (Axes)
+### Common (X-Y Axis)
 | Name | Type | Required | Watch | Default | Description
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | axisMin | Number | false | false | 0 | Miniimum value for the chart axis |
