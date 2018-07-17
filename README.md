@@ -185,7 +185,7 @@ Common events are shown in the table below.
 | ---------------- | -------------- | -------------- | ----------- |
 | outside#click | inside#click | click | |
 | outside#dblclick | inside#dblclick | dblclick | |
-| outside#rclick | inside#rclick | rclick | Right Click |
+| outside#rclick | inside#rclick | rclick | `contextmenu` |
 | outside#mouseover | inside#mouseover | mouseover | |
 | outside#mouseout | inside#mouseout | mouseout | |
 | outside#mousemove | inside#mousemove | mousemove | |
