@@ -135,6 +135,49 @@ preparing...
 
 There are three types of events for the drawing object, outside and inside the axis area.
 
+```html
+<div id="app">
+    <graph-bar
+            :width="600"
+            :height="400"
+            :axis-min="0"
+            :axis-max="50"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :values="values"
+            :active-event="'click'"
+            @click="onClickBar"
+            @outside#click="onClickOutside"
+            @inside#click="onClickInside">
+        <note :text="'Bar Chart (+Event)'"></note>
+    </graph-bar>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        values: [
+            [ 10, 5, 5, 5 ],
+            [ 40, 10, 10, 10 ],
+            [ 30, 30, 30, 30 ]
+        ]
+    },
+    methods: {
+        onClickBar: function() {
+            console.log(arguments);
+            alert("onClickBar");
+        },
+        onClickOutside: function() {
+            console.log(arguments);
+            alert("onClickOutside");
+        },
+        onClickInside: function() {
+            console.log(arguments);
+            alert("onClickInside");
+        }
+    }
+});
+</script>
+```
 | Outside axis | Inside axis | Drawing object | Description |
 | ---------------- | -------------- | -------------- | ----------- |
 | outside#click | inside#click | click | |
