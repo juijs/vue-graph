@@ -34,7 +34,7 @@ Vue.use(VueGraph)
 
 Unlike other chart components, vue-graphs have child nodes in the chart called widgets. The widget is used as an additional function of charts such as chart title, legend, tooltip.
 
-The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/){:target="_blank"}.
+The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
 
 ![](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/1.png)
 
