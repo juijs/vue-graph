@@ -4,7 +4,6 @@ export default {
     mounted: function() {
         var self = this;
 
-        console.log(this.theme, this.styles)
         if(this.brushes.length == 0) {
             throw new Error('[Vue Graph error]: At least one brush must be added to \'brushes\' variable.')
         }
