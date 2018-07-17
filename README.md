@@ -133,7 +133,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
 | borderline | Boolean | false | false | true | Show lines on the border of the area chart |
 
-#### graph-area
+#### graph-bar
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | size | Number | false | false | 0 | Fixed width of bar (or height) |
@@ -146,7 +146,18 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 
 ### Props by widgets
-preparing...
+
+#### note
+A widget that can display text in a chart.
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| text | String | true | true |  | Text to display |
+| align | String | false | false | `center` | Horizontal alignment (**center**) |
+| verticalAlign | String | false | false | `top` |  |
+| dx | Number | false | false | 0 |  |
+| dy | Number | false | false | 9 |  |
+| size | Number | false | false | `undefined` |  |
+| color | String | false | false | `undefined` |  |
 
 
 ## Events
