@@ -91,7 +91,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 ## Props
 
 ### Common
-| Name | Type | Required | Watch | Default | Description
+| Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | theme | String | false | false | `jennifer` | Supports a total of five themes (jennifer, dark, pastel, gradient, pattern) |
 | styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
@@ -108,7 +108,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | values | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
 ### Common (X-Y Axis)
-| Name | Type | Required | Watch | Default | Description
+| Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | axisMin | Number | false | false | 0 | Miniimum value for the chart axis |
 | axisMax | Number | false | false | 0 | Maximum value for the chart axis |
@@ -131,6 +131,6 @@ preparing...
 
 ## Events
 
-| Outside chart | Inside chart | Drawing object | Description
+| Outside chart | Inside chart | Drawing object | Description |
 | ---------------- | -------------- | -------------- | ----------- |
 | outside#click | inside#click | click | |
