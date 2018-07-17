@@ -131,6 +131,13 @@ preparing...
 
 ## Events
 
-| Outside chart | Inside chart | Drawing object | Description |
+| Outside axis | Inside axis | Drawing object | Description |
 | ---------------- | -------------- | -------------- | ----------- |
 | outside#click | inside#click | click | |
+| outside#dblclick | inside#dblclick | dblclick | |
+| outside#rclick | inside#rclick | rclick | |
+| outside#mouseover | inside#mouseover | mouseover | |
+| outside#mouseout | inside#mouseout | mouseout | |
+| outside#mousemove | inside#mousemove | mousemove | |
+| outside#mousedown | inside#mousedown | mousedown | |
+| outside#mouseup | inside#mouseup | mouseup | |
