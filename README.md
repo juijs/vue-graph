@@ -94,7 +94,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| theme | String | false | false | `jennifer` | Supports a total of five themes (jennifer, dark, pastel, gradient, pattern) |
+| theme | String | false | false | `jennifer` | Supports a total of five themes (**jennifer**, **dark**, **pastel**, **gradient**, **pattern**) |
 | styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
 | colors | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
 | clip | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
@@ -115,10 +115,10 @@ There are many charts that have not yet been migrated. We are going to continue.
 | axisMin | Number | false | false | 0 | Miniimum value for the chart axis |
 | axisMax | Number | false | false | 0 | Maximum value for the chart axis |
 | axisStep | Number | false | false | 10 | Display interval of chart axis value |
-| axisXStyle | String | false | false | `solid` | Line style for chart x-axis area (solid, dotted, gradient, hidden) |
-| axisYStyle | String | false | false | `solid` | Line style for chart y-axis area (solid, dotted, gradient, hidden) 
-| axisXPosition | String | false | false | `bottom` | Chart x-axis position (bottom, top) |
-| axisYPosition | String | false | false | `left` | Chart y-axis position (left, right) |
+| axisXStyle | String | false | false | `solid` | Line style for chart x-axis area (**solid**, **dotted**, **gradient**, **hidden**) |
+| axisYStyle | String | false | false | `solid` | Line style for chart y-axis area (**solid**, **dotted**, **gradient**, **hidden**) 
+| axisXPosition | String | false | false | `bottom` | Chart x-axis position (**bottom**, **top**) |
+| axisYPosition | String | false | false | `left` | Chart y-axis position (**left**, **right**) |
 | axisReverse | Boolean | false | false | false | Replace the x and y axis positions |
 | axisFullMode | Boolean | false | false | false | Draw a chart drawing element full of the axis label area. |
 | axisInterval | Number | false | false | 1000 * 60 * 60 | It is the label value display interval of the date type (Unit: ms) |
