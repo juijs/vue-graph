@@ -126,14 +126,6 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 ### Props by charts
 
-#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy)
- 
-| Name | Type | Required | Watch | Default | Description |
-| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
-| shape | String | false | false | `normal` | It is the shape of the area chart (**normal**, **curve**, **step**) |
-| opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
-| borderLine | Boolean | false | false | true | Show lines on the border of the area chart |
-
 #### [graph-bar](https://codepen.io/seogi1004/pen/WKrVLx)
  
 | Name | Type | Required | Watch | Default | Description |
@@ -163,9 +155,36 @@ There are many charts that have not yet been migrated. We are going to continue.
 | activeIndex | Number | false | false | `undefined` | The index of the bar to activate |
 | activeEvent | String | false | false | `undefined` | Event type to activate the bar |
 | display | String | false | false | `undefined` | Options that display the value of the bar (**max**, **min**, **all**) |
-| connectedLine | Boolean | false | false | true | Options that show the line connecting the bars and bars |
-| fullMode | Boolean | false | false | true | Option to change to full stack bar |
-| showText | Boolean | false | false | true | Options to show the percentage value in the bar |
+| connectedLine | Boolean | false | false | false | Options that show the line connecting the bars and bars |
+| fullMode | Boolean | false | false | false | Option to change to full stack bar |
+| showText | Boolean | false | false | false | Options to show the percentage value in the bar |
+
+#### [graph-bubble](https://codepen.io/seogi1004/pen/qyZWBL)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| minSize | Number | false | false | 5 | Minimum size of bubble |
+| maxSize | Number | false | false | 30 | Maximum size of bubble |
+| showText | Boolean | false | false | false | Options to show the percentage value in the bubble |
+| activeEvent | String | false | false | `undefined` | Event type to activate the bubble |
+
+#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| shape | String | false | false | `normal` | It is the shape of the area chart (**normal**, **curve**, **step**) |
+| opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
+| borderLine | Boolean | false | false | true | Show lines on the border of the area chart |
+
+#### [graph-bubble](https://codepen.io/seogi1004/pen/qyZWBL)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| minSize | Number | false | false | 5 | Minimum size of bubble |
+| maxSize | Number | false | false | 30 | Maximum size of bubble |
+| showText | Boolean | false | false | false | Options to show the percentage value in the bubble |
+| activeEvent | String | false | false | `undefined` | Event type to activate the bubble |
+
 
 ### Props by widgets
 
