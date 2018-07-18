@@ -36,7 +36,7 @@ Unlike other chart components, vue-graphs have child nodes in the chart called w
 
 The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
 
-![](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/2.png)
+![](https://cdn.rawgit.com/juijs/vue-graph/1e440ab8/images/line3d.png)
 
 ```html
 <div id="app">
