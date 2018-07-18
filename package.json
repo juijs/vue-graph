@@ -1,11 +1,16 @@
 {
   "name": "vue-graph",
   "productionName": "Vue Graph",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A library that provides various visualization elements for vue.js",
   "main": "src/vue-graph.js",
   "files": [
-    "src"
+    "dist",
+    "examples",
+    "src",
+    "webpack.config.js",
+    "webpack.dev.js",
+    "webpack.prod.js"
   ],
   "scripts": {
     "start": "npm run dev",

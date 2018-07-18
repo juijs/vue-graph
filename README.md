@@ -36,21 +36,26 @@ Unlike other chart components, vue-graphs have child nodes in the chart called w
 
 The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
 
-![](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/1.png)
+![](https://cdn.rawgit.com/juijs/vue-graph/9517572b/examples/images/2.png)
 
 ```html
 <div id="app">
-    <graph-bar
-            :width="600"
-            :height="400"
+    <graph-line3d
+            :width="800"
+            :height="600"
             :axis-min="0"
             :axis-max="50"
+            :padding-top="100"
+            :padding-bottom="100"
+            :depth="180"
             :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :names="names"
             :values="values">
-        <note :text="'Bar Chart'"></note>
+        <note :text="'3D-Line Chart'" :align="'left'"></note>
         <tooltip :names="names" :position="'left'"></tooltip>
-        <legends :names="names" :filter="true"></legends>
-    </graph-bar>
+        <legends :names="names"></legends>
+        <rotate3d></rotate3d>
+    </graph-line3d>
 </div>
 ```
 In the following code, the chart is prefixed with 'graph-' for each type. The widget can be added as a child node of the chart, unlike a chart, was named without a prefix.
@@ -62,9 +67,9 @@ var vm = new Vue({
     data: {
         names: [ "MS", "Apple", "Google" ],
         values: [
-            [ 10, 5, 5, 5 ],
-            [ 40, 10, 10, 10 ],
-            [ 30, 30, 30, 30 ]
+            [ 0, 15, 8, 18 ],
+            [ 15, 6, 10, 5 ],
+            [ 20, 20, 20, 20 ]
         ]
     }
 });
