@@ -33,11 +33,6 @@ export default {
             required: false,
             size: 7
         },
-        hide: {
-            type: Boolean,
-            required: false,
-            size: false
-        },
         hideZero: {
             type: Boolean,
             required: false,
@@ -55,7 +50,6 @@ export default {
             display: this.display,
             opacity: this.opacity,
             size: this.size,
-            hide: this.hide,
             hideZero: this.hideZero
         }];
     }

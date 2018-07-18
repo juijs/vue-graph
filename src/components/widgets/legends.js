@@ -11,12 +11,12 @@ export default {
         align: {
             type: String,
             required: false,
-            default: 'center' // or left, right
+            default: 'center' // or start, end
         },
         position: {
             typ: String,
             required: false,
-            default: 'bottom' // or top, start, end
+            default: 'bottom' // or top, left, right
         },
         dx: {
             type: Number,
