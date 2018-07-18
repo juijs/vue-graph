@@ -143,7 +143,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | names | Array | true | false | `undefined` | Name of the z-axis data key |
-| barPadding | Number | false | false | 0 | When the value is very small, the minimum size of the bar  |
+| barPadding | Number | false | false | 20 | Inside padding inside the bar  |
 
 #### [graph-stackbar](https://codepen.io/seogi1004/pen/djMbGE)
  
@@ -168,6 +168,13 @@ There are many charts that have not yet been migrated. We are going to continue.
 | activeEvent | String | false | false | `undefined` | Event type to activate the line |
 | display | String | false | false | `undefined` | Options that display the value of the line (**max**, **min**, **all**) |
 | opacity | Number | false | false | `undefined` | The transparency of the line (Value between 0 and 1) |
+
+#### [graph-line3d](https://codepen.io/seogi1004/pen/PBZMEr)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| names | Array | true | false | `undefined` | Name of the z-axis data key |
+| linePadding | Number | false | false | 20 | Inside padding inside the line  |
 
 #### [graph-bubble](https://codepen.io/seogi1004/pen/qyZWBL)
  
@@ -209,7 +216,7 @@ A widget that can display text in a chart.
 | align | String | false | false | `center` | Horizontal alignment (**center**, **left**, **right**) |
 | verticalAlign | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
 | dx | Number | false | false | 0 | x-axis position adjustment value |
-| dy | Number | false | false | 9 | y-axis position adjustment value |
+| dy | Number | false | false | 0 | y-axis position adjustment value |
 | size | Number | false | false | `undefined` | Font size |
 | color | String | false | false | `undefined` | Font color |
 
