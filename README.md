@@ -1,6 +1,6 @@
 # vue-graph
 
-> A vue component library based on the [jui charts](http://jui.io/?p=chart) available in vuejs.
+> A vue component library based on the [JUI charts](http://jui.io/?p=chart) available in vuejs.
 
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/made-with-vue.svg)](http://forthebadge.com)
@@ -159,7 +159,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | fullMode | Boolean | false | false | false | Option to change to full stack bar |
 | showText | Boolean | false | false | false | Options to show the percentage value in the bar |
 
-#### [graph-line](https://codepen.io/seogi1004/pen/jpqNPm)
+#### [graph-line](https://codepen.io/seogi1004/pen/jpqNPm), [graph-line-dateblock](https://codepen.io/seogi1004/pen/qyZWEL)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
