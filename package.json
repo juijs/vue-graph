@@ -1,7 +1,7 @@
 {
   "name": "vue-graph",
   "productionName": "Vue Graph",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A library that provides various visualization elements for vue.js",
   "main": "src/vue-graph.js",
   "files": [
@@ -19,10 +19,11 @@
   },
   "keywords": [
     "vue",
+    "vue-graph",
     "jui",
     "svg",
     "canvas",
-    "graph",
+    "chart",
     "component",
     "data-visualization"
   ],
