@@ -82,6 +82,7 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Line Chart](https://codepen.io/seogi1004/pen/jpqNPm)
  - [Line Chart (Reverse)](https://codepen.io/seogi1004/pen/MBygar)
  - [Line Chart (Date+Block)](https://codepen.io/seogi1004/pen/qyZWEL)
+ - [Line Chart (Time+Range)](https://codepen.io/seogi1004/pen/WKxqRd)
  - [3D-Bar Chart](https://codepen.io/seogi1004/pen/GBoVPV)
  - [3D-Line Chart](https://codepen.io/seogi1004/pen/PBZMEr)
  - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym)
@@ -159,7 +160,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | fullMode | Boolean | false | false | false | Option to change to full stack bar |
 | showText | Boolean | false | false | false | Options to show the percentage value in the bar |
 
-#### [graph-line](https://codepen.io/seogi1004/pen/jpqNPm), [graph-line-dateblock](https://codepen.io/seogi1004/pen/qyZWEL)
+#### [graph-line](https://codepen.io/seogi1004/pen/jpqNPm), [graph-line-dateblock](https://codepen.io/seogi1004/pen/qyZWEL), [graph-line-timerange](https://codepen.io/seogi1004/pen/WKxqRd)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
