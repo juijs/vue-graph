@@ -23,7 +23,7 @@ Just download `dist/vue-graph.js` and include it in your HTML file:
 
 ### ES Modules
 
-##### Plugin
+##### Plug-In
 
 ```js
 import Vue from 'vue'
