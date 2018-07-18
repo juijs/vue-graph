@@ -185,6 +185,17 @@ There are many charts that have not yet been migrated. We are going to continue.
 | showText | Boolean | false | false | false | Options to show the percentage value in the bubble |
 | activeEvent | String | false | false | `undefined` | Event type to activate the bubble |
 
+#### [graph-scatter](https://codepen.io/seogi1004/pen/YjqKym)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| shape | String | false | false | `circle` | It is the shape of the scatter chart (**circle**, **triangle**, **rectangle**, **cross**) |
+| activeEvent | String | false | false | `undefined` | Event type to activate the scatter |
+| display | String | false | false | `undefined` | Options that display the value of the scatter (**max**, **min**, **all**) |
+| opacity | Number | false | false | `undefined` | The transparency of the scatter chart (Value between 0 and 1) |
+| size | Number | false | false | 7 | Size of scatter (Value between 0 and 1) |
+| hideZero | Boolean | false | false | false | Option to hide scatter when the value is 0 |
+
 
 ### Props by widgets
 
