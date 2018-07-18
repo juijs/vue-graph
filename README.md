@@ -146,6 +146,26 @@ There are many charts that have not yet been migrated. We are going to continue.
 | activeEvent | String | false | false | `undefined` | Event type to activate the bar |
 | display | String | false | false | `undefined` | Options that display the value of the bar (**max**, **min**, **all**) |
 
+#### [graph-bar3d](https://codepen.io/seogi1004/pen/GBoVPV)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| names | Array | true | false | `undefined` | Name of the z-axis data key |
+| padding | Number | false | false | 0 | When the value is very small, the minimum size of the bar  |
+
+#### [graph-stackbar](https://codepen.io/seogi1004/pen/djMbGE)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| size | Number | false | false | 0 | Fixed width of bar (or height) |
+| margin | Number | false | false | 2 | Margins between bars and bars |
+| padding | Number | false | false | 1 | Inside padding inside the bar |
+| activeIndex | Number | false | false | `undefined` | The index of the bar to activate |
+| activeEvent | String | false | false | `undefined` | Event type to activate the bar |
+| display | String | false | false | `undefined` | Options that display the value of the bar (**max**, **min**, **all**) |
+| connectedLine | Boolean | false | false | true | Options that show the line connecting the bars and bars |
+| fullMode | Boolean | false | false | true | Option to change to full stack bar |
+| showText | Boolean | false | false | true | Options to show the percentage value in the bar |
 
 ### Props by widgets
 
@@ -161,6 +181,15 @@ A widget that can display text in a chart.
 | dy | Number | false | false | 9 | y-axis position adjustment value |
 | size | Number | false | false | `undefined` | Font size |
 | color | String | false | false | `undefined` | Font color |
+
+#### tooltip
+Widget showing chart element values.
+
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| names | String | true | false |  | Name to map to value type |
+| position | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **left**, **right**) |
+| anchor | Boolean | false | false | true | Options to display anchor |
 
 
 ## Events
