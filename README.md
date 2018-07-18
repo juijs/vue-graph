@@ -25,14 +25,14 @@ Just download `dist/vue-graph.js` and include it in your HTML file:
 
 ```js
 import Vue from 'vue'
-import VueGraph from '/src/vue-graph.js'
+import VueGraph from 'vue-graph'
 
 Vue.use(VueGraph)
 ```
 
 ## Usage
 
-Unlike other chart components, vue-graphs have child nodes in the chart called widgets. The widget is used as an additional function of charts such as chart title, legend, tooltip.
+Unlike other chart components, vue-graph have child nodes in the chart called widgets. The widget is used as an additional function of charts such as chart title, legend, tooltip.
 
 The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
 
