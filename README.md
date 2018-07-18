@@ -159,6 +159,16 @@ There are many charts that have not yet been migrated. We are going to continue.
 | fullMode | Boolean | false | false | false | Option to change to full stack bar |
 | showText | Boolean | false | false | false | Options to show the percentage value in the bar |
 
+#### [graph-line](https://codepen.io/seogi1004/pen/jpqNPm)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| shape | String | false | false | `normal` | It is the shape of the line (**normal**, **curve**, **step**) |
+| activeIndex | Number | false | false | `undefined` | The index of the line to activate |
+| activeEvent | String | false | false | `undefined` | Event type to activate the line |
+| display | String | false | false | `undefined` | Options that display the value of the line (**max**, **min**, **all**) |
+| opacity | Number | false | false | `undefined` | The transparency of the line (Value between 0 and 1) |
+
 #### [graph-bubble](https://codepen.io/seogi1004/pen/qyZWBL)
  
 | Name | Type | Required | Watch | Default | Description |
@@ -172,27 +182,18 @@ There are many charts that have not yet been migrated. We are going to continue.
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
-| shape | String | false | false | `normal` | It is the shape of the area chart (**normal**, **curve**, **step**) |
-| opacity | Number | false | false | `undefined` | The transparency of the area chart (Value between 0 and 1) |
-| borderLine | Boolean | false | false | true | Show lines on the border of the area chart |
-
-#### [graph-bubble](https://codepen.io/seogi1004/pen/qyZWBL)
- 
-| Name | Type | Required | Watch | Default | Description |
-| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
-| minSize | Number | false | false | 5 | Minimum size of bubble |
-| maxSize | Number | false | false | 30 | Maximum size of bubble |
-| showText | Boolean | false | false | false | Options to show the percentage value in the bubble |
-| activeEvent | String | false | false | `undefined` | Event type to activate the bubble |
+| shape | String | false | false | `normal` | It is the shape of the area (**normal**, **curve**, **step**) |
+| opacity | Number | false | false | `undefined` | The transparency of the area (Value between 0 and 1) |
+| borderLine | Boolean | false | false | true | Show lines on the border of the area |
 
 #### [graph-scatter](https://codepen.io/seogi1004/pen/YjqKym)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
-| shape | String | false | false | `circle` | It is the shape of the scatter chart (**circle**, **triangle**, **rectangle**, **cross**) |
+| shape | String | false | false | `circle` | It is the shape of the scatter (**circle**, **triangle**, **rectangle**, **cross**) |
 | activeEvent | String | false | false | `undefined` | Event type to activate the scatter |
 | display | String | false | false | `undefined` | Options that display the value of the scatter (**max**, **min**, **all**) |
-| opacity | Number | false | false | `undefined` | The transparency of the scatter chart (Value between 0 and 1) |
+| opacity | Number | false | false | `undefined` | The transparency of the scatter (Value between 0 and 1) |
 | size | Number | false | false | 7 | Size of scatter (Value between 0 and 1) |
 | hideZero | Boolean | false | false | false | Option to hide scatter when the value is 0 |
 
