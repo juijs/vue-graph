@@ -52,9 +52,7 @@ The following is a link you can test with [CodePen](https://codepen.io/collectio
             :names="names"
             :values="values">
         <note :text="'3D-Line Chart'" :align="'left'"></note>
-        <tooltip :names="names" :position="'left'"></tooltip>
         <legends :names="names"></legends>
-        <rotate3d></rotate3d>
     </graph-line3d>
 </div>
 ```
