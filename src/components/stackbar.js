@@ -11,17 +11,17 @@ export default {
     name: 'graph-stackbar',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],
     props: {
-        size: {
+        fixedSize: {
             type: Number,
             required: false,
             default: 0
         },
-        margin: {
+        barMargin: {
             type: Number,
             required: false,
             default: 2
         },
-        padding: {
+        barPadding: {
             type: Number,
             required: false,
             default: 1
@@ -78,8 +78,9 @@ export default {
             active: this.activeIndex,
             activeEvent: this.activeEvent,
             display: this.display,
-            size: this.size,
-            outerPadding: this.margin,
+            size: this.fixedSize,
+            outerPadding: this.barMargin,
+            innerPadding: this.barPadding,
             edge: this.connectedLine
         }];
 

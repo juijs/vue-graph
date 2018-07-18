@@ -11,9 +11,9 @@ export default {
         position: {
             type: String,
             required: false,
-            default: 'top' // or top, left, right
+            default: 'top' // or top, bottom, left, right
         },
-        anchor: {
+        showAnchor: {
             type: Boolean,
             required: false,
             default: true
@@ -25,7 +25,7 @@ export default {
         this.$parent.widgets.push({
             type: 'tooltip',
             orient: this.position,
-            anchor: this.anchor,
+            anchor: this.showAnchor,
             format: function(data, key) {
                 if(data != null) {
                     return {

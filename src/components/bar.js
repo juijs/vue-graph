@@ -11,22 +11,22 @@ export default {
     name: 'graph-bar',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],
     props: {
-        size: {
+        fixedSize: {
             type: Number,
             required: false,
             default: 0
         },
-        minSize: {
+        minValue: {
             type: Number,
             required: false,
             default: 0
         },
-        margin: {
+        barMargin: {
             type: Number,
             required: false,
             default: 2
         },
-        padding: {
+        barPadding: {
             type: Number,
             required: false,
             default: 1
@@ -52,10 +52,10 @@ export default {
             active: this.activeIndex,
             activeEvent: this.activeEvent,
             display: this.display,
-            size: this.size,
-            minSize: this.minSize,
-            outerPadding: this.margin,
-            innerPadding: this.padding
+            size: this.fixedSize,
+            minSize: this.minValue,
+            outerPadding: this.barMargin,
+            innerPadding: this.barPadding
         }];
     }
 }

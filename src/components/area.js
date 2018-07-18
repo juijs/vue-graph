@@ -20,7 +20,7 @@ export default {
             type: Number,
             required: false
         },
-        borderline: {
+        borderLine: {
             type: Boolean,
             required: false,
             default: true

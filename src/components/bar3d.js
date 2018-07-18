@@ -15,7 +15,7 @@ export default {
             type: Array,
             required: true
         },
-        padding: {
+        barPadding: {
             type: Number,
             required: false,
             default: 20
@@ -25,7 +25,7 @@ export default {
         this.brushes = [{
             type: 'polygon.column3d',
             colors: this.colors,
-            padding: this.padding
+            padding: this.barPadding
         }];
     }
 }
