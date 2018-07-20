@@ -5,23 +5,22 @@
 </head>
 <body>
     <div id="app">
-        <graph-stackbar
+        <graph-pie
                 :width="600"
                 :height="400"
-                :shape="'curve'"
-                :axis-reverse="false"
-                :axis-x-style="'gradient'"
-                :axis-y-style="'solid'"
-                :labels="labels"
                 :values="values"
                 :names="names"
-                :full-mode="true"
-                :show-text="true"
+                :active-index="[ 0, 2 ]"
+                :active-event="'click'"
+                :show-text-type="'inside'"
+                :data-format="dataFormat"
+                :shape="'donut'"
+                :show-total-value="true"
         >
             <note :text="title"></note>
             <legends :names="names"></legends>
-            <tooltip :names="names" :position="'right'"></tooltip>
-        </graph-stackbar>
+            <tooltip :names="names" :position="'left'"></tooltip>
+        </graph-pie>
     </div>
 </body>
 </html>

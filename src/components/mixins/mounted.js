@@ -18,80 +18,84 @@ export default {
                 left: this.paddingLeft
             },
             event: {
-                "chart.click": function(e) {
-                    self.$emit("inside#click", e);
+                'chart.click': function(e) {
+                    self.$emit('inside#click', e);
                 },
-                "chart.dblclick": function(e) {
-                    self.$emit("inside#dblclick", e);
+                'chart.dblclick': function(e) {
+                    self.$emit('inside#dblclick', e);
                 },
-                "chart.rclick": function(e) {
-                    self.$emit("inside#rclick", e);
+                'chart.rclick': function(e) {
+                    self.$emit('inside#rclick', e);
                 },
-                "chart.mouseover": function(e) {
-                    self.$emit("inside#mouseover", e);
+                'chart.mouseover': function(e) {
+                    self.$emit('inside#mouseover', e);
                 },
-                "chart.mouseout": function(e) {
-                    self.$emit("inside#mouseout", e);
+                'chart.mouseout': function(e) {
+                    self.$emit('inside#mouseout', e);
                 },
-                "chart.mousemove": function(e) {
-                    self.$emit("inside#mousemove", e);
+                'chart.mousemove': function(e) {
+                    self.$emit('inside#mousemove', e);
                 },
-                "chart.mousedown": function(e) {
-                    self.$emit("inside#mousedown", e);
+                'chart.mousedown': function(e) {
+                    self.$emit('inside#mousedown', e);
                 },
-                "chart.mouseup": function(e) {
-                    self.$emit("inside#mouseup", e);
+                'chart.mouseup': function(e) {
+                    self.$emit('inside#mouseup', e);
                 },
-                "bg.click": function(e) {
-                    self.$emit("outside#click", e);
+                'bg.click': function(e) {
+                    self.$emit('outside#click', e);
                 },
-                "bg.dblclick": function(e) {
-                    self.$emit("outside#dblclick", e);
+                'bg.dblclick': function(e) {
+                    self.$emit('outside#dblclick', e);
                 },
-                "bg.rclick": function(e) {
-                    self.$emit("outside#rclick", e);
+                'bg.rclick': function(e) {
+                    self.$emit('outside#rclick', e);
                 },
-                "bg.mouseover": function(e) {
-                    self.$emit("outside#mouseover", e);
+                'bg.mouseover': function(e) {
+                    self.$emit('outside#mouseover', e);
                 },
-                "bg.mouseout": function(e) {
-                    self.$emit("outside#mouseout", e);
+                'bg.mouseout': function(e) {
+                    self.$emit('outside#mouseout', e);
                 },
-                "bg.mousemove": function(e) {
-                    self.$emit("outside#mousemove", e);
+                'bg.mousemove': function(e) {
+                    self.$emit('outside#mousemove', e);
                 },
-                "bg.mousedown": function(e) {
-                    self.$emit("outside#mousedown", e);
+                'bg.mousedown': function(e) {
+                    self.$emit('outside#mousedown', e);
                 },
-                "bg.mouseup": function(e) {
-                    self.$emit("outside#mouseup", e);
+                'bg.mouseup': function(e) {
+                    self.$emit('outside#mouseup', e);
                 },
-                "click": function(obj, e) {
-                    self.$emit("click", obj, e);
+                'click': function(obj, e) {
+                    self.$emit('click', obj, e);
                 },
-                "dblclick": function(obj, e) {
-                    self.$emit("dblclick", obj, e);
+                'dblclick': function(obj, e) {
+                    self.$emit('dblclick', obj, e);
                 },
-                "rclick": function(obj, e) {
-                    self.$emit("rclick", obj, e);
+                'rclick': function(obj, e) {
+                    self.$emit('rclick', obj, e);
                 },
-                "mouseover": function(obj, e) {
-                    self.$emit("mouseover", obj, e);
+                'mouseover': function(obj, e) {
+                    self.$emit('mouseover', obj, e);
                 },
-                "mouseout": function(obj, e) {
-                    self.$emit("mouseout", obj, e);
+                'mouseout': function(obj, e) {
+                    self.$emit('mouseout', obj, e);
                 },
-                "mousemove": function(obj, e) {
-                    self.$emit("mousemove", obj, e);
+                'mousemove': function(obj, e) {
+                    self.$emit('mousemove', obj, e);
                 },
-                "mousedown": function(obj, e) {
-                    self.$emit("mousedown", obj, e);
+                'mousedown': function(obj, e) {
+                    self.$emit('mousedown', obj, e);
                 },
-                "mouseup": function(obj, e) {
-                    self.$emit("mouseup", obj, e);
+                'mouseup': function(obj, e) {
+                    self.$emit('mouseup', obj, e);
                 }
             },
-            format: this.format,
+            format: function() {
+                if(typeof(self.format) == 'function') {
+                    self.format(this, arguments);
+                }
+            },
             theme: this.theme,
             style: this.styles,
             render: false,

@@ -9,13 +9,14 @@ window.vm = new Vue({
     el: "#app",
     data: {
         name : "[Simple Dashboard]",
-        labels: [ "1q", "2q", "3q", "4q" ],
-        values: [
-            [ 10, 5, 5, 5 ],
-            [ 40, 10, 10, 10 ],
-            [ 30, 30, 30, 30 ]
-        ],
-        names: [ 'MS', 'Apple', 'Google' ],
-        title: "StackBar Test"
+        values: [ 10, 5, 5, 5 ],
+        names: [ 'Apple', 'Google', 'MS', 'Timax' ],
+        title: "PIE",
+    },
+    methods: {
+        dataFormat: function(a, b) {
+            if(b) return b + "%";
+            return a;
+        }
     }
 });

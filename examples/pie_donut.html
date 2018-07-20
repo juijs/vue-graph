@@ -1,0 +1,44 @@
+<html>
+<head>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-pie
+            :width="500"
+            :height="500"
+            :padding-top="75"
+            :padding-right="75"
+            :padding-bottom="75"
+            :padding-left="75"
+            :values="values"
+            :names="names"
+            :active-index="[ 0, 2 ]"
+            :active-event="'click'"
+            :show-text-type="'outside'"
+            :data-format="dataFormat"
+            :shape="'donut'"
+            :show-total-value="true">
+        <note :text="'Donut Chart'"></note>
+        <legends :names="names"></legends>
+        <tooltip :names="names"></tooltip>
+    </graph-pie>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        values: [ 10, 5, 5, 5 ],
+        names: [ 'Apple', 'Google', 'MS', 'Facebook' ]
+    },
+    methods: {
+        dataFormat: function(a, b) {
+            if(b) return b + "%";
+            return a;
+        }
+    }
+});
+</script>
+</body>
+</html>

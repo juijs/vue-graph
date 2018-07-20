@@ -32,7 +32,7 @@ export default {
         },
         labels: {
             type: Array,
-            required: true
+            required: false
         },
         values: {
             type: Array,

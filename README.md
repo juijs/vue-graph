@@ -91,6 +91,8 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym)
  - [Bubble Chart](https://codepen.io/seogi1004/pen/qyZWBL)
  - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
+ - [Pie Chart](https://codepen.io/seogi1004/pen/xJgxoN)
+ - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  
 ## Props
 
@@ -109,7 +111,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | paddingRight | Number | false | false | 50 | Right padding of the chart |
 | paddingBottom | Number | false | false | 50 | Bottom padding of the chart |
 | paddingLeft | Number | false | false | 50 | Left padding of the chart |
-| labels | Array | true | true | `undefined` | Label of chart data |
+| labels | Array | false | true | `undefined` | Label of chart data |
 | values | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
 ### Common (X-Y Axis)
@@ -207,6 +209,18 @@ There are many charts that have not yet been migrated. We are going to continue.
 | opacity | Number | false | false | `undefined` | The transparency of the scatter (Value between 0 and 1) |
 | size | Number | false | false | 7 | Size of scatter (Value between 0 and 1) |
 | hideZero | Boolean | false | false | false | Option to hide scatter when the value is 0 |
+
+#### [graph-pie](https://codepen.io/seogi1004/pen/xJgxoN)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| shape | String | false | false | `pie` | It is the shape of the pie (**pie**, **donut**) |
+| activeIndex | Number, Array | false | false | `undefined` | The index of the pie to activate |
+| activeEvent | String | false | false | `undefined` | Event type to activate the pie |
+| showTextType | String | false | false | `undefined` | Options that display the value of the pie (**inside**, **outside**) |
+| dataFormat | Function | false | true | `undefined` | Pie data format function |
+| showTotalValue | Boolean | false | false | `undefined` | Options that show total value in the center when the shape is donut |
+| strokeWidth | Number | false | false | 50 | When the shape is donut, set the stroke width |
 
 
 ### Props by widgets
