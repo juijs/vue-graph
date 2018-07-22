@@ -5,22 +5,14 @@
 </head>
 <body>
     <div id="app">
-        <graph-pie
+        <graph-comparison-bar
                 :width="600"
                 :height="400"
+                :labels="labels"
                 :values="values"
-                :names="names"
-                :active-index="[ 0, 2 ]"
-                :active-event="'click'"
-                :show-text-type="'inside'"
-                :data-format="dataFormat"
-                :shape="'donut'"
-                :show-total-value="true"
         >
             <note :text="title"></note>
-            <legends :names="names"></legends>
-            <tooltip :names="names" :position="'left'"></tooltip>
-        </graph-pie>
+        </graph-comparison-bar>
     </div>
 </body>
 </html>

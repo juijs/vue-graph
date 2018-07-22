@@ -91,11 +91,7 @@ export default {
                     self.$emit('mouseup', obj, e);
                 }
             },
-            format: function() {
-                if(typeof(self.format) == 'function') {
-                    self.format(this, arguments);
-                }
-            },
+            format: this.format,
             theme: this.theme,
             style: this.styles,
             render: false,
