@@ -56,6 +56,7 @@ export default {
 
         this.$parent.widgets.push({
             type: 'legend',
+            brush: this.brushes,
             orient: ORIENT_MAP[this.position],
             align: ALIGN_MAP[this.align],
             dx: this.dx,

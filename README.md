@@ -94,6 +94,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 
  - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
  - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva)
+ - [Comparison Bar Chart](https://codepen.io/seogi1004/pen/djvoov)
  - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE)
  - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR)
  - [Stack Bar Cahrt (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
@@ -147,7 +148,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 ### Props by charts
 
-#### [graph-bar](https://codepen.io/seogi1004/pen/WKrVLx)
+#### [graph-bar](https://codepen.io/seogi1004/pen/WKrVLx), [graph-comparison-bar](https://codepen.io/seogi1004/pen/djvoov)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |

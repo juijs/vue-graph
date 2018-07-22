@@ -10,8 +10,11 @@
                 :height="400"
                 :labels="labels"
                 :values="values"
+                :axis-step="7"
         >
             <note :text="title"></note>
+            <tooltip :names="names"></tooltip>
+            <legends :names="names"></legends>
         </graph-comparison-bar>
     </div>
 </body>

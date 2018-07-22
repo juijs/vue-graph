@@ -6,5 +6,10 @@ export default {
         }
 
         this.index = this.$parent.widgets.length;
+        this.brushes = [];
+
+        for(let i = 0; i < this.$parent.brushes.length; i++) {
+            this.brushes.push(i);
+        }
     }
 }

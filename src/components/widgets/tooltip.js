@@ -24,6 +24,7 @@ export default {
 
         this.$parent.widgets.push({
             type: 'tooltip',
+            brush: this.brushes,
             orient: this.position,
             anchor: this.showAnchor,
             format: function(data, key) {
