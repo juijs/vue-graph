@@ -1,0 +1,39 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-area-dateblock
+            :width="600"
+            :height="400"
+            :axis-min="0"
+            :axis-max="100"
+            :axis-reverse="false"
+            :axis-format="'HH:mm'"
+            :axis-interval="1000 * 60 * 60 * 8"
+            :labels="labels"
+            :values="values">
+        <note :text="'Area Chart'"></note>
+        <legends :names="names"></legends>
+        <tooltip :names="names" :position="'right'"></tooltip>
+        <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
+    </graph-area-dateblock>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        labels: [ new Date("2018-07-07 00:00:00"), new Date("2018-07-08 00:00:00") ],
+        names: [ "MS", "Apple", "Google" ],
+        values: [
+            [ 10, 0, 5, 5 ],
+            [ 40, 10, 10, 10 ],
+            [ 30, 25, 35, 30 ]
+        ]
+    }
+});
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import GraphBar from './components/bar.js'
 import GraphBar3d from './components/bar3d.js'
 import GraphStackBar from './components/stackbar.js'
+import GraphRangeBar from './components/rangebar.js'
 import GraphLine from './components/line.js'
 import GraphLine3d from './components/line3d.js'
 import GraphLineForDateBlock from './components/line-dateblock.js'
@@ -8,6 +9,8 @@ import GraphLineForTimeRange from './components/line-timerange.js'
 import GraphScatter from './components/scatter.js'
 import GraphBubble from './components/bubble.js'
 import GraphArea from './components/area.js'
+import GraphAreaForDateBlock from './components/area-dateblock.js'
+import GraphAreaForTimeRange from './components/area-timerange.js'
 import GraphPie from './components/pie.js'
 import GraphComparisonBar from './components/comparisonbar.js'
 import WidgetNote from './components/widgets/note.js'
@@ -22,6 +25,7 @@ export default {
         Vue.component(GraphBar.name, GraphBar);
         Vue.component(GraphBar3d.name, GraphBar3d);
         Vue.component(GraphStackBar.name, GraphStackBar);
+        Vue.component(GraphRangeBar.name, GraphRangeBar);
         Vue.component(GraphLine.name, GraphLine);
         Vue.component(GraphLine3d.name, GraphLine3d);
         Vue.component(GraphLineForDateBlock.name, GraphLineForDateBlock);
@@ -29,6 +33,8 @@ export default {
         Vue.component(GraphScatter.name, GraphScatter);
         Vue.component(GraphBubble.name, GraphBubble);
         Vue.component(GraphArea.name, GraphArea);
+        Vue.component(GraphAreaForDateBlock.name, GraphAreaForDateBlock);
+        Vue.component(GraphAreaForTimeRange.name, GraphAreaForTimeRange);
         Vue.component(GraphPie.name, GraphPie);
         Vue.component(GraphComparisonBar.name, GraphComparisonBar);
 

@@ -97,7 +97,9 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Comparison Bar Chart](https://codepen.io/seogi1004/pen/djvoov)
  - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE)
  - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR)
- - [Stack Bar Cahrt (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
+ - [Stack Bar Chart (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
+ - [Range Bar Chart](https://codepen.io/seogi1004/pen/QBvZjr)
+ - [Range Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/RBVerK)
  - [Line Chart](https://codepen.io/seogi1004/pen/jpqNPm)
  - [Line Chart (Reverse)](https://codepen.io/seogi1004/pen/MBygar)
  - [Line Chart (Date+Block)](https://codepen.io/seogi1004/pen/qyZWEL)
@@ -107,6 +109,8 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Scatter Chart](https://codepen.io/seogi1004/pen/YjqKym)
  - [Bubble Chart](https://codepen.io/seogi1004/pen/qyZWBL)
  - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
+ - [Area Chart (Date+Block)](https://codepen.io/seogi1004/pen/zLwmrV)
+ - [Area Chart (Time+Range)](https://codepen.io/seogi1004/pen/WKjawJ)
  - [Pie Chart](https://codepen.io/seogi1004/pen/xJgxoN)
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  
@@ -181,6 +185,13 @@ There are many charts that have not yet been migrated. We are going to continue.
 | fullMode | Boolean | false | false | false | Option to change to full stack bar |
 | showText | Boolean | false | false | false | Options to show the percentage value in the bar |
 
+#### [graph-rangebar](https://codepen.io/seogi1004/pen/QBvZjr)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| barMargin | Number | false | false | 2 | Margins between bars and bars |
+| barPadding | Number | false | false | 1 | Inside padding inside the bar |
+
 #### [graph-line](https://codepen.io/seogi1004/pen/jpqNPm), [graph-line-dateblock](https://codepen.io/seogi1004/pen/qyZWEL), [graph-line-timerange](https://codepen.io/seogi1004/pen/WKxqRd)
  
 | Name | Type | Required | Watch | Default | Description |
@@ -207,7 +218,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | showText | Boolean | false | false | false | Options to show the percentage value in the bubble |
 | activeEvent | String | false | false | `undefined` | Event type to activate the bubble |
 
-#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy)
+#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy), [graph-area-dateblock](https://codepen.io/seogi1004/pen/zLwmrV), [graph-area-timerange](https://codepen.io/seogi1004/pen/WKjawJ)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |

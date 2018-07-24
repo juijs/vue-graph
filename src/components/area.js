@@ -47,7 +47,7 @@ export default {
             colors: this.colors,
             symbol: this.shape,
             opacity: this.opacity,
-            line: this.borderline
+            line: this.borderLine
         }];
     }
 }

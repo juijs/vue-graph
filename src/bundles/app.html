@@ -4,18 +4,20 @@
     <meta http-equiv="content-type" content="charset=utf-8;"/>
 </head>
 <body>
-    <div id="app">
-        <graph-comparison-bar
-                :width="600"
-                :height="400"
-                :labels="labels"
-                :values="values"
-                :axis-step="7"
-        >
-            <note :text="title"></note>
-            <tooltip :names="names"></tooltip>
-            <legends :names="names"></legends>
-        </graph-comparison-bar>
-    </div>
+<div id="app">
+    <graph-area-timerange
+            :width="600"
+            :height="400"
+            :axis-min="0"
+            :axis-max="100"
+            :axis-reverse="false"
+            :axis-format="'HH:mm'"
+            :axis-interval="1000 * 60 * 60 * 8"
+            :labels="labels"
+            :values="values">
+        <note :text="'Line Chart'"></note>
+        <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
+    </graph-area-timerange>
+</div>
 </body>
 </html>
