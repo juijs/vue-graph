@@ -111,6 +111,9 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Area Chart](https://codepen.io/seogi1004/pen/qybeMy)
  - [Area Chart (Date+Block)](https://codepen.io/seogi1004/pen/zLwmrV)
  - [Area Chart (Time+Range)](https://codepen.io/seogi1004/pen/WKjawJ)
+ - [Range Area Chart](https://codepen.io/seogi1004/pen/bjrmbB)
+ - [Range Area Chart (Date+Block)](https://codepen.io/seogi1004/pen/oMeagR)
+ - [Range Area Chart (Time+Range)](https://codepen.io/seogi1004/pen/xJLyxQ)
  - [Pie Chart](https://codepen.io/seogi1004/pen/xJgxoN)
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  

@@ -5,19 +5,18 @@
 </head>
 <body>
 <div id="app">
-    <graph-area-timerange
+    <graph-rangearea-timerange
             :width="600"
             :height="400"
             :axis-min="0"
-            :axis-max="100"
-            :axis-reverse="false"
-            :axis-format="'HH:mm'"
-            :axis-interval="1000 * 60 * 60 * 8"
+            :axis-max="15"
+            :axis-format="'yyyy'"
+            :axis-interval="1000 * 60 * 60 * 24 * 365"
             :labels="labels"
             :values="values">
-        <note :text="'Line Chart'"></note>
+        <note :text="'Area Chart'"></note>
         <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
-    </graph-area-timerange>
+    </graph-rangearea-timerange>
 </div>
 </body>
 </html>

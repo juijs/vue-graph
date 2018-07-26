@@ -1,0 +1,38 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-rangearea-dateblock
+            :width="600"
+            :height="400"
+            :axis-format="'yyyy'"
+            :axis-interval="1000 * 60 * 60 * 24 * 365"
+            :labels="labels"
+            :values="values">
+        <note :text="'Area Chart'"></note>
+        <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
+    </graph-rangearea-dateblock>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        labels: [ new Date("2001-01-01 00:00:00"), new Date("2009-01-01 00:00:00") ],
+        values: [
+            [ 4, 6, 8 ],
+            [ 5, 7, 9 ],
+            [ 6, 8, 11 ],
+            [ 5, 6, 10 ],
+            [ 2, 3, 6 ],
+            [ 5, 6, 8 ],
+            [ 2, 4, 6 ],
+            [ 8, 10, 12 ]
+        ]
+    }
+});
+</script>
+</body>
+</html>

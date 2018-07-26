@@ -11,6 +11,9 @@ import GraphBubble from './components/bubble.js'
 import GraphArea from './components/area.js'
 import GraphAreaForDateBlock from './components/area-dateblock.js'
 import GraphAreaForTimeRange from './components/area-timerange.js'
+import GraphRangeArea from './components/rangearea.js'
+import GraphRangeAreaForDateBlock from './components/rangearea-dateblock.js'
+import GraphRangeAreaForTimeRange from './components/rangearea-timerange.js'
 import GraphPie from './components/pie.js'
 import GraphComparisonBar from './components/comparisonbar.js'
 import WidgetNote from './components/widgets/note.js'
@@ -35,6 +38,9 @@ export default {
         Vue.component(GraphArea.name, GraphArea);
         Vue.component(GraphAreaForDateBlock.name, GraphAreaForDateBlock);
         Vue.component(GraphAreaForTimeRange.name, GraphAreaForTimeRange);
+        Vue.component(GraphRangeArea.name, GraphRangeArea);
+        Vue.component(GraphRangeAreaForDateBlock.name, GraphRangeAreaForDateBlock);
+        Vue.component(GraphRangeAreaForTimeRange.name, GraphRangeAreaForTimeRange);
         Vue.component(GraphPie.name, GraphPie);
         Vue.component(GraphComparisonBar.name, GraphComparisonBar);
 

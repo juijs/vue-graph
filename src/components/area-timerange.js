@@ -8,7 +8,7 @@ export default {
     beforeMount: function() {
         this.brushes = [{
             type: 'stackarea',
-            target: [ '1' ],
+            target: '1',
             clip: this.clip,
             colors: this.colors,
             symbol: this.shape,

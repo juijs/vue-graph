@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-rangearea
+            :width="600"
+            :height="400"
+            :axis-full-mode="true"
+            :labels="labels"
+            :values="values">
+        <note :text="'RangeArea Chart'"></note>
+        <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
+    </graph-rangearea>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        labels: [ "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008" ],
+        values: [
+            [ 4, 6, 8 ],
+            [ 5, 7, 9 ],
+            [ 6, 8, 11 ],
+            [ 5, 6, 10 ],
+            [ 2, 3, 6 ],
+            [ 5, 6, 8 ],
+            [ 2, 4, 6 ],
+            [ 8, 10, 12 ]
+        ]
+    }
+});
+</script>
+</body>
+</html>
