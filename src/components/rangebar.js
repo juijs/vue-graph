@@ -7,6 +7,12 @@ import props_axes from './mixins/props-block.js';
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-block.js'
 
+import JUI from 'juijs-chart'
+import RangeBarBrush from 'juijs-chart/src/brush/rangebar.js'
+import RangeColumnBrush from 'juijs-chart/src/brush/rangecolumn.js'
+
+JUI.use(RangeBarBrush, RangeColumnBrush)
+
 export default {
     name: 'graph-rangebar',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],

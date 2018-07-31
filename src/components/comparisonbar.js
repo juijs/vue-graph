@@ -1,12 +1,16 @@
-import jui from 'juijs-chart'
 import graph_bar from './bar.js'
 import methods_axes from "./mixins/methods-comparison.js";
+
+import JUI from 'juijs-chart'
+import BarBrush from 'juijs-chart/src/brush/bar.js'
+
+JUI.use(BarBrush)
 
 export default {
     name: 'graph-comparison-bar',
     mixins: [ graph_bar, methods_axes ],
     beforeMount: function() {
-        const _ = jui.include('util.base')
+        const _ = JUI.include('util.base')
 
         let colors = !this.colors ? [ 1, 2 ] : this.colors;
 

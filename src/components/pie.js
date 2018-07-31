@@ -5,6 +5,12 @@ import mounted from './mixins/mounted.js'
 import props from './mixins/props.js'
 import methods from './mixins/methods.js'
 
+import JUI from 'juijs-chart'
+import PieBrush from 'juijs-chart/src/brush/pie.js'
+import DonutBrush from 'juijs-chart/src/brush/donut.js'
+
+JUI.use(PieBrush, DonutBrush)
+
 export default {
     name: 'graph-pie',
     mixins: [ graph_base, watch, created, mounted, props, methods ],

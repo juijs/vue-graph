@@ -7,6 +7,16 @@ import props_axes from './mixins/props-block.js';
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-block.js'
 
+import JUI from 'juijs-chart'
+import BarBrush from 'juijs-chart/src/brush/bar.js'
+import StackBarBrush from 'juijs-chart/src/brush/stackbar.js'
+import FullStackBarBrush from 'juijs-chart/src/brush/fullstackbar.js'
+import ColumnBrush from 'juijs-chart/src/brush/column.js'
+import StackColumnBrush from 'juijs-chart/src/brush/stackcolumn.js'
+import FullStackColumnBrush from 'juijs-chart/src/brush/fullstackcolumn.js'
+
+JUI.use(BarBrush, StackBarBrush, FullStackBarBrush, ColumnBrush, StackColumnBrush, FullStackColumnBrush)
+
 export default {
     name: 'graph-stackbar',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],

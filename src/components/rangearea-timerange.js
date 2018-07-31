@@ -7,6 +7,12 @@ import props_axes from './mixins/props-timerange.js';
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-timerange.js'
 
+import JUI from 'juijs-chart'
+import LineBrush from 'juijs-chart/src/brush/line.js'
+import RangeAreaBrush from 'juijs-chart/src/brush/rangearea.js'
+
+JUI.use(LineBrush, RangeAreaBrush)
+
 export default {
     name: 'graph-rangearea-timerange',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],

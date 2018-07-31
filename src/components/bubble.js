@@ -7,6 +7,11 @@ import props_axes from './mixins/props-timerange.js'
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-timerange.js'
 
+import JUI from 'juijs-chart'
+import BubbleBrush from 'juijs-chart/src/brush/bubble.js'
+
+JUI.use(BubbleBrush)
+
 export default {
     name: 'graph-bubble',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],

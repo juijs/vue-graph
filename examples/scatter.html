@@ -5,26 +5,21 @@
 </head>
 <body>
 <div id="app">
-    <div class="title">{{ name }}</div>
-    <div class="row">
-        <div class="col">
-            <graph-scatter
-                    :width="600"
-                    :height="400"
-                    :shape="'cross'"
-                    :axis-min="0"
-                    :axis-max="50"
-                    :axis-interval="3600000"
-                    :axis-format="'HH'"
-                    :display="'max'"
-                    :active-event="'click'"
-                    :labels="labels"
-                    :values="values">
-                <note :text="'Scatter Chart'" :align="'left'"></note>
-                <legends :names="[ 'Date', 'Value' ]"></legends>
-            </graph-scatter>
-        </div>
-    </div>
+    <graph-scatter
+            :width="600"
+            :height="400"
+            :shape="'cross'"
+            :axis-min="0"
+            :axis-max="50"
+            :axis-interval="3600000"
+            :axis-format="'HH'"
+            :display="'max'"
+            :active-event="'click'"
+            :labels="labels"
+            :values="values">
+        <note :text="'Scatter Chart'" :align="'left'"></note>
+        <legends :names="[ 'Date', 'Value' ]"></legends>
+    </graph-scatter>
 </div>
 <script>
 var vm = new Vue({

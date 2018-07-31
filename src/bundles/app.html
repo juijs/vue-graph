@@ -5,17 +5,21 @@
 </head>
 <body>
 <div id="app">
-    <graph-bar
+    <graph-scatter
             :width="600"
             :height="400"
+            :shape="'cross'"
             :axis-min="0"
             :axis-max="50"
-            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :axis-interval="3600000"
+            :axis-format="'HH'"
+            :display="'max'"
+            :active-event="'click'"
+            :labels="labels"
             :values="values">
-        <note :text="'Bar Chart'"></note>
-        <tooltip :names="names" :position="'left'"></tooltip>
-        <legends :names="names" :filter="true"></legends>
-    </graph-bar>
+        <note :text="'Scatter Chart'" :align="'left'"></note>
+        <legends :names="[ 'Date', 'Value' ]"></legends>
+    </graph-scatter>
 </div>
 </body>
 </html>

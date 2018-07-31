@@ -7,6 +7,12 @@ import props_axes from './mixins/props-block.js';
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-block.js'
 
+import JUI from 'juijs-chart'
+import BarBrush from 'juijs-chart/src/brush/bar.js'
+import ColumnBrush from 'juijs-chart/src/brush/column.js'
+
+JUI.use(BarBrush, ColumnBrush)
+
 export default {
     name: 'graph-bar',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],

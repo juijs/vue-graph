@@ -7,6 +7,13 @@ import props_axes from './mixins/props-block.js';
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-block.js'
 
+import JUI from 'juijs-chart'
+import LineBrush from 'juijs-chart/src/brush/line.js'
+import AreaBrush from 'juijs-chart/src/brush/area.js'
+import StackAreaBrush from 'juijs-chart/src/brush/stackarea.js'
+
+JUI.use(LineBrush, AreaBrush, StackAreaBrush);
+
 export default {
     name: 'graph-area',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],

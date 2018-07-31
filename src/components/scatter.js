@@ -7,6 +7,11 @@ import props_axes from './mixins/props-timerange.js'
 import methods from './mixins/methods.js'
 import methods_axes from './mixins/methods-timerange.js'
 
+import JUI from 'juijs-chart'
+import ScatterBrush from 'juijs-chart/src/brush/scatter.js'
+
+JUI.use(ScatterBrush)
+
 export default {
     name: 'graph-scatter',
     mixins: [ graph_base, watch, created, mounted, props, props_axes, methods, methods_axes ],
