@@ -1,26 +1,29 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     mode: 'development',
     entry: {
-        vendor: [ 'vue', 'juijs-chart' ],
+        vendors: [ 'vue', 'juijs', 'juijs-graph', 'juijs-chart' ],
         app: path.resolve(__dirname, 'src/bundles/app.js'),
     },
     output: {
         path: path.resolve(__dirname, 'out'),
-        filename: '[name].[hash].js',
-        chunkFilename: '[name].[hash].js',
+        filename: '[name].js'
     },
     optimization: {
+        runtimeChunk: 'single',
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
-                vendor: {
-                    chunks: 'initial',
-                    name: 'vendor',
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendors',
                     enforce: true,
-                },
-            },
+                    chunks: 'all'
+                }
+            }
         }
     },
     plugins: [
@@ -31,7 +34,8 @@ module.exports = {
                 removeComments: true,
                 collapseWhitespace: true,
             }
-        })
+        }),
+        new BundleAnalyzerPlugin()
     ],
     resolve: {
         alias: {

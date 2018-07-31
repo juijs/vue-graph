@@ -5,18 +5,17 @@
 </head>
 <body>
 <div id="app">
-    <graph-rangearea-timerange
+    <graph-bar
             :width="600"
             :height="400"
             :axis-min="0"
-            :axis-max="15"
-            :axis-format="'yyyy'"
-            :axis-interval="1000 * 60 * 60 * 24 * 365"
-            :labels="labels"
+            :axis-max="50"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
             :values="values">
-        <note :text="'Area Chart'"></note>
-        <guideline :tooltip-x="true" :tooltip-y="true"></guideline>
-    </graph-rangearea-timerange>
+        <note :text="'Bar Chart'"></note>
+        <tooltip :names="names" :position="'left'"></tooltip>
+        <legends :names="names" :filter="true"></legends>
+    </graph-bar>
 </div>
 </body>
 </html>
