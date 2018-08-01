@@ -1,7 +1,7 @@
 {
   "name": "vue-graph",
   "productionName": "Vue Graph",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A library that provides various visualization elements for Vue.js",
   "main": "src/vue-graph.js",
   "files": [
@@ -35,7 +35,6 @@
   "author": "alvin.h <seogi777@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "compression-webpack-plugin": "^1.1.11",
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
@@ -47,7 +46,7 @@
     "webpack-bundle-analyzer": "^2.13.1"
   },
   "dependencies": {
-    "juijs-chart": "^2.1.4-es6",
+    "juijs-chart": "^2.1.5-es6",
     "vue": "^2.5.16"
   }
 }
