@@ -16,11 +16,11 @@ import GraphRangeAreaForDateBlock from './components/rangearea-dateblock.js'
 import GraphRangeAreaForTimeRange from './components/rangearea-timerange.js'
 import GraphPie from './components/pie.js'
 import GraphComparisonBar from './components/comparisonbar.js'
-import WidgetNote from './components/widgets/note.js'
-import WidgetTooltip from './components/widgets/tooltip.js'
-import WidgetGuideline from './components/widgets/guideline.js'
-import WidgetLegends from './components/widgets/legends.js'
-import WidgetRotate3d from './components/widgets/rotate3d.js'
+import WidgetNote from './widgets/note.js'
+import WidgetTooltip from './widgets/tooltip.js'
+import WidgetGuideline from './widgets/guideline.js'
+import WidgetLegends from './widgets/legends.js'
+import WidgetRotate3d from './widgets/rotate3d.js'
 
 export default {
     install: function(Vue, options) {

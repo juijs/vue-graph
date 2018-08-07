@@ -1,5 +1,5 @@
 import graph_bar from './bar.js'
-import methods_axes from "./mixins/methods-comparison.js";
+import methods_axes from "../base/methods-comparison.js";
 
 import JUI from 'juijs-chart'
 import BarBrush from 'juijs-chart/src/brush/bar.js'

@@ -1,8 +1,8 @@
-import graph_base from './base.js'
+import graph_core from './core.js'
 
 export default {
     name: 'tooltip',
-    mixins: [ graph_base ],
+    mixins: [ graph_core ],
     props: {
         names: {
             type: Array,

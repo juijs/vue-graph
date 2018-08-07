@@ -5,8 +5,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = {
     mode: 'development',
     entry: {
-        vendors: [ 'vue', 'juijs', 'juijs-graph', 'juijs-chart' ],
-        app: path.resolve(__dirname, 'src/bundles/index.js'),
+        vendors: [ 'vue', 'juijs-chart' ],
+        app: path.resolve(__dirname, 'bundles', 'index.js'),
     },
     output: {
         path: path.resolve(__dirname, 'out'),
@@ -28,8 +28,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, 'src/bundles/index.html'),
-            filename: path.resolve(__dirname, 'out/index.html'),
+            template: path.resolve(__dirname, 'bundles', 'index.html'),
+            filename: path.resolve(__dirname, 'out', 'index.html'),
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,

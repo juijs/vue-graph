@@ -1,9 +1,9 @@
-import graph_base from './base.js'
-import watch from './mixins/watch.js'
-import created from './mixins/created.js'
-import mounted from './mixins/mounted.js'
-import props from './mixins/props.js'
-import methods from './mixins/methods.js'
+import graph_core from './core.js'
+import watch from '../base/watch.js'
+import created from '../base/created.js'
+import mounted from '../base/mounted.js'
+import props from '../base/props.js'
+import methods from '../base/methods.js'
 
 import JUI from 'juijs-chart'
 import PieBrush from 'juijs-chart/src/brush/pie.js'
@@ -13,7 +13,7 @@ JUI.use(PieBrush, DonutBrush)
 
 export default {
     name: 'graph-pie',
-    mixins: [ graph_base, watch, created, mounted, props, methods ],
+    mixins: [ graph_core, watch, created, mounted, props, methods ],
     props: {
         shape: {
             type: String,

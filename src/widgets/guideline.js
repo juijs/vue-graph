@@ -1,9 +1,9 @@
-import graph_base from './base.js'
+import graph_core from './core.js'
 import jui from "juijs-chart";
 
 export default {
     name: 'guideline',
-    mixins: [ graph_base ],
+    mixins: [ graph_core ],
     props: {
         tooltipX: {
             type: Boolean,

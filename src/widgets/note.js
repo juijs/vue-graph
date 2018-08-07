@@ -1,8 +1,8 @@
-import graph_base from './base.js'
+import graph_core from './core.js'
 
 export default {
     name: 'note',
-    mixins: [ graph_base ],
+    mixins: [ graph_core ],
     props: {
         text: {
             type: String,

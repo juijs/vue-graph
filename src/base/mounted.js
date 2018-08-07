@@ -1,4 +1,4 @@
-import jui from 'juijs-chart'
+import JUI from 'juijs-chart'
 
 export default {
     mounted: function() {
@@ -8,7 +8,7 @@ export default {
             throw new Error('[Vue Graph error]: At least one brush must be added to \'brushes\' variable.')
         }
 
-        this.chart = jui.create('chart.builder', this.$el, {
+        this.chart = JUI.create('chart.builder', this.$el, {
             width: this.width,
             height: this.height,
             padding: {

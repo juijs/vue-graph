@@ -1,6 +1,6 @@
 import graph_area from './area.js'
-import props_axes from "./mixins/props-timerange.js";
-import methods_axes from "./mixins/methods-timerange.js";
+import props_axes from "../base/props-timerange.js";
+import methods_axes from "../base/methods-timerange.js";
 
 export default {
     name: 'graph-area-timerange',

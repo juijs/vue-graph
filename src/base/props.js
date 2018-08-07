@@ -3,7 +3,7 @@ export default {
         theme: {
             type: String,
             required: false,
-            default: "jennifer"
+            default: "classic"
         },
         styles: {
             type: Object,

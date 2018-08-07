@@ -1,9 +1,9 @@
-import jui from 'juijs-chart'
+import JUI from 'juijs-chart'
 
 export default {
     methods: {
         convertToData: function(values) {
-            let util = jui.include('util.base');
+            let util = JUI.include('util.base');
             let data = [];
 
             for(let i = 0; i < values.length; i++) {

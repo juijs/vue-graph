@@ -18,10 +18,10 @@
 // });
 
 import Vue from 'vue'
-import GraphScatter from '../components/scatter.js'
-import WidgetNote from '../components/widgets/note.js'
-import WidgetTooltip from '../components/widgets/tooltip.js'
-import WidgetLegends from '../components/widgets/legends.js'
+import GraphScatter from '../src/components/scatter.js'
+import WidgetNote from '../src/widgets/note.js'
+import WidgetTooltip from '../src/widgets/tooltip.js'
+import WidgetLegends from '../src/widgets/legends.js'
 
 Vue.component(GraphScatter.name, GraphScatter);
 Vue.component(WidgetNote.name, WidgetNote);

@@ -1,12 +1,19 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     mode: 'production',
-    entry: path.resolve(__dirname, 'src', 'bundles/production.js'),
+    entry: {
+        'vue-graph': path.resolve(__dirname, 'bundles', 'production.js')
+    },
+    target: 'node',
+    externals: [nodeExternals({
+        whitelist: [ /^juijs/ ]
+    })],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'vue-graph.js'
+        filename: '[name].js'
     },
     optimization: {
         minimizer: [
