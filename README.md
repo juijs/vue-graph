@@ -37,8 +37,8 @@ Vue.use(VueGraph)
 ```js
 import Vue from 'vue'
 import GraphLine3D from 'vue-graph/src/components/line3d.js'
-import NoteWidget from 'vue-graph/src/components/widgets/note.js'
-import LegendWidget from 'vue-graph/src/components/widgets/legends.js'
+import NoteWidget from 'vue-graph/src/widgets/note.js'
+import LegendWidget from 'vue-graph/src/widgets/legends.js'
 
 Vue.component(GraphLine3D.name, GraphLine3D);
 Vue.component(NoteWidget.name, NoteWidget);
