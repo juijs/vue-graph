@@ -116,6 +116,7 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Range Area Chart (Time+Range)](https://codepen.io/seogi1004/pen/xJLyxQ)
  - [Pie Chart](https://codepen.io/seogi1004/pen/xJgxoN)
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
+ - [Treemap Chart](https://codepen.io/seogi1004/pen/QBJREN)
  
 ## Props
 
@@ -251,6 +252,16 @@ There are many charts that have not yet been migrated. We are going to continue.
 | dataFormat | Function | false | true | `undefined` | Pie data format function |
 | showTotalValue | Boolean | false | false | `undefined` | Options that show total value in the center when the shape is donut |
 | strokeWidth | Number | false | false | 50 | When the shape is donut, set the stroke width |
+
+#### [graph-treemap](https://codepen.io/seogi1004/pen/QBJREN)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| showText | Boolean | false | false | false | Options to show the title in the treemap node |
+| textAlign | String | false | false | `center` | Horizontal alignment (**center**, **left**, **right**) |
+| textVerticalAlign | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
+| titleDepth | Number | false | false | 1 | The depth of the node that shows the title text |
+| nodeColor | Function | false | false | `undefined` | Set the color of the node to the callback function |
 
 
 ### Props by widgets

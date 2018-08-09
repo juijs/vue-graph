@@ -1,0 +1,42 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-treemap
+            :width="800"
+            :height="800"
+            :text-align="'right'"
+            :text-vertical-align="'bottom'"
+            :colors="[ '#EC2500', '#ECE100', '#EC9800', '#9EDE00' ]"
+            :values="values">
+        <note :text="'Treemap Chart'" :align="'left'"></note>
+        <tooltip :position="'top'"></tooltip>
+    </graph-treemap>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        values: [
+            [ '0', 'Apples', -1 ],
+            [ '0.0', 'Anne', 5 ],
+            [ '0.1', 'Rick', 3 ],
+            [ '0.2', 'Peter', 4 ],
+            [ '1', 'Bananas', -1 ],
+            [ '1.0', 'Anne', 4 ],
+            [ '1.1', 'Rick', 10 ],
+            [ '1.2', 'Peter', 1 ],
+            [ '2', 'Oranges', -1 ],
+            [ '2.0', 'Anne', 1 ],
+            [ '2.1', 'Rick', 3 ],
+            [ '2.2', 'Peter', 3 ],
+            [ '3', 'Susanne', 2 ],
+        ]
+    }
+});
+</script>
+</body>
+</html>

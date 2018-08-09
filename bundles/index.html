@@ -5,21 +5,16 @@
 </head>
 <body>
 <div id="app">
-    <graph-scatter
-            :width="600"
-            :height="400"
-            :shape="'cross'"
-            :axis-min="0"
-            :axis-max="50"
-            :axis-interval="3600000"
-            :axis-format="'HH'"
-            :display="'max'"
-            :active-event="'click'"
-            :labels="labels"
+    <graph-treemap
+            :width="800"
+            :height="800"
+            :text-align="'right'"
+            :text-vertical-align="'bottom'"
+            :colors="[ '#EC2500', '#ECE100', '#EC9800', '#9EDE00' ]"
             :values="values">
-        <note :text="'Scatter Chart'" :align="'left'"></note>
-        <legends :names="[ 'Date', 'Value' ]"></legends>
-    </graph-scatter>
+        <note :text="'Treemap Chart'" :align="'left'"></note>
+        <tooltip :position="'top'"></tooltip>
+    </graph-treemap>
 </div>
 </body>
 </html>

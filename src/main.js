@@ -16,6 +16,7 @@ import GraphRangeAreaForDateBlock from './components/rangearea-dateblock.js'
 import GraphRangeAreaForTimeRange from './components/rangearea-timerange.js'
 import GraphPie from './components/pie.js'
 import GraphComparisonBar from './components/comparisonbar.js'
+import GraphTreemap from './components/treemap.js'
 import WidgetNote from './widgets/note.js'
 import WidgetTooltip from './widgets/tooltip.js'
 import WidgetGuideline from './widgets/guideline.js'
@@ -43,6 +44,7 @@ export default {
         Vue.component(GraphRangeAreaForTimeRange.name, GraphRangeAreaForTimeRange);
         Vue.component(GraphPie.name, GraphPie);
         Vue.component(GraphComparisonBar.name, GraphComparisonBar);
+        Vue.component(GraphTreemap.name, GraphTreemap);
 
         // 2. 위젯 추가 영역
         Vue.component(WidgetNote.name, WidgetNote);

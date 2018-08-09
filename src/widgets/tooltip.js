@@ -6,7 +6,7 @@ export default {
     props: {
         names: {
             type: Array,
-            required: true
+            required: false
         },
         position: {
             type: String,
@@ -28,13 +28,21 @@ export default {
             orient: this.position,
             anchor: this.showAnchor,
             format: function(data, key) {
-                if(data != null) {
+                // TODO: 좋은 방법은 아닌 것 같다. ㅠㅠ
+                if(self.$parent.$vnode.tag.indexOf('graph-treemap') != -1) {
                     return {
-                        key: self.names[key],
+                        key: data.text,
                         value: data[key]
                     }
                 } else {
-                    return self.names[key];
+                    if(data != null) {
+                        return {
+                            key: self.names[key],
+                            value: data[key]
+                        }
+                    } else {
+                        return self.names[key];
+                    }
                 }
             }
         });

@@ -18,25 +18,32 @@
 // });
 
 import Vue from 'vue'
-import GraphScatter from '../src/components/scatter.js'
+import GraphTreemap from '../src/components/treemap.js'
 import WidgetNote from '../src/widgets/note.js'
 import WidgetTooltip from '../src/widgets/tooltip.js'
-import WidgetLegends from '../src/widgets/legends.js'
 
-Vue.component(GraphScatter.name, GraphScatter);
+Vue.component(GraphTreemap.name, GraphTreemap);
 Vue.component(WidgetNote.name, WidgetNote);
 Vue.component(WidgetTooltip.name, WidgetTooltip);
-Vue.component(WidgetLegends.name, WidgetLegends);
 
 window.vm = new Vue({
     el: "#app",
     data: {
-        labels: [ new Date('2018-07-09 00:00:00'), new Date('2018-07-10 00:00:00') ],
         values: [
-            [ new Date('2018-07-09 05:23:00'), 20 ],
-            [ new Date('2018-07-09 12:00:00'), 15 ],
-            [ new Date('2018-07-09 15:55:00'), 12 ],
-            [ new Date('2018-07-09 19:01:00'), 30 ]
-        ]
+            [ '0', 'Apples', -1 ],
+            [ '0.0', 'Anne', 5 ],
+            [ '0.1', 'Rick', 3 ],
+            [ '0.2', 'Peter', 4 ],
+            [ '1', 'Bananas', -1 ],
+            [ '1.0', 'Anne', 4 ],
+            [ '1.1', 'Rick', 10 ],
+            [ '1.2', 'Peter', 1 ],
+            [ '2', 'Oranges', -1 ],
+            [ '2.0', 'Anne', 1 ],
+            [ '2.1', 'Rick', 3 ],
+            [ '2.2', 'Peter', 3 ],
+            [ '3', 'Susanne', 2 ],
+        ],
+        names: [ '1' ]
     }
 });
