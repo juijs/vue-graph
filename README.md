@@ -260,7 +260,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | showText | Boolean | false | false | false | Options to show the title in the treemap node |
 | textAlign | String | false | false | `center` | Horizontal alignment (**center**, **left**, **right**) |
 | textVerticalAlign | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
-| titleDepth | Number | false | false | 1 | The depth of the node that shows the title text |
+| titleDepth | Number | false | false | 1 | Sets the depth of the tree node to show the title |
 | nodeColor | Function | false | false | `undefined` | Set the color of the node to the callback function |
 
 
