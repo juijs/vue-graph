@@ -124,7 +124,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| theme | String | false | false | `jennifer` | Supports a total of five themes (**jennifer**, **dark**, **pastel**, **gradient**, **pattern**) |
+| theme | String | false | false | `classic` | Supports a total of five themes (**classic**, **dark**, **pastel**, **gradient**, **pattern**) |
 | styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
 | colors | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
 | clip | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
