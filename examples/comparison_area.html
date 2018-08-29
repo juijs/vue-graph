@@ -1,0 +1,38 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-comparison-area
+            :width="600"
+            :height="400"
+            :labels="labels"
+            :values="values"
+            :shape="'step'"
+            :axis-step="5"
+            :axis-min="[ 0, 0 ]"
+            :axis-max="[ 100, 20 ]">
+        <note :text="title"></note>
+        <legends :names="names"></legends>
+    </graph-comparison-area>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        labels: [
+            "2018/01", "", "2018/03", "", "2018/05", "", "2018/07", "", "2018/09", "", "2018/11", ""
+        ],
+        values: [
+            [ 15, 20, 40, 60, 45, 30, 20, 10, 10, 10, 7, 5 ],
+            [ 3, 2, 1, 4, 2, 1, 2, 4, 5, 6, 1, 0 ]
+        ],
+        names: [ "Sales", "Profit" ],
+        title: "Comparison Area Chart"
+    }
+});
+</script>
+</body>
+</html>

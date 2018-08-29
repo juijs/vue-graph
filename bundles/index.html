@@ -5,24 +5,19 @@
 </head>
 <body>
 
-<script type="text/x-template" id="app-template">
-  <graph-stackbar
-      :width="600"
-      :height="400"
-      :fullMode="true"
-      :axis-reverse="true"
-      :labels="[ 'Threat 1', 'Threat 2', 'Threat 3', 'Threat 4' ]"
-      :full-mode="false"
-      :axis-min="0"
-      :axis-max="50"
-      :values="values"
-    >
-    <note :text="'StackBar Chart'"></note>
-  </graph-stackbar>
-</script>
-
 <div id="app">
-    <test-comp></test-comp>
+    <graph-comparison-area
+            :width="600"
+            :height="400"
+            :labels="labels"
+            :values="values"
+            :shape="'step'"
+            :axis-step="5"
+            :axis-min="[ 0, 0 ]"
+            :axis-max="[ 100, 20 ]">
+        <note :text="title"></note>
+        <legends :names="names"></legends>
+    </graph-comparison-area>
 </div>
 
 </body>
