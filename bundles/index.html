@@ -4,17 +4,26 @@
     <meta http-equiv="content-type" content="charset=utf-8;"/>
 </head>
 <body>
+
+<script type="text/x-template" id="app-template">
+  <graph-stackbar
+      :width="600"
+      :height="400"
+      :fullMode="true"
+      :axis-reverse="true"
+      :labels="[ 'Threat 1', 'Threat 2', 'Threat 3', 'Threat 4' ]"
+      :full-mode="false"
+      :axis-min="0"
+      :axis-max="50"
+      :values="values"
+    >
+    <note :text="'StackBar Chart'"></note>
+  </graph-stackbar>
+</script>
+
 <div id="app">
-    <graph-treemap
-            :width="800"
-            :height="800"
-            :text-align="'right'"
-            :text-vertical-align="'bottom'"
-            :colors="[ '#EC2500', '#ECE100', '#EC9800', '#9EDE00' ]"
-            :values="values">
-        <note :text="'Treemap Chart'" :align="'left'"></note>
-        <tooltip :position="'top'"></tooltip>
-    </graph-treemap>
+    <test-comp></test-comp>
 </div>
+
 </body>
 </html>

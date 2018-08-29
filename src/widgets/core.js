@@ -1,7 +1,7 @@
 export default {
     template: '<span style="display: none;"></span>',
     beforeMount: function(e) {
-        if(this.$root == this.$parent) {
+        if(!this.$parent || !this.$parent.$vnode || this.$parent.$vnode.tag.indexOf("graph-") == -1) {
             throw new Error('[Vue Graph error]: Can only be used as child nodes.');
         }
 
