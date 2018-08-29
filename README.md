@@ -95,6 +95,7 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Bar Chart](https://codepen.io/seogi1004/pen/WKrVLx)
  - [Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/xJZvva)
  - [Comparison Bar Chart](https://codepen.io/seogi1004/pen/djvoov)
+ - [Comparison Area Chart](https://codepen.io/seogi1004/pen/PdGXMZ)
  - [Stack Bar Chart](https://codepen.io/seogi1004/pen/djMbGE)
  - [Stack Bar Chart (Reverse)](https://codepen.io/seogi1004/pen/oMxvLR)
  - [Stack Bar Chart (Full Mode)](https://codepen.io/seogi1004/pen/xJVKVm)
@@ -222,7 +223,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | showText | Boolean | false | false | false | Options to show the percentage value in the bubble |
 | activeEvent | String | false | false | `undefined` | Event type to activate the bubble |
 
-#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy), [graph-area-dateblock](https://codepen.io/seogi1004/pen/zLwmrV), [graph-area-timerange](https://codepen.io/seogi1004/pen/WKjawJ)
+#### [graph-area](https://codepen.io/seogi1004/pen/qybeMy), [graph-area-dateblock](https://codepen.io/seogi1004/pen/zLwmrV), [graph-area-timerange](https://codepen.io/seogi1004/pen/WKjawJ), [graph-comparison-area](https://codepen.io/seogi1004/pen/PdGXMZ)
  
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
