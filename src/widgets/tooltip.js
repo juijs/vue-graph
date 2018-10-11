@@ -19,6 +19,12 @@ export default {
             default: true
         }
     },
+    watch: {
+        names: function(newVal, oldVal) {
+            this.names = newVal;
+            this.$parent.chart.render(true);
+        }
+    },
     beforeMount: function(e) {
         const self = this;
 

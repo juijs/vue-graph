@@ -285,7 +285,7 @@ Widget showing chart element values.
 
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
-| names | String | true | false |  | Name to map to value type |
+| names | String | true | true |  | Name to map to value type |
 | position | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **left**, **right**) |
 | showAnchor | Boolean | false | false | true | Options to display anchor |
 
@@ -294,7 +294,7 @@ Widget that represents the chart legend.
 
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
-| names | String | true | false |  | Name to map to value type |
+| names | String | true | true |  | Name to map to value type |
 | align | String | false | false | `center` | Horizontal alignment (**center**, **start**, **end**) |
 | position | String | false | false | `bottom` | Vertical alignment (**top**, **bottom**, **left**, **right**) |
 | dx | Number | false | false | 0 | x-axis position adjustment value |
