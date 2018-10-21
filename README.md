@@ -144,9 +144,9 @@ There are many charts that have not yet been migrated. We are going to continue.
 
 | Name | Type | Required | Watch | Default | Description |
 | ---- | ---- | -------- | ----- | --------| ----------- |
-| renderInterval | Number | false | false | 0 | Miniimum value for the chart axis |
-| renderHandler | Number | false | false | 0 | Maximum value for the chart axis |
-| renderStop | Boolean | false | false | 10 | Display interval of chart axis value |
+| renderInterval | Number | false | false | 200 | Rendering interval (ms) |
+| renderHandler | Function | false | false | `null` | Callback function that can post-process when rendering a chart |
+| renderStop | Boolean | false | true | false | Pause or resume chart rendering |
 
 ### Common (X-Y Axis)
 
@@ -272,6 +272,16 @@ There are many charts that have not yet been migrated. We are going to continue.
 | textVerticalAlign | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
 | titleDepth | Number | false | false | 1 | Sets the depth of the tree node to show the title |
 | nodeColor | Function | false | false | `undefined` | Set the color of the node to the callback function |
+
+#### [graph-equalizer](https://codepen.io/seogi1004/pen/ReJEyd)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| minValue | Number | false | false | 0 | When the value is very small, the minimum size of the bar  |
+| fixedSize | Number | false | false | 0 | Fixed width of bar (or height) |
+| barMargin | Number | false | false | 2 | Margins between bars and bars |
+| barPadding | Number | false | false | 1 | Inside padding inside the bar |
+| maxDivisions | Number | false | false | 5 | Maximum number of division bars |
 
 
 ### Props by widgets
