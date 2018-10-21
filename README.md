@@ -118,7 +118,7 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Pie Chart](https://codepen.io/seogi1004/pen/xJgxoN)
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  - [Treemap Chart](https://codepen.io/seogi1004/pen/QBJREN)
- - [Equalizer Chart](https://codepen.io/seogi1004/pen/ReJEyd)
+ - [Equalizer Chart](https://codepen.io/seogi1004/pen/ReJEyd) (+Animation)
  
 ## Props
 
