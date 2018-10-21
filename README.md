@@ -118,13 +118,14 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Pie Chart](https://codepen.io/seogi1004/pen/xJgxoN)
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  - [Treemap Chart](https://codepen.io/seogi1004/pen/QBJREN)
+ - [Equalizer Chart](https://codepen.io/seogi1004/pen/ReJEyd)
  
 ## Props
 
 ### Common
 
 | Name | Type | Required | Watch | Default | Description |
-| ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ---- | ---- | -------- | ----- | --------| ----------- |
 | theme | String | false | false | `classic` | Supports a total of five themes (**classic**, **dark**) |
 | styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
 | colors | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
@@ -139,10 +140,18 @@ There are many charts that have not yet been migrated. We are going to continue.
 | labels | Array | false | true | `undefined` | Label of chart data |
 | values | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 
+### Common (Animation)
+
+| Name | Type | Required | Watch | Default | Description |
+| ---- | ---- | -------- | ----- | --------| ----------- |
+| renderInterval | Number | false | false | 0 | Miniimum value for the chart axis |
+| renderHandler | Number | false | false | 0 | Maximum value for the chart axis |
+| renderStop | Boolean | false | false | 10 | Display interval of chart axis value |
+
 ### Common (X-Y Axis)
 
 | Name | Type | Required | Watch | Default | Description |
-| ---------------- | -------------- | -------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| ---- | ---- | -------- | ----- | --------| ----------- |
 | axisMin | Number | false | false | 0 | Miniimum value for the chart axis |
 | axisMax | Number | false | false | 0 | Maximum value for the chart axis |
 | axisStep | Number | false | false | 10 | Display interval of chart axis value |
