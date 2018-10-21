@@ -6,24 +6,18 @@
 <body>
 
 <div id="app">
-    <section class="container">
-        Select your dataset:
-
-        <select v-model="dataset">
-            <option value="set1">Set 1</option>
-            <option value="set2">Set 2</option>
-        </select>
-
-        <graph-pie
-                :width="600"
-                :height="350"
-                :padding-bottom="100"
-                :values="items[dataset].values"
-                :names="items[dataset].names">
-            <legends :names="items[dataset].names"></legends>
-            <tooltip :names="items[dataset].names"></tooltip>
-        </graph-pie>
-    </section>
+    <graph-equalizer
+            :width="800"
+            :height="250"
+            :axis-max="30"
+            :axis-step="3"
+            :labels="[ 'JBoss1', 'JBoss2', 'JBoss3', 'JBoss4', 'Tomcat', 'Jeus', 'Jetty' ]"
+            :values="values"
+            :render-interval="200"
+            :render-stop="isStop"
+            :max-divisions="10"
+            @click="onClickEvent">
+    </graph-equalizer>
 </div>
 
 </body>

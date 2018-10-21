@@ -1,0 +1,58 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-equalizer
+            :width="800"
+            :height="250"
+            :axis-max="30"
+            :axis-step="3"
+            :axis-x-style="'none'"
+            :labels="[ 'JBoss1', 'JBoss2', 'JBoss3', 'JBoss4', 'Tomcat', 'Jeus', 'Jetty' ]"
+            :values="values"
+            :render-interval="200"
+            :render-stop="isStop"
+            :max-divisions="10"
+            @click="onClickEvent">
+        <note :text="'Equalizer Chart'" :align="'left'"></note>
+        <legends :names="names" :position="'top'" :align="'right'" :dy="15"></legends>
+    </graph-equalizer>
+</div>
+<script>
+function rnd(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+var vm = new Vue({
+    el: "#app",
+    data: {
+        names: [],
+        values: [],
+        isStop: false
+    },
+    methods: {
+        onClickEvent: function(obj, e) {
+            alert("Data Index : " + obj.dataIndex);
+        }
+    }
+});
+
+setInterval(function() {
+    vm.values = [
+        [ rnd(3,6), rnd(3,6), rnd(3,6), rnd(3,6), rnd(4,8), rnd(4,8), rnd(4,8) ],
+        [ rnd(0,4), rnd(0,4), rnd(0,4), rnd(0,4), rnd(2,4), rnd(2,4), rnd(2,4) ],
+        [ rnd(0,3), rnd(0,3), rnd(0,3), rnd(0,3), rnd(3,6), rnd(3,6), rnd(3,6) ],
+        [ rnd(0,2), rnd(0,2), rnd(0,2), rnd(0,2), rnd(0,2), rnd(0,2), rnd(0,2) ]
+    ];
+
+    // The legend can be drawn only if the data exists
+    if(vm.names.length == 0) {
+        vm.names = [ "Normal", "Info", "Warn", "Fatal" ];
+    }
+}, 2000);
+</script>
+</body>
+</html>

@@ -1,27 +1,25 @@
 /* bundling type : vue + vue-graph + juijs */
 
 import Vue from 'vue'
-import GraphPie from '../src/components/pie.js'
-import WidgetLegends from '../src/widgets/legends.js'
-import WidgetTooltip from '../src/widgets/tooltip.js'
+import GraphEqualizer from '../src/components/equalizer.js'
 
-Vue.component(GraphPie.name, GraphPie);
-Vue.component(WidgetLegends.name, WidgetLegends);
-Vue.component(WidgetTooltip.name, WidgetTooltip);
+Vue.component(GraphEqualizer.name, GraphEqualizer);
 
 var vm = new Vue({
     el: "#app",
     data: {
-        dataset: 'set1',
-        items: {
-            set1: {
-                values: [ 10, 5, 5, 5 ],
-                names: [ 'Apple', 'Google', 'MS', 'Facebook' ],
-            },
-            set2: {
-                values: [ 7, 10, 12, 3 ],
-                names: [ 'Lufthansa', 'Southwest', 'Iberia', 'Virgin' ],
-            }
-        }
+        names: [ "0-3", "3-6", "6-9", "9-" ],
+        values: [
+            [ 5, 5, 5, 5, 5, 5, 5 ],
+            [ 5, 5, 5, 5, 5, 5, 5 ],
+            [ 5, 5, 5, 5, 5, 5, 5 ],
+            [ 5, 5, 5, 5, 5, 5, 5 ]
+        ],
+        isStop: false
     },
+    methods: {
+        onClickEvent: function(data, e) {
+            console.log(data);
+        }
+    }
 });

@@ -6,7 +6,7 @@ export default {
                 domain : this.labels,
                 interval : this.axisInterval,
                 format : this.axisFormat,
-                line : this.axisXStyle,
+                line : this.axisXStyle == "none" ? false : this.axisXStyle,
                 hide : this.axisXStyle == "hidden",
                 orient : this.axisXPosition
             }
@@ -15,7 +15,7 @@ export default {
                 type : 'range',
                 domain : this.getAxisMinAndMax(),
                 step : this.axisStep,
-                line : this.axisYStyle,
+                line : this.axisYStyle == "none" ? false : this.axisYStyle,
                 hide : this.axisYStyle == "hidden",
                 orient : this.axisYPosition
             }
