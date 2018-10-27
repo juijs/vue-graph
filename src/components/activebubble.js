@@ -41,8 +41,8 @@ export default {
 
                 if(row.length == 2) {
                     data.push({
-                        'startTime': row[0],
-                        'duration': row[1]
+                        '0': row[0],
+                        '1': row[1]
                     });
                 }
             }
@@ -51,6 +51,10 @@ export default {
         },
         initGraphAxes: function() {
             return {
+                keymap: {
+                    'startTime': '0',
+                    'duration': '1'
+                },
                 data: this.convertToData(this.values)
             }
         }
