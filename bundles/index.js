@@ -1,25 +1,17 @@
 /* bundling type : vue + vue-graph + juijs */
 
 import Vue from 'vue'
-import GraphEqualizer from '../src/components/equalizer.js'
+import GraphActiveBubble from '../src/components/activebubble.js'
 
-Vue.component(GraphEqualizer.name, GraphEqualizer);
+Vue.component(GraphActiveBubble.name, GraphActiveBubble);
 
 var vm = new Vue({
     el: "#app",
     data: {
-        names: [ "0-3", "3-6", "6-9", "9-" ],
         values: [
-            [ 5, 5, 5, 5, 5, 5, 5 ],
-            [ 5, 5, 5, 5, 5, 5, 5 ],
-            [ 5, 5, 5, 5, 5, 5, 5 ],
-            [ 5, 5, 5, 5, 5, 5, 5 ]
-        ],
-        isStop: false
-    },
-    methods: {
-        onClickEvent: function(data, e) {
-            console.log(data);
-        }
+            [ Date.now(), 5000 ],
+            [ Date.now() + 1000, 3000 ],
+            [ Date.now() + 2000, 4000 ]
+        ]
     }
 });

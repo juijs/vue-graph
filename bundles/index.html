@@ -6,18 +6,16 @@
 <body>
 
 <div id="app">
-    <graph-equalizer
-            :width="800"
-            :height="250"
-            :axis-max="30"
-            :axis-step="3"
-            :labels="[ 'JBoss1', 'JBoss2', 'JBoss3', 'JBoss4', 'Tomcat', 'Jeus', 'Jetty' ]"
+    <graph-activebubble
+            :width="1000"
+            :height="70"
+            :padding-top="5"
+            :padding-bottom="0"
+            :padding-left="0"
+            :padding-right="0"
             :values="values"
-            :render-interval="200"
-            :render-stop="isStop"
-            :max-divisions="10"
-            @click="onClickEvent">
-    </graph-equalizer>
+            :render-interval="0">
+    </graph-activebubble>
 </div>
 
 </body>

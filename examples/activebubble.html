@@ -1,0 +1,32 @@
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js"></script>
+    <script src="../dist/vue-graph.js"></script>
+</head>
+<body>
+<div id="app">
+    <graph-activebubble
+            :width="1000"
+            :height="70"
+            :padding-top="5"
+            :padding-bottom="0"
+            :padding-left="0"
+            :padding-right="0"
+            :values="values"
+            :render-interval="0">
+    </graph-activebubble>
+</div>
+<script>
+var vm = new Vue({
+    el: "#app",
+    data: {
+        values: [
+            [ Date.now(), 5000 ],
+            [ Date.now() + 1000, 3000 ],
+            [ Date.now() + 2000, 4000 ]
+        ]
+    }
+});
+</script>
+</body>
+</html>

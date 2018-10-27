@@ -90,7 +90,9 @@ export default {
         this.chart = this.animation.builder;
         this.initGraphBrushes();
         this.initGraphWidgets();
-        this.chart.addWidget({ type: 'raycast' });
+
+        if(this.chart.axis(0).x != null && this.chart.axis(0).x != null)
+            this.chart.addWidget({ type: 'raycast' });
         this.chart.render(true);
 
         this.animation.run(function(runningTime) {
