@@ -1,7 +1,7 @@
 {
   "name": "vue-graph",
   "productionName": "Vue Graph",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "A library that provides various visualization elements for Vue.js",
   "main": "src/main.js",
   "files": [
@@ -51,7 +51,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "juijs-chart": "2.2.6-es6",
+    "juijs-chart": "2.3.1-es6",
     "vue": "^2.5.16"
   }
 }

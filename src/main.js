@@ -20,6 +20,7 @@ import GraphComparisonArea from './components/comparisonarea.js'
 import GraphTreemap from './components/treemap.js'
 import GraphEqualizer from './components/equalizer.js'
 import GraphActiveBubble from './components/activebubble.js'
+import GraphBubbleCloud from './components/bubblecloud.js'
 import WidgetNote from './widgets/note.js'
 import WidgetTooltip from './widgets/tooltip.js'
 import WidgetGuideline from './widgets/guideline.js'
@@ -51,6 +52,7 @@ export default {
         Vue.component(GraphTreemap.name, GraphTreemap);
         Vue.component(GraphEqualizer.name, GraphEqualizer);
         Vue.component(GraphActiveBubble.name, GraphActiveBubble);
+        Vue.component(GraphBubbleCloud.name, GraphBubbleCloud);
 
         // 2. 위젯 추가 영역
         Vue.component(WidgetNote.name, WidgetNote);

@@ -1,5 +1,6 @@
 import JUI from 'juijs-chart'
 import RayCastWidget from 'juijs-chart/src/widget/raycast.js'
+import PickerWidget from 'juijs-chart/src/widget/canvas/picker.js'
 
 export default {
     mounted: function() {
@@ -9,7 +10,7 @@ export default {
             throw new Error('[Vue Graph error]: At least one brush must be added to \'brushes\' variable.')
         }
 
-        JUI.use(RayCastWidget);
+        JUI.use(RayCastWidget, PickerWidget);
 
         this.animation = JUI.create('chart.animation', this.$el, {
             width: this.width,
@@ -77,7 +78,13 @@ export default {
                 },
                 'raycast.rclick': function(obj, e) {
                     self.$emit('rclick', obj, e);
-                }
+                },
+                'picker.click': function(obj, e) {
+                    self.$emit('click', obj, e);
+                },
+                'picker.dblclick': function(obj, e) {
+                    self.$emit('dblclick', obj, e);
+                },
             },
             format: this.format,
             theme: this.theme,
@@ -93,6 +100,7 @@ export default {
 
         if(this.chart.axis(0).x != null && this.chart.axis(0).x != null)
             this.chart.addWidget({ type: 'raycast' });
+        this.chart.addWidget({ type: 'canvas.picker' });
         this.chart.render(true);
 
         this.animation.run(function(runningTime) {
