@@ -129,7 +129,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | Name | Type | Required | Watch | Default | Description |
 | ---- | ---- | -------- | ----- | --------| ----------- |
 | theme | String | false | false | `classic` | Supports a total of five themes (**classic**, **dark**) |
-| styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
+| styles | Object | false | false | `undefined` | You can change the style of the chart elements you want in key-value format ([Classic](https://github.com/juijs/jui-chart/blob/es6/src/theme/classic.js), [Dark](https://github.com/juijs/jui-chart/blob/es6/src/theme/dark.js)) |
 | colors | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
 | clip | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
 | format | Function | false | true | `undefined` | A callback function that allows you to customize the axis values of the chart |
