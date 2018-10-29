@@ -119,6 +119,8 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  - [Treemap Chart](https://codepen.io/seogi1004/pen/QBJREN)
  - [Equalizer Chart (+Animation)](https://codepen.io/seogi1004/pen/ReJEyd)
+ - [Active Bubble Chart](https://codepen.io/seogi1004/pen/zmbNxo)
+ - [Bubble Cloud Chart](https://codepen.io/seogi1004/pen/WaWZOz)
  
 ## Props
 
