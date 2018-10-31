@@ -119,6 +119,8 @@ There are many charts that have not yet been migrated. We are going to continue.
  - [Pie Chart (Donut)](https://codepen.io/seogi1004/pen/oMBgNg)
  - [Treemap Chart](https://codepen.io/seogi1004/pen/QBJREN)
  - [Equalizer Chart (+Animation)](https://codepen.io/seogi1004/pen/ReJEyd)
+ - [Active Bubble Chart](https://codepen.io/seogi1004/pen/zmbNxo)
+ - [Bubble Cloud Chart](https://codepen.io/seogi1004/pen/WaWZOz)
  
 ## Props
 
@@ -127,7 +129,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | Name | Type | Required | Watch | Default | Description |
 | ---- | ---- | -------- | ----- | --------| ----------- |
 | theme | String | false | false | `classic` | Supports a total of five themes (**classic**, **dark**) |
-| styles | Object | false | false | `undefined` | Options to customize chart theme properties ([Style Tab](http://chartplay.jui.io/)) |
+| styles | Object | false | false | `undefined` | Customize the style of the chart elements you want in key-value format ([Classic](https://github.com/juijs/jui-chart/blob/es6/src/theme/classic.js), [Dark](https://github.com/juijs/jui-chart/blob/es6/src/theme/dark.js)) |
 | colors | Array, Function | false | false | `undefined` | Options to change the list of colors defined by chart theme ([Style Tab](http://chartplay.jui.io/)) |
 | clip | Boolean | false | false | false | Option to cut if the drawing element is out of the chart range |
 | format | Function | false | true | `undefined` | A callback function that allows you to customize the axis values of the chart |
@@ -282,6 +284,14 @@ There are many charts that have not yet been migrated. We are going to continue.
 | barMargin | Number | false | false | 2 | Margins between bars and bars |
 | barPadding | Number | false | false | 1 | Inside padding inside the bar |
 | maxDivisions | Number | false | false | 5 | Maximum number of division bars |
+
+#### [graph-activebubble](https://codepen.io/seogi1004/pen/zmbNxo)
+ 
+| Name | Type | Required | Watch | Default | Description |
+| ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
+| gravity | Number | false | false | 0.2 | Sets the force to pull the bubble  |
+| radius | Number | false | false | 20 | Radius value of the bubble |
+| opacity | Number | false | false | 1 | Transparency value of the bubble |
 
 
 ### Props by widgets
