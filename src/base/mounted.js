@@ -95,8 +95,8 @@ export default {
                 'mouseup': function(obj, e) {
                     self.$emit('mouseup', obj, e);
                 },
-                'legends.filter': function(target) {
-                    self.$emit('legends.filter', target);
+                'legend.filter': function(target) {
+                    self.$emit('legends#filter', target);
                 }
             },
             format: this.format,

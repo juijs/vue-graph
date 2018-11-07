@@ -14,8 +14,9 @@
             :names="names"
             :values="values"
             :active-index="active"
-            :text-rotate-x="20">
-        <legends :names="names"></legends>
+            :text-rotate-x="20"
+            @legends#filter="onFilter">
+        <legends :names="names" :filter="true"></legends>
         <tooltip :names="names" :position="'right'"></tooltip>
     </graph-stackbar>
 </div>
