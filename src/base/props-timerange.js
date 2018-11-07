@@ -51,6 +51,17 @@ export default {
             type: [ String, Function ],
             required: true,
             default: 'HH' // 1시간
+        },
+
+        textRotateX: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        textRotateY: {
+            type: Number,
+            required: false,
+            default: 0
         }
     }
 }

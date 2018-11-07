@@ -6,7 +6,8 @@ export default {
                 domain : this.labels,
                 line : this.axisXStyle == "none" ? false : this.axisXStyle,
                 hide : this.axisXStyle == "hidden",
-                orient : this.axisXPosition
+                orient : this.axisXPosition,
+                textRotate: -this.textRotateX
             }
 
             let yAxis = {
@@ -15,7 +16,8 @@ export default {
                 step : this.axisStep,
                 line : this.axisYStyle == "none" ? false : this.axisYStyle,
                 hide : this.axisYStyle == "hidden",
-                orient : this.axisYPosition
+                orient : this.axisYPosition,
+                textRotate: -this.textRotateY
             }
 
             return {

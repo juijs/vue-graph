@@ -165,6 +165,8 @@ There are many charts that have not yet been migrated. We are going to continue.
 | axisFullMode | Boolean | false | false | false | Draw a chart drawing element full of the axis label area. |
 | axisInterval | Number | false | false | 1000 * 60 * 60 | It is the label value display interval of the date type (Unit: ms) |
 | axisFormat | String, Function | false | false | `HH` | It is the label value display format of the date type |
+| textRotateX | Number | false | false | 0 | The tilt angle of the x-axis text |
+| textRotateY | Number | false | false | 0 | The tilt angle of the y-axis text |
 
 ### Props by charts
 
@@ -176,7 +178,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | minValue | Number | false | false | 0 | When the value is very small, the minimum size of the bar  |
 | barMargin | Number | false | false | 2 | Margins between bars and bars |
 | barPadding | Number | false | false | 1 | Inside padding inside the bar |
-| activeIndex | Number | false | false | `undefined` | The index of the bar to activate |
+| activeIndex | Number | false | true | `undefined` | The index of the bar to activate |
 | activeEvent | String | false | false | `undefined` | Event type to activate the bar |
 | display | String | false | false | `undefined` | Options that display the value of the bar (**max**, **min**, **all**) |
 
@@ -194,7 +196,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | fixedSize | Number | false | false | 0 | Fixed width of bar (or height) |
 | barMargin | Number | false | false | 2 | Margins between bars and bars |
 | barPadding | Number | false | false | 1 | Inside padding inside the bar |
-| activeIndex | Number | false | false | `undefined` | The index of the bar to activate |
+| activeIndex | Number | false | true | `undefined` | The index of the bar to activate |
 | activeEvent | String | false | false | `undefined` | Event type to activate the bar |
 | display | String | false | false | `undefined` | Options that display the value of the bar (**max**, **min**, **all**) |
 | connectedLine | Boolean | false | false | false | Options that show the line connecting the bars and bars |
@@ -258,7 +260,7 @@ There are many charts that have not yet been migrated. We are going to continue.
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | shape | String | false | false | `pie` | It is the shape of the pie (**pie**, **donut**) |
-| activeIndex | Number, Array | false | false | `undefined` | The index of the pie to activate |
+| activeIndex | Number, Array | false | true | `undefined` | The index of the pie to activate |
 | activeEvent | String | false | false | `undefined` | Event type to activate the pie |
 | showTextType | String | false | false | `undefined` | Options that display the value of the pie (**inside**, **outside**) |
 | dataFormat | Function | false | true | `undefined` | Pie data format function |

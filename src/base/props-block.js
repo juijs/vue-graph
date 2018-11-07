@@ -45,6 +45,17 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+
+        textRotateX: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        textRotateY: {
+            type: Number,
+            required: false,
+            default: 0
         }
     }
 }

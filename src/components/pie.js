@@ -51,6 +51,14 @@ export default {
             default: 50
         }
     },
+    watch: {
+        activeIndex: function(newVal, oldVal) {
+            if(newVal == oldVal) return;
+
+            this.chart.updateBrush(0, { active: newVal });
+            this.chart.render();
+        }
+    },
     methods: {
         convertToData: function(values) {
             var row = {};

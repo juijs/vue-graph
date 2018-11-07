@@ -6,17 +6,18 @@
 <body>
 
 <div id="app">
-    <graph-bubblecloud
-            :width="500"
-            :height="500"
-            :padding-top="5"
-            :padding-bottom="0"
-            :padding-left="0"
-            :padding-right="0"
+    <graph-stackbar
+            :height="400"
+            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :full-mode="true"
+            :show-text="true"
+            :names="names"
             :values="values"
-            :colors="colors"
-            :render-interval="0">
-    </graph-bubblecloud>
+            :active-index="active"
+            :text-rotate-x="20">
+        <legends :names="names"></legends>
+        <tooltip :names="names" :position="'right'"></tooltip>
+    </graph-stackbar>
 </div>
 
 </body>

@@ -1,6 +1,11 @@
 import JUI from 'juijs-chart'
 
 export default {
+    computed: {
+        realWidth: function() {
+            return this.width == 0 ? "100%" : this.width;
+        }
+    },
     mounted: function() {
         var self = this;
 
@@ -9,7 +14,7 @@ export default {
         }
 
         this.chart = JUI.create('chart.builder', this.$el, {
-            width: this.width,
+            width: this.realWidth,
             height: this.height,
             padding: {
                 top: this.paddingTop,
@@ -89,6 +94,9 @@ export default {
                 },
                 'mouseup': function(obj, e) {
                     self.$emit('mouseup', obj, e);
+                },
+                'legends.filter': function(target) {
+                    self.$emit('legends.filter', target);
                 }
             },
             format: this.format,

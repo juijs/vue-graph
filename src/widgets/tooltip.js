@@ -38,13 +38,13 @@ export default {
                 if(self.$parent.$vnode.tag.indexOf('graph-treemap') != -1) {
                     return {
                         key: data.text,
-                        value: data[key]
+                        value: this.format(data[key])
                     }
                 } else {
                     if(data != null) {
                         return {
                             key: self.names[key],
-                            value: data[key]
+                            value: this.format(data[key])
                         }
                     } else {
                         return self.names[key];

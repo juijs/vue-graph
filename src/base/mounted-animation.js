@@ -3,6 +3,11 @@ import RayCastWidget from 'juijs-chart/src/widget/raycast.js'
 import PickerWidget from 'juijs-chart/src/widget/canvas/picker.js'
 
 export default {
+    computed: {
+        realWidth: function() {
+            return this.width == 0 ? "100%" : this.width;
+        }
+    },
     mounted: function() {
         const self = this;
 
@@ -13,7 +18,7 @@ export default {
         JUI.use(RayCastWidget, PickerWidget);
 
         this.animation = JUI.create('chart.animation', this.$el, {
-            width: this.width,
+            width: this.realWidth,
             height: this.height,
             padding: {
                 top: this.paddingTop,

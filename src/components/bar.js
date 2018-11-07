@@ -50,6 +50,14 @@ export default {
             required: false
         }
     },
+    watch: {
+        activeIndex: function(newVal, oldVal) {
+            if(newVal == oldVal) return;
+
+            this.chart.updateBrush(0, { active: newVal });
+            this.chart.render();
+        }
+    },
     beforeMount: function() {
         this.brushes = [{
             type: this.axisReverse ? 'bar' : 'column',

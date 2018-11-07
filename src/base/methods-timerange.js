@@ -28,7 +28,8 @@ export default {
                 line : this.axisXStyle == "none" ? false : this.axisXStyle,
                 hide : this.axisXStyle == "hidden",
                 orient : this.axisXPosition,
-                key : '0'
+                key : '0',
+                textRotate: -this.textRotateX
             }
 
             let yAxis = {
@@ -37,7 +38,8 @@ export default {
                 step : this.axisStep,
                 line : this.axisYStyle == "none" ? false : this.axisYStyle,
                 hide : this.axisYStyle == "hidden",
-                orient : this.axisYPosition
+                orient : this.axisYPosition,
+                textRotate: -this.textRotateY
             }
 
             return {

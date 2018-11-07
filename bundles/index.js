@@ -1,28 +1,29 @@
 /* bundling type : vue + vue-graph + juijs */
 
 import Vue from 'vue'
-import GraphBubbleCloud from '../src/components/bubblecloud.js'
+import GraphStackBar from '../src/components/stackbar.js'
+import WidgetLegend from '../src/widgets/legends.js'
+import WidgetTooltip from '../src/widgets/tooltip.js'
 
-Vue.component(GraphBubbleCloud.name, GraphBubbleCloud);
+Vue.component(GraphStackBar.name, GraphStackBar);
+Vue.component(WidgetLegend.name, WidgetLegend);
+Vue.component(WidgetTooltip.name, WidgetTooltip);
 
-var vm = new Vue({
+window.vm = new Vue({
     el: "#app",
     data: {
+        names: [ 'MS', 'Apple', 'Google' ],
         values: [
-            [ "app1.jsp", 10, 1000 ],
-            [ "app2.jsp", 20, 2000 ],
-            [ "app3.jsp", 15, 3000 ],
-            [ "app4.jsp", 5, 4000 ],
-            [ "app5.jsp", 50, 5000 ]
+            [ 10, 5, 5, 5 ],
+            [ 40, 10, 10, 10 ],
+            [ 30, 30, 30, 30 ]
         ],
-        colors: function(data) {
-            if(data[2] > 4000) {
-                return 2;
-            } else if(data[2] > 3000) {
-                return 1;
-            }
-
-            return 0;
+        active: 2
+    },
+    methods: {
+        dataFormat: function(d) {
+            if(typeof(d) == "number") return d + "$";
+            return d;
         }
     }
 });
