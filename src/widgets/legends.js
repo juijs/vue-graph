@@ -47,13 +47,6 @@ export default {
     beforeMount: function(e) {
         const self = this;
 
-        const ORIENT_MAP = {
-            top: 'top',
-            bottom: 'bottom',
-            start: 'left',
-            end: 'right'
-        };
-
         const ALIGN_MAP = {
             left: 'start',
             center: 'center',
@@ -63,7 +56,7 @@ export default {
         this.$parent.widgets.push({
             type: 'legend',
             brush: this.brushes,
-            orient: ORIENT_MAP[this.position],
+            orient: this.position,
             align: ALIGN_MAP[this.align],
             dx: this.dx,
             dy: this.dy,

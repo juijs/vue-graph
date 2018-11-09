@@ -326,7 +326,7 @@ Widget that represents the chart legend.
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | names | String | true | true |  | Name to map to value type |
-| align | String | false | false | `center` | Horizontal alignment (**center**, **start**, **end**) |
+| align | String | false | false | `center` | Horizontal alignment (**center**, **left**, **right**) |
 | position | String | false | false | `bottom` | Vertical alignment (**top**, **bottom**, **left**, **right**) |
 | dx | Number | false | false | 0 | x-axis position adjustment value |
 | dy | Number | false | false | 0 | y-axis position adjustment value |
