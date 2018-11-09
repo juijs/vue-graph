@@ -63,7 +63,7 @@ export default {
             filter: this.filter,
             colors: this.color,
             format: function(key) {
-                return self.names[key];
+                return this.format(self.names[key]);
             }
         });
     }

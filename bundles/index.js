@@ -21,8 +21,9 @@ window.vm = new Vue({
         active: 2
     },
     methods: {
-        dataFormat: function(d) {
+        baseFormat: function(d) {
             if(typeof(d) == "number") return d + "$";
+            else if(typeof(d) == "string") return d.substr(1);
             return d;
         },
         onFilter: function(targets) {
