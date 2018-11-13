@@ -9,8 +9,10 @@ import CrossWidget from 'juijs-chart/src/widget/cross.js'
 JUI.use(ClassicTheme, DarkTheme, TitleWidget, LegendWidget, TooltipWidget, CrossWidget);
 
 export default {
-    template: '<div><slot></slot></div>',
     beforeMount: function(e) {
         this.index = this.brushes.length;
+    },
+    render: function(createElement) {
+        return createElement('div', this.$slots.default);
     }
 }
