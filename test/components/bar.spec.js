@@ -18,8 +18,6 @@ describe('bar.js', () => {
             }
         });
 
-        wrapper.vm.$mount();
-
         wrapper.vm.$nextTick(() => {
             expect(wrapper.vm.$el).toMatchSnapshot();
         });
