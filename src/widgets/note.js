@@ -1,5 +1,17 @@
 import graph_core from './core.js'
 
+const ORIENT_MAP = {
+    top: 'top',
+    middle: 'center',
+    bottom: 'bottom'
+};
+
+const ALIGN_MAP = {
+    left: 'start',
+    center: 'middle',
+    right: 'end'
+};
+
 export default {
     name: 'note',
     mixins: [ graph_core ],
@@ -51,7 +63,7 @@ export default {
                 return;
 
             this.$parent.chart.updateWidget(this.index, {
-                align: newVal
+                align: ALIGN_MAP[newVal]
             });
 
             this.$parent.chart.render(true)
@@ -61,25 +73,13 @@ export default {
                 return;
 
             this.$parent.chart.updateWidget(this.index, {
-                orient: newVal
+                orient: ORIENT_MAP[newVal]
             });
 
             this.$parent.chart.render(true)
         }
     },
     beforeMount: function(e) {
-        const ORIENT_MAP = {
-            top: 'top',
-            middle: 'center',
-            bottom: 'bottom'
-        };
-
-        const ALIGN_MAP = {
-            left: 'start',
-            center: 'middle',
-            right: 'end'
-        }
-
         this.$parent.widgets.push({
             type: 'title',
             text: this.text,
