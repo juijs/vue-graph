@@ -45,6 +45,26 @@ export default {
             });
 
             this.$parent.chart.render(true)
+        },
+        align: function(newVal, oldVal) {
+            if(newVal == oldVal || (newVal != "left" && newVal != "center" && newVal != "right"))
+                return;
+
+            this.$parent.chart.updateWidget(this.index, {
+                align: newVal
+            });
+
+            this.$parent.chart.render(true)
+        },
+        verticalAlign: function(newVal, oldVal) {
+            if(newVal == oldVal || (newVal != "top" && newVal != "middle" && newVal != "bottom"))
+                return;
+
+            this.$parent.chart.updateWidget(this.index, {
+                orient: newVal
+            });
+
+            this.$parent.chart.render(true)
         }
     },
     beforeMount: function(e) {

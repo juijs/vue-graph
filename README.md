@@ -304,8 +304,8 @@ A widget that can display text in a chart.
 | Name | Type | Required | Watch | Default | Description |
 | ---------------- | -------------- | -------------- | ----------- | ------------- | --------------- |
 | text | String | true | true |  | Text to display |
-| align | String | false | false | `center` | Horizontal alignment (**center**, **left**, **right**) |
-| verticalAlign | String | false | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
+| align | String | false | true | `center` | Horizontal alignment (**center**, **left**, **right**) |
+| verticalAlign | String | true | false | `top` | Vertical alignment (**top**, **bottom**, **middle**) |
 | dx | Number | false | false | 0 | x-axis position adjustment value |
 | dy | Number | false | false | 0 | y-axis position adjustment value |
 | size | Number | false | false | `undefined` | Font size |
