@@ -51,7 +51,7 @@ Unlike other chart components, vue-graph have child nodes in the chart called wi
 
 The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
 
-![](https://cdn.rawgit.com/juijs/vue-graph/1e440ab8/images/line3d.png)
+![](https://cdn.rawgit.com/juijs/vue-graph/1e440ab8/images/treemap.png)
 
 ```html
 <div id="app">
