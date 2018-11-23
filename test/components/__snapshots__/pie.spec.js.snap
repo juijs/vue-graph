@@ -84,7 +84,7 @@ exports[`pie.js snapshot 1`] = `
           <path
             d="M117.55705045849464,161.80339887498945 A200,200 0 0,1 -117.55705045849459,161.80339887498948 L0,0 Z"
             fill="#7BBAE7"
-            opacity="0.4"
+            opacity="0.5"
             stroke="#ececec"
             stroke-width="1"
           />
@@ -106,7 +106,7 @@ exports[`pie.js snapshot 1`] = `
           <path
             d="M-190.21130325903073,-61.80339887498945 A200,200 0 0,1 -4.973799150320701e-14,-200 L0,0 Z"
             fill="#FF7800"
-            opacity="0.4"
+            opacity="0.5"
             stroke="#ececec"
             stroke-width="1"
           />
@@ -131,7 +131,7 @@ exports[`pie.js snapshot 1`] = `
           <text
             fill="#333"
             font-size="11"
-            opacity="0.4"
+            opacity="0.5"
             text-anchor="middle"
             transform="translate(200,300)"
             y="3"
@@ -159,7 +159,7 @@ exports[`pie.js snapshot 1`] = `
           <text
             fill="#333"
             font-size="11"
-            opacity="0.4"
+            opacity="0.5"
             text-anchor="middle"
             transform="translate(141.22147477075268,119.09830056250527)"
             y="3"
