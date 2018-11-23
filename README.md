@@ -49,7 +49,7 @@ Vue.component(LegendWidget.name, LegendWidget);
 
 Unlike other chart components, vue-graph have child nodes in the chart called widgets. The widget is used as an additional function of charts such as chart title, legend, tooltip.
 
-The following is a link you can test with [CodePen](https://codepen.io/collection/nWpqoB/).
+The following is a link you can test with [CodePen](https://codepen.io/seogi1004/pen/QBJREN).
 
 <p align="center"> 
 <img src="https://github.com/juijs/vue-graph/blob/master/images/treemap.png">
@@ -57,20 +57,16 @@ The following is a link you can test with [CodePen](https://codepen.io/collectio
 
 ```html
 <div id="app">
-    <graph-line3d
+    <graph-treemap
             :width="800"
-            :height="600"
-            :axis-min="0"
-            :axis-max="50"
-            :padding-top="100"
-            :padding-bottom="100"
-            :depth="180"
-            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-            :names="names"
+            :height="800"
+            :text-align="'right'"
+            :text-vertical-align="'bottom'"
+            :colors="[ '#EC2500', '#ECE100', '#EC9800', '#9EDE00' ]"
             :values="values">
-        <note :text="'3D-Line Chart'" :align="'left'"></note>
-        <legends :names="names"></legends>
-    </graph-line3d>
+        <note :text="'Treemap Chart'" :align="'left'"></note>
+        <tooltip :position="'top'"></tooltip>
+    </graph-treemap>
 </div>
 ```
 In the following code, the chart is prefixed with 'graph-' for each type. The widget can be added as a child node of the chart, unlike a chart, was named without a prefix.
@@ -80,11 +76,20 @@ The vue-graph can be combined with charts and widgets for a variety of visualiza
 var vm = new Vue({
     el: "#app",
     data: {
-        names: [ "MS", "Apple", "Google" ],
         values: [
-            [ 0, 15, 8, 18 ],
-            [ 15, 6, 10, 5 ],
-            [ 20, 20, 20, 20 ]
+            [ '0', 'Apples', -1 ],
+            [ '0.0', 'Anne', 5 ],
+            [ '0.1', 'Rick', 3 ],
+            [ '0.2', 'Peter', 4 ],
+            [ '1', 'Bananas', -1 ],
+            [ '1.0', 'Anne', 4 ],
+            [ '1.1', 'Rick', 10 ],
+            [ '1.2', 'Peter', 1 ],
+            [ '2', 'Oranges', -1 ],
+            [ '2.0', 'Anne', 1 ],
+            [ '2.1', 'Rick', 3 ],
+            [ '2.2', 'Peter', 3 ],
+            [ '3', 'Susanne', 2 ],
         ]
     }
 });
