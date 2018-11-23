@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`bar.js snapshot 1`] = `
+exports[`rangebar.js snapshot 1`] = `
 <div
   style="position: relative; -webkit-user-select: none;"
   unselectable="on"
@@ -642,149 +642,129 @@ exports[`bar.js snapshot 1`] = `
         />
       </g>
       <g
-        class="brush-column"
+        class="brush-rangecolumn"
         transform="translate(50,50)"
       >
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
+        <rect
           fill="#7977C2"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(2,240)"
-          width="39.666666666666664"
+          height="132"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="30"
+          y="150"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V240 A0,0 0 0,1 39.666666666666664,240 H0 A0,0 0 0,1 0,240 Z"
-          fill="#7BBAE7"
-          height="240"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(42.666666666666664,60)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
-          fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(83.33333333333333,120)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V30 A0,0 0 0,1 39.666666666666664,30 H0 A0,0 0 0,1 0,30 Z"
-          fill="#7977C2"
-          height="30"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(127,270)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
+        <rect
           fill="#7BBAE7"
           height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(167.66666666666666,240)"
-          width="39.666666666666664"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="52"
+          y="180"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
+        <rect
           fill="#FFC000"
           height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(208.33333333333331,120)"
-          width="39.666666666666664"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="74"
+          y="90"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V30 A0,0 0 0,1 39.666666666666664,30 H0 A0,0 0 0,1 0,30 Z"
+        <rect
           fill="#7977C2"
           height="30"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(252,270)"
-          width="39.666666666666664"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="155"
+          y="120"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
+        <rect
           fill="#7BBAE7"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(292.6666666666667,240)"
-          width="39.666666666666664"
+          height="30"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="177"
+          y="150"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
+        <rect
           fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(333.33333333333337,120)"
-          width="39.666666666666664"
+          height="18"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="199"
+          y="72"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V30 A0,0 0 0,1 39.666666666666664,30 H0 A0,0 0 0,1 0,30 Z"
+        <rect
+          fill="#7977C2"
+          height="78"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="280"
+          y="42"
+        />
+        <rect
+          fill="#7BBAE7"
+          height="48"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="302"
+          y="102"
+        />
+        <rect
+          fill="#FFC000"
+          height="12"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="324"
+          y="60"
+        />
+        <rect
           fill="#7977C2"
           height="30"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(377,270)"
-          width="39.666666666666664"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="405"
+          y="12"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
+        <rect
           fill="#7BBAE7"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(417.6666666666667,240)"
-          width="39.666666666666664"
+          height="72"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="427"
+          y="30"
         />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
+        <rect
           fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(458.33333333333337,120)"
-          width="39.666666666666664"
+          height="48"
+          stroke="undefined"
+          stroke-opacity="undefined"
+          stroke-width="undefined"
+          width="21"
+          x="449"
+          y="12"
         />
-        <g
-          visibility="hidden"
-        >
-          <text
-            fill="#333"
-            font-size="11"
-            font-weight="bold"
-            opacity="undefined"
-            text-anchor="middle"
-          >
-            
-          </text>
-          <circle
-            fill="undefined"
-            opacity="undefined"
-            r="5"
-            stroke="undefined"
-            stroke-width="1"
-          />
-        </g>
       </g>
     </g>
     <g

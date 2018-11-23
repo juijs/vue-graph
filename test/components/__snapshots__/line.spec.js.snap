@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`bar.js snapshot 1`] = `
+exports[`line.js snapshot 1`] = `
 <div
   style="position: relative; -webkit-user-select: none;"
   unselectable="on"
@@ -9,7 +9,7 @@ exports[`bar.js snapshot 1`] = `
     buffered-rendering="dynamic"
     height="400"
     style="font-family:arial,Tahoma,verdana,classic;background:#fff"
-    width="600"
+    width="800"
   >
     <g
       transform="translate(0.5,0.5)"
@@ -20,7 +20,7 @@ exports[`bar.js snapshot 1`] = `
         >
           <rect
             height="300"
-            width="500"
+            width="700"
             x="0"
             y="0"
           />
@@ -30,7 +30,7 @@ exports[`bar.js snapshot 1`] = `
         >
           <rect
             height="300"
-            width="500"
+            width="700"
             x="0"
             y="0"
           />
@@ -45,12 +45,12 @@ exports[`bar.js snapshot 1`] = `
         stroke="#fff"
         stroke-width="0"
         transform="translate(50,50)"
-        width="500"
+        width="700"
         x="0"
         y="0"
       />
       <g
-        class="grid-block"
+        class="grid-fullblock"
         transform="translate(50,350)"
       >
         <g
@@ -72,15 +72,15 @@ exports[`bar.js snapshot 1`] = `
             font-size="11"
             font-weight="normal"
             text-anchor="middle"
-            transform="rotate(0 62.5,13)"
-            x="62.5"
+            transform="rotate(0 0,13)"
+            x="0"
             y="13"
           >
             1Q
           </text>
         </g>
         <g
-          transform="translate(125,0)"
+          transform="translate(233.33333333333334,0)"
         >
           <line
             stroke="#bfbfbf"
@@ -108,15 +108,15 @@ exports[`bar.js snapshot 1`] = `
             font-size="11"
             font-weight="normal"
             text-anchor="middle"
-            transform="rotate(0 62.5,13)"
-            x="62.5"
+            transform="rotate(0 0,13)"
+            x="0"
             y="13"
           >
             2Q
           </text>
         </g>
         <g
-          transform="translate(250,0)"
+          transform="translate(466.6666666666667,0)"
         >
           <line
             stroke="#bfbfbf"
@@ -144,15 +144,15 @@ exports[`bar.js snapshot 1`] = `
             font-size="11"
             font-weight="normal"
             text-anchor="middle"
-            transform="rotate(0 62.5,13)"
-            x="62.5"
+            transform="rotate(0 0,13)"
+            x="0"
             y="13"
           >
             3Q
           </text>
         </g>
         <g
-          transform="translate(375,0)"
+          transform="translate(700,0)"
         >
           <line
             stroke="#bfbfbf"
@@ -180,8 +180,8 @@ exports[`bar.js snapshot 1`] = `
             font-size="11"
             font-weight="normal"
             text-anchor="middle"
-            transform="rotate(0 62.5,13)"
-            x="62.5"
+            transform="rotate(0 0,13)"
+            x="0"
             y="13"
           >
             4Q
@@ -192,34 +192,10 @@ exports[`bar.js snapshot 1`] = `
           stroke-opacity="1"
           stroke-width="2"
           x1="0"
-          x2="500"
+          x2="700"
           y1="0"
           y2="0"
         />
-        <g
-          transform="translate(500,0)"
-        >
-          <line
-            stroke="#bfbfbf"
-            stroke-dasharray="none"
-            stroke-opacity="1"
-            stroke-width="1.5"
-            x1="0"
-            x2="0"
-            y1="0"
-            y2="3"
-          />
-          <line
-            stroke="#ebebeb"
-            stroke-dasharray="none"
-            stroke-opacity="1"
-            stroke-width="1"
-            x1="0"
-            x2="0"
-            y1="0"
-            y2="-300"
-          />
-        </g>
       </g>
       <g
         transform="translate(50,50)"
@@ -247,7 +223,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -261,7 +237,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            50
+            40
           </text>
         </g>
         <g
@@ -283,7 +259,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -297,7 +273,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            45
+            36
           </text>
         </g>
         <g
@@ -319,7 +295,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -333,7 +309,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            40
+            32
           </text>
         </g>
         <g
@@ -355,7 +331,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -369,7 +345,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            35
+            28
           </text>
         </g>
         <g
@@ -391,7 +367,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -405,7 +381,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            30
+            24
           </text>
         </g>
         <g
@@ -427,7 +403,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -441,7 +417,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            25
+            20
           </text>
         </g>
         <g
@@ -463,7 +439,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -477,7 +453,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            20
+            16
           </text>
         </g>
         <g
@@ -499,7 +475,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -513,7 +489,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            15
+            12
           </text>
         </g>
         <g
@@ -535,7 +511,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -549,7 +525,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            10
+            8
           </text>
         </g>
         <g
@@ -571,7 +547,7 @@ exports[`bar.js snapshot 1`] = `
             stroke-opacity="1"
             stroke-width="1"
             x1="0"
-            x2="500"
+            x2="700"
             y1="0"
             y2="0"
           />
@@ -585,7 +561,7 @@ exports[`bar.js snapshot 1`] = `
             x="-8"
             y="0"
           >
-            5
+            4
           </text>
         </g>
         <g
@@ -636,153 +612,55 @@ exports[`bar.js snapshot 1`] = `
           fill="transparent"
           height="300"
           stroke="transparent"
-          width="500"
+          width="700"
           x="0"
           y="0"
         />
       </g>
       <g
-        class="brush-column"
+        class="brush-line"
         transform="translate(50,50)"
       >
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
-          fill="#7977C2"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(2,240)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V240 A0,0 0 0,1 39.666666666666664,240 H0 A0,0 0 0,1 0,240 Z"
-          fill="#7BBAE7"
-          height="240"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(42.666666666666664,60)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
-          fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(83.33333333333333,120)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V30 A0,0 0 0,1 39.666666666666664,30 H0 A0,0 0 0,1 0,30 Z"
-          fill="#7977C2"
-          height="30"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(127,270)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
-          fill="#7BBAE7"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(167.66666666666666,240)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
-          fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(208.33333333333331,120)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V30 A0,0 0 0,1 39.666666666666664,30 H0 A0,0 0 0,1 0,30 Z"
-          fill="#7977C2"
-          height="30"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(252,270)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
-          fill="#7BBAE7"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(292.6666666666667,240)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
-          fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(333.33333333333337,120)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V30 A0,0 0 0,1 39.666666666666664,30 H0 A0,0 0 0,1 0,30 Z"
-          fill="#7977C2"
-          height="30"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(377,270)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V60 A0,0 0 0,1 39.666666666666664,60 H0 A0,0 0 0,1 0,60 Z"
-          fill="#7BBAE7"
-          height="60"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(417.6666666666667,240)"
-          width="39.666666666666664"
-        />
-        <path
-          d="M0,3 A3,3 0 0,1 3,0 H36.666666666666664 A3,3 0 0,1 39.666666666666664,3 V180 A0,0 0 0,1 39.666666666666664,180 H0 A0,0 0 0,1 0,180 Z"
-          fill="#FFC000"
-          height="180"
-          stroke="none"
-          stroke-opacity="0"
-          stroke-width="0"
-          transform="translate(458.33333333333337,120)"
-          width="39.666666666666664"
-        />
-        <g
-          visibility="hidden"
-        >
-          <text
-            fill="#333"
-            font-size="11"
-            font-weight="bold"
-            opacity="undefined"
-            text-anchor="middle"
-          >
-            
-          </text>
-          <circle
-            fill="undefined"
-            opacity="undefined"
-            r="5"
-            stroke="undefined"
-            stroke-width="1"
+        <g>
+          <path
+            cursor="normal"
+            d="M0,225 L233.33333333333334,262.5 L466.6666666666667,262.5 L700,262.5"
+            fill="transparent"
+            stroke="#7977C2"
+            stroke-dasharray="none"
+            stroke-opacity="0.6"
+            stroke-width="2"
+            style="pointer-events:stroke"
+            x1="0"
+            x2="700"
+          />
+        </g>
+        <g>
+          <path
+            cursor="normal"
+            d="M0,0 L233.33333333333334,225 L466.6666666666667,225 L700,225"
+            fill="transparent"
+            stroke="#7BBAE7"
+            stroke-dasharray="none"
+            stroke-opacity="0.6"
+            stroke-width="2"
+            style="pointer-events:stroke"
+            x1="0"
+            x2="700"
+          />
+        </g>
+        <g>
+          <path
+            cursor="normal"
+            d="M0,75 L233.33333333333334,75 L466.6666666666667,75 L700,75"
+            fill="transparent"
+            stroke="#FFC000"
+            stroke-dasharray="none"
+            stroke-opacity="0.6"
+            stroke-width="2"
+            style="pointer-events:stroke"
+            x1="0"
+            x2="700"
           />
         </g>
       </g>
