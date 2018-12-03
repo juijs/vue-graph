@@ -16,7 +16,7 @@ exports[`line3d.js snapshot 1`] = `
     >
       <defs>
         <clippath
-          id="axis-clip-id"
+          id="axis-clip-id-0"
         >
           <rect
             height="400"
@@ -26,7 +26,7 @@ exports[`line3d.js snapshot 1`] = `
           />
         </clippath>
         <clippath
-          id="axis-clip-rect-id"
+          id="axis-clip-rect-id-0"
         >
           <rect
             height="400"

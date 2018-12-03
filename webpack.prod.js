@@ -2,11 +2,13 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const entry = path.resolve(__dirname, 'bundles', 'production.js');
 
 module.exports = {
     mode: 'production',
     entry: {
-        'vue-graph': path.resolve(__dirname, 'bundles', 'production.js')
+        'vue-graph': entry,
+        'vue-graph.min': entry
     },
     target: 'node',
     externals: [nodeExternals({
@@ -18,7 +20,9 @@ module.exports = {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin()
+            new UglifyJsPlugin({
+                include: /\.min\.js$/
+            })
         ]
     },
     module: {
