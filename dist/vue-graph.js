@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -95,7 +95,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _juijsGraph = __webpack_require__(33);
+var _juijsGraph = __webpack_require__(36);
 
 var _juijsGraph2 = _interopRequireDefault(_juijsGraph);
 
@@ -118,27 +118,27 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _classic = __webpack_require__(34);
+var _classic = __webpack_require__(37);
 
 var _classic2 = _interopRequireDefault(_classic);
 
-var _dark = __webpack_require__(35);
+var _dark = __webpack_require__(38);
 
 var _dark2 = _interopRequireDefault(_dark);
 
-var _title = __webpack_require__(36);
+var _title = __webpack_require__(39);
 
 var _title2 = _interopRequireDefault(_title);
 
-var _legend = __webpack_require__(37);
+var _legend = __webpack_require__(40);
 
 var _legend2 = _interopRequireDefault(_legend);
 
-var _tooltip = __webpack_require__(38);
+var _tooltip = __webpack_require__(41);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
-var _cross = __webpack_require__(39);
+var _cross = __webpack_require__(42);
 
 var _cross2 = _interopRequireDefault(_cross);
 
@@ -652,170 +652,259 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = __webpack_require__(0);
+
+var _main2 = _interopRequireDefault(_main);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
-    props: {
-        axisMin: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        axisMax: {
-            type: Number,
-            required: false,
-            default: 100
-        },
-        axisStep: {
-            type: Number,
-            required: false,
-            default: 10
-        },
+    name: "chart.brush.bar",
+    extend: "chart.brush.core",
+    component: function component() {
+        var _ = _main2.default.include("util.base");
 
-        axisXStyle: {
-            type: String,
-            required: false,
-            default: 'solid' // or dotted, gradient, hidden
-        },
-        axisYStyle: {
-            type: String,
-            required: false,
-            default: 'solid' // or dotted, gradient, hidden
-        },
-        axisXPosition: {
-            type: String,
-            required: false,
-            default: 'bottom'
-        },
-        axisYPosition: {
-            type: String,
-            required: false,
-            default: 'left'
-        },
-        axisReverse: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
+        var BarBrush = function BarBrush() {
+            var g;
+            var zeroX, height, half_height, bar_height;
 
-        axisInterval: {
-            type: Number,
-            required: true,
-            default: 1000 * 60 * 60 // 1시간
-        },
-        axisFormat: {
-            type: [String, Function],
-            required: true,
-            default: 'HH' // 1시간
-        },
+            this.getBarStyle = function () {
+                return {
+                    borderColor: this.chart.theme("barBorderColor"),
+                    borderWidth: this.chart.theme("barBorderWidth"),
+                    borderOpacity: this.chart.theme("barBorderOpacity"),
+                    borderRadius: this.chart.theme("barBorderRadius"),
+                    disableOpacity: this.chart.theme("barDisableBackgroundOpacity"),
+                    circleColor: this.chart.theme("barPointBorderColor")
+                };
+            };
 
-        textRotateX: {
-            type: Number,
-            required: false,
-            default: 0
-        },
-        textRotateY: {
-            type: Number,
-            required: false,
-            default: 0
-        }
+            this.getBarElement = function (dataIndex, targetIndex, info) {
+                var style = this.getBarStyle(),
+                    color = this.color(dataIndex, targetIndex),
+                    value = this.getData(dataIndex)[this.brush.target[targetIndex]];
+
+                var r = this.chart.svg.pathRect({
+                    width: info.width,
+                    height: info.height,
+                    fill: color,
+                    stroke: style.borderColor,
+                    "stroke-width": style.borderWidth,
+                    "stroke-opacity": style.borderOpacity
+                });
+
+                if (value != 0) {
+                    this.addEvent(r, dataIndex, targetIndex);
+                }
+
+                if (this.barList == null) {
+                    this.barList = [];
+                }
+
+                this.barList.push(_.extend({
+                    element: r,
+                    color: color
+                }, info));
+
+                return r;
+            };
+
+            this.setActiveEffect = function (r) {
+                var style = this.getBarStyle(),
+                    cols = this.barList;
+
+                for (var i = 0; i < cols.length; i++) {
+                    var opacity = cols[i] == r ? 1 : style.disableOpacity;
+                    cols[i].element.attr({ opacity: opacity });
+
+                    if (cols[i].minmax) {
+                        cols[i].minmax.style(cols[i].color, style.circleColor, opacity);
+                    }
+                }
+            };
+
+            this.drawBefore = function () {
+                var op = this.brush.outerPadding,
+                    ip = this.brush.innerPadding,
+                    len = this.brush.target.length;
+
+                g = this.chart.svg.group();
+                zeroX = this.axis.x(0);
+                height = this.axis.y.rangeBand();
+
+                if (this.brush.size > 0) {
+                    bar_height = this.brush.size;
+                    half_height = bar_height * len + (len - 1) * ip;
+                } else {
+                    half_height = height - op * 2;
+                    bar_height = (half_height - (len - 1) * ip) / len;
+                    bar_height = bar_height < 0 ? 0 : bar_height;
+                }
+            };
+
+            this.drawETC = function (group) {
+                if (!_.typeCheck("array", this.barList)) return;
+
+                var self = this,
+                    style = this.getBarStyle();
+
+                // 액티브 툴팁 생성
+                this.active = this.drawTooltip();
+                group.append(this.active.tooltip);
+
+                for (var i = 0; i < this.barList.length; i++) {
+                    var r = this.barList[i],
+                        d = this.brush.display;
+
+                    // Max & Min 툴팁 생성
+                    if (d == "max" && r.max || d == "min" && r.min || d == "all") {
+                        r.minmax = this.drawTooltip(r.color, style.circleColor, 1);
+                        r.minmax.control(r.position, r.tooltipX, r.tooltipY, this.format(r.value));
+                        group.append(r.minmax.tooltip);
+                    }
+
+                    // 컬럼 및 기본 브러쉬 이벤트 설정
+                    if (r.value != 0 && this.brush.activeEvent != null) {
+                        (function (bar) {
+                            self.active.style(bar.color, style.circleColor, 1);
+
+                            bar.element.on(self.brush.activeEvent, function (e) {
+                                self.active.style(bar.color, style.circleColor, 1);
+                                self.active.control(bar.position, bar.tooltipX, bar.tooltipY, self.format(bar.value));
+                                self.setActiveEffect(bar);
+                            });
+
+                            bar.element.attr({ cursor: "pointer" });
+                        })(r);
+                    }
+                }
+
+                // 액티브 툴팁 위치 설정
+                var r = this.barList[this.brush.active];
+                if (r != null) {
+                    this.active.style(r.color, style.circleColor, 1);
+                    this.active.control(r.position, r.tooltipX, r.tooltipY, this.format(r.value));
+                    this.setActiveEffect(r);
+                }
+            };
+
+            this.draw = function () {
+                var points = this.getXY(),
+                    style = this.getBarStyle();
+
+                this.eachData(function (data, i) {
+                    var startY = this.offset("y", i) - half_height / 2;
+
+                    for (var j = 0; j < this.brush.target.length; j++) {
+                        var value = data[this.brush.target[j]],
+                            tooltipX = this.axis.x(value),
+                            tooltipY = startY + bar_height / 2,
+                            position = tooltipX >= zeroX ? "right" : "left";
+
+                        // 최소 크기 설정
+                        if (Math.abs(zeroX - tooltipX) < this.brush.minSize) {
+                            tooltipX = position == "right" ? tooltipX + this.brush.minSize : tooltipX - this.brush.minSize;
+                        }
+
+                        var width = Math.abs(zeroX - tooltipX),
+                            radius = width < style.borderRadius || bar_height < style.borderRadius ? 0 : style.borderRadius,
+                            r = this.getBarElement(i, j, {
+                            width: width,
+                            height: bar_height,
+                            value: value,
+                            tooltipX: tooltipX,
+                            tooltipY: tooltipY,
+                            position: position,
+                            max: points[j].max[i],
+                            min: points[j].min[i]
+                        });
+
+                        if (tooltipX >= zeroX) {
+                            r.round(width, bar_height, 0, radius, radius, 0);
+                            r.translate(zeroX, startY);
+                        } else {
+                            r.round(width, bar_height, radius, 0, 0, radius);
+                            r.translate(zeroX - width, startY);
+                        }
+
+                        // 그룹에 컬럼 엘리먼트 추가
+                        g.append(r);
+
+                        // 다음 컬럼 좌표 설정
+                        startY += bar_height + this.brush.innerPadding;
+                    }
+                });
+
+                this.drawETC(g);
+
+                return g;
+            };
+
+            this.drawAnimate = function (root) {
+                var svg = this.chart.svg,
+                    type = this.brush.animate;
+
+                root.append(svg.animate({
+                    attributeName: "opacity",
+                    from: "0",
+                    to: "1",
+                    begin: "0s",
+                    dur: "1.4s",
+                    repeatCount: "1",
+                    fill: "freeze"
+                }));
+
+                root.each(function (i, elem) {
+                    if (elem.is("util.svg.element.path")) {
+                        var xy = elem.data("translate").split(","),
+                            x = parseInt(xy[0]),
+                            y = parseInt(xy[1]),
+                            w = parseInt(elem.attr("width")),
+                            start = type == "right" ? x + w : x - w;
+
+                        elem.append(svg.animateTransform({
+                            attributeName: "transform",
+                            type: "translate",
+                            from: start + " " + y,
+                            to: x + " " + y,
+                            begin: "0s",
+                            dur: "0.7s",
+                            repeatCount: "1",
+                            fill: "freeze"
+                        }));
+                    }
+                });
+            };
+        };
+
+        BarBrush.setup = function () {
+            return {
+                /** @cfg {Number} [size=0] Set a fixed size of the bar. */
+                size: 0,
+                /** @cfg {Number} [minSize=0] Sets the minimum size as it is not possible to draw a bar when the value is 0. */
+                minSize: 0,
+                /** @cfg {Number} [outerPadding=2] Determines the outer margin of a bar.  */
+                outerPadding: 2,
+                /** @cfg {Number} [innerPadding=1] Determines the inner margin of a bar. */
+                innerPadding: 1,
+                /** @cfg {Number} [active=null] Activates the bar of an applicable index. */
+                active: null,
+                /** @cfg {String} [activeEvent=null]  Activates the bar in question when a configured event occurs (click, mouseover, etc). */
+                activeEvent: null,
+                /** @cfg {"max"/"min"/"all"} [display=null]  Shows a tool tip on the bar for the minimum/maximum value.  */
+                display: null,
+                /** @cfg {Function} [format=null] Sets the format of the value that is displayed on the tool tip. */
+                format: null
+            };
+        };
+
+        return BarBrush;
     }
 };
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _juijsChart = __webpack_require__(0);
-
-var _juijsChart2 = _interopRequireDefault(_juijsChart);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    methods: {
-        convertToData: function convertToData(values) {
-            var util = _juijsChart2.default.include('util.base');
-            var data = [];
-
-            for (var i = 0; i < values.length; i++) {
-                var val = values[i];
-
-                if (util.typeCheck('array', val)) {
-                    data.push({
-                        '0': val[0],
-                        '1': val[1]
-                    });
-                }
-            }
-
-            return data;
-        },
-        initGraphAxes: function initGraphAxes() {
-            var xAxis = {
-                type: 'date',
-                domain: this.labels,
-                interval: this.axisInterval,
-                format: this.axisFormat,
-                line: this.axisXStyle == "none" ? false : this.axisXStyle,
-                hide: this.axisXStyle == "hidden",
-                orient: this.axisXPosition,
-                key: '0',
-                textRotate: -this.textRotateX
-            };
-
-            var yAxis = {
-                type: 'range',
-                domain: [this.axisMin, this.axisMax],
-                step: this.axisStep,
-                line: this.axisYStyle == "none" ? false : this.axisYStyle,
-                hide: this.axisYStyle == "hidden",
-                orient: this.axisYPosition,
-                textRotate: -this.textRotateY
-            };
-
-            return {
-                x: this.axisReverse ? yAxis : xAxis,
-                y: this.axisReverse ? xAxis : yAxis,
-                data: this.convertToData(this.values)
-            };
-        }
-    }
-};
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    template: '<span style="display: none;"></span>',
-    beforeMount: function beforeMount(e) {
-        if (!this.$parent || !this.$parent.$vnode || this.$parent.$vnode.tag.indexOf("graph-") == -1) {
-            throw new Error('[Vue Graph error]: Can only be used as child nodes.');
-        }
-
-        this.index = this.$parent.widgets.length;
-        this.brushes = [];
-
-        for (var i = 0; i < this.$parent.brushes.length; i++) {
-            this.brushes.push(i);
-        }
-    }
-};
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1078,7 +1167,179 @@ exports.default = {
 };
 
 /***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: {
+        axisMin: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        axisMax: {
+            type: Number,
+            required: false,
+            default: 100
+        },
+        axisStep: {
+            type: Number,
+            required: false,
+            default: 10
+        },
+
+        axisXStyle: {
+            type: String,
+            required: false,
+            default: 'solid' // or dotted, gradient, hidden
+        },
+        axisYStyle: {
+            type: String,
+            required: false,
+            default: 'solid' // or dotted, gradient, hidden
+        },
+        axisXPosition: {
+            type: String,
+            required: false,
+            default: 'bottom'
+        },
+        axisYPosition: {
+            type: String,
+            required: false,
+            default: 'left'
+        },
+        axisReverse: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+
+        axisInterval: {
+            type: Number,
+            required: true,
+            default: 1000 * 60 * 60 // 1시간
+        },
+        axisFormat: {
+            type: [String, Function],
+            required: true,
+            default: 'HH' // 1시간
+        },
+
+        textRotateX: {
+            type: Number,
+            required: false,
+            default: 0
+        },
+        textRotateY: {
+            type: Number,
+            required: false,
+            default: 0
+        }
+    }
+};
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _juijsChart = __webpack_require__(0);
+
+var _juijsChart2 = _interopRequireDefault(_juijsChart);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    methods: {
+        convertToData: function convertToData(values) {
+            var util = _juijsChart2.default.include('util.base');
+            var data = [];
+
+            for (var i = 0; i < values.length; i++) {
+                var val = values[i];
+
+                if (util.typeCheck('array', val)) {
+                    data.push({
+                        '0': val[0],
+                        '1': val[1]
+                    });
+                }
+            }
+
+            return data;
+        },
+        initGraphAxes: function initGraphAxes() {
+            var xAxis = {
+                type: 'date',
+                domain: this.labels,
+                interval: this.axisInterval,
+                format: this.axisFormat,
+                line: this.axisXStyle == "none" ? false : this.axisXStyle,
+                hide: this.axisXStyle == "hidden",
+                orient: this.axisXPosition,
+                key: '0',
+                textRotate: -this.textRotateX
+            };
+
+            var yAxis = {
+                type: 'range',
+                domain: [this.axisMin, this.axisMax],
+                step: this.axisStep,
+                line: this.axisYStyle == "none" ? false : this.axisYStyle,
+                hide: this.axisYStyle == "hidden",
+                orient: this.axisYPosition,
+                textRotate: -this.textRotateY
+            };
+
+            return {
+                x: this.axisReverse ? yAxis : xAxis,
+                y: this.axisReverse ? xAxis : yAxis,
+                data: this.convertToData(this.values)
+            };
+        }
+    }
+};
+
+/***/ }),
 /* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    template: '<span style="display: none;"></span>',
+    beforeMount: function beforeMount(e) {
+        if (!this.$parent || !this.$parent.$vnode || this.$parent.$vnode.tag.indexOf("graph-") == -1) {
+            throw new Error('[Vue Graph error]: Can only be used as child nodes.');
+        }
+
+        this.index = this.$parent.widgets.length;
+        this.brushes = [];
+
+        for (var i = 0; i < this.$parent.brushes.length; i++) {
+            this.brushes.push(i);
+        }
+    }
+};
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1124,15 +1385,15 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _line = __webpack_require__(12);
+var _line = __webpack_require__(10);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _area = __webpack_require__(26);
+var _area = __webpack_require__(19);
 
 var _area2 = _interopRequireDefault(_area);
 
-var _stackarea = __webpack_require__(58);
+var _stackarea = __webpack_require__(59);
 
 var _stackarea2 = _interopRequireDefault(_stackarea);
 
@@ -1188,7 +1449,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1202,254 +1463,285 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
+var _bar = __webpack_require__(9);
+
+var _bar2 = _interopRequireDefault(_bar);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+_main2.default.use(_bar2.default);
+
 exports.default = {
-    name: "chart.brush.bar",
-    extend: "chart.brush.core",
+    name: "chart.brush.stackbar",
+    extend: "chart.brush.bar",
     component: function component() {
         var _ = _main2.default.include("util.base");
 
-        var BarBrush = function BarBrush() {
-            var g;
-            var zeroX, height, half_height, bar_height;
+        var StackBarBrush = function StackBarBrush(chart, axis, brush) {
+            var g, height, bar_height;
 
-            this.getBarStyle = function () {
-                return {
-                    borderColor: this.chart.theme("barBorderColor"),
-                    borderWidth: this.chart.theme("barBorderWidth"),
-                    borderOpacity: this.chart.theme("barBorderOpacity"),
-                    borderRadius: this.chart.theme("barBorderRadius"),
-                    disableOpacity: this.chart.theme("barDisableBackgroundOpacity"),
-                    circleColor: this.chart.theme("barPointBorderColor")
-                };
+            this.addBarElement = function (elem) {
+                if (this.barList == null) {
+                    this.barList = [];
+                }
+
+                this.barList.push(elem);
             };
 
-            this.getBarElement = function (dataIndex, targetIndex, info) {
+            this.getBarElement = function (dataIndex, targetIndex) {
                 var style = this.getBarStyle(),
-                    color = this.color(dataIndex, targetIndex),
+                    color = this.color(targetIndex),
                     value = this.getData(dataIndex)[this.brush.target[targetIndex]];
 
-                var r = this.chart.svg.pathRect({
-                    width: info.width,
-                    height: info.height,
+                var r = this.chart.svg.rect({
                     fill: color,
                     stroke: style.borderColor,
                     "stroke-width": style.borderWidth,
                     "stroke-opacity": style.borderOpacity
                 });
 
+                // 데이타가 0이면 화면에 표시하지 않음.
+                if (value == 0) {
+                    r.attr({ display: 'none' });
+                }
+
                 if (value != 0) {
                     this.addEvent(r, dataIndex, targetIndex);
                 }
 
-                if (this.barList == null) {
-                    this.barList = [];
-                }
-
-                this.barList.push(_.extend({
-                    element: r,
-                    color: color
-                }, info));
-
                 return r;
             };
 
-            this.setActiveEffect = function (r) {
+            this.setActiveEffect = function (group) {
                 var style = this.getBarStyle(),
-                    cols = this.barList;
+                    columns = this.barList,
+                    tooltips = this.stackTooltips;
 
-                for (var i = 0; i < cols.length; i++) {
-                    var opacity = cols[i] == r ? 1 : style.disableOpacity;
-                    cols[i].element.attr({ opacity: opacity });
+                for (var i = 0; i < columns.length; i++) {
+                    var opacity = group == columns[i] ? 1 : style.disableOpacity;
 
-                    if (cols[i].minmax) {
-                        cols[i].minmax.style(cols[i].color, style.circleColor, opacity);
+                    if (tooltips) {
+                        // bar 가 그려지지 않으면 tooltips 객체가 없을 수 있음.
+                        if (opacity == 1 || _.inArray(i, this.tooltipIndexes) != -1) {
+                            tooltips[i].attr({ opacity: 1 });
+                        } else {
+                            tooltips[i].attr({ opacity: 0 });
+                        }
+                    }
+
+                    columns[i].attr({ opacity: opacity });
+                }
+            };
+
+            this.setActiveEffectOption = function () {
+                var active = this.brush.active;
+
+                if (this.barList && this.barList[active]) {
+                    this.setActiveEffect(this.barList[active]);
+                }
+            };
+
+            this.setActiveEvent = function (group) {
+                var self = this;
+
+                group.on(self.brush.activeEvent, function (e) {
+                    self.setActiveEffect(group);
+                });
+            };
+
+            this.setActiveEventOption = function (group) {
+                if (this.brush.activeEvent != null) {
+                    this.setActiveEvent(group);
+                    group.attr({ cursor: "pointer" });
+                }
+            };
+
+            this.getTargetSize = function () {
+                var height = this.axis.y.rangeBand();
+
+                if (this.brush.size > 0) {
+                    return this.brush.size;
+                } else {
+                    var size = height - this.brush.outerPadding * 2;
+                    return size < this.brush.minSize ? this.brush.minSize : size;
+                }
+            };
+
+            this.setActiveTooltips = function (minIndex, maxIndex) {
+                var type = this.brush.display,
+                    activeIndex = type == "min" ? minIndex : maxIndex;
+
+                for (var i = 0; i < this.stackTooltips.length; i++) {
+                    if (i == activeIndex || type == "all") {
+                        this.stackTooltips[i].css({
+                            opacity: 1
+                        });
+
+                        this.tooltipIndexes.push(i);
+                    }
+                }
+            };
+
+            this.drawStackTooltip = function (group, index, value, x, y, pos) {
+                var fontSize = this.chart.theme("tooltipPointFontSize"),
+                    orient = "middle",
+                    dx = 0,
+                    dy = 0;
+
+                if (pos == "left") {
+                    orient = "start";
+                    dx = 3;
+                    dy = fontSize / 3;
+                } else if (pos == "right") {
+                    orient = "end";
+                    dx = -3;
+                    dy = fontSize / 3;
+                } else if (pos == "top") {
+                    dy = -(fontSize / 3);
+                } else {
+                    dy = fontSize;
+                }
+
+                var tooltip = this.chart.text({
+                    fill: this.chart.theme("tooltipPointFontColor"),
+                    "font-size": fontSize,
+                    "font-weight": this.chart.theme("tooltipPointFontWeight"),
+                    "text-anchor": orient,
+                    dx: dx,
+                    dy: dy,
+                    opacity: 0
+                }).text(this.format(value)).translate(x, y);
+
+                this.stackTooltips[index] = tooltip;
+                group.append(tooltip);
+            };
+
+            this.drawStackEdge = function (g) {
+                var borderWidth = this.chart.theme("barStackEdgeBorderWidth");
+
+                for (var i = 1; i < this.edgeData.length; i++) {
+                    var pre = this.edgeData[i - 1],
+                        now = this.edgeData[i];
+
+                    for (var j = 0; j < this.brush.target.length; j++) {
+                        if (now[j].width > 0 && now[j].height > 0) {
+                            g.append(this.svg.line({
+                                x1: pre[j].x + pre[j].width - pre[j].ex,
+                                x2: now[j].x + now[j].dx - now[j].ex,
+                                y1: pre[j].y + pre[j].height - pre[j].ey,
+                                y2: now[j].y + now[j].dy,
+                                stroke: now[j].color,
+                                "stroke-width": borderWidth
+                            }));
+                        }
                     }
                 }
             };
 
             this.drawBefore = function () {
-                var op = this.brush.outerPadding,
-                    ip = this.brush.innerPadding,
-                    len = this.brush.target.length;
+                g = chart.svg.group();
+                height = axis.y.rangeBand();
+                bar_height = this.getTargetSize();
 
-                g = this.chart.svg.group();
-                zeroX = this.axis.x(0);
-                height = this.axis.y.rangeBand();
-
-                if (this.brush.size > 0) {
-                    bar_height = this.brush.size;
-                    half_height = bar_height * len + (len - 1) * ip;
-                } else {
-                    half_height = height - op * 2;
-                    bar_height = (half_height - (len - 1) * ip) / len;
-                    bar_height = bar_height < 0 ? 0 : bar_height;
-                }
-            };
-
-            this.drawETC = function (group) {
-                if (!_.typeCheck("array", this.barList)) return;
-
-                var self = this,
-                    style = this.getBarStyle();
-
-                // 액티브 툴팁 생성
-                this.active = this.drawTooltip();
-                group.append(this.active.tooltip);
-
-                for (var i = 0; i < this.barList.length; i++) {
-                    var r = this.barList[i],
-                        d = this.brush.display;
-
-                    // Max & Min 툴팁 생성
-                    if (d == "max" && r.max || d == "min" && r.min || d == "all") {
-                        r.minmax = this.drawTooltip(r.color, style.circleColor, 1);
-                        r.minmax.control(r.position, r.tooltipX, r.tooltipY, this.format(r.value));
-                        group.append(r.minmax.tooltip);
-                    }
-
-                    // 컬럼 및 기본 브러쉬 이벤트 설정
-                    if (r.value != 0 && this.brush.activeEvent != null) {
-                        (function (bar) {
-                            self.active.style(bar.color, style.circleColor, 1);
-
-                            bar.element.on(self.brush.activeEvent, function (e) {
-                                self.active.style(bar.color, style.circleColor, 1);
-                                self.active.control(bar.position, bar.tooltipX, bar.tooltipY, self.format(bar.value));
-                                self.setActiveEffect(bar);
-                            });
-
-                            bar.element.attr({ cursor: "pointer" });
-                        })(r);
-                    }
-                }
-
-                // 액티브 툴팁 위치 설정
-                var r = this.barList[this.brush.active];
-                if (r != null) {
-                    this.active.style(r.color, style.circleColor, 1);
-                    this.active.control(r.position, r.tooltipX, r.tooltipY, this.format(r.value));
-                    this.setActiveEffect(r);
-                }
+                this.stackTooltips = [];
+                this.tooltipIndexes = [];
+                this.edgeData = [];
             };
 
             this.draw = function () {
-                var points = this.getXY(),
-                    style = this.getBarStyle();
+                var maxIndex = null,
+                    maxValue = 0,
+                    minIndex = null,
+                    minValue = this.axis.x.max(),
+                    isReverse = this.axis.get("x").reverse;
 
                 this.eachData(function (data, i) {
-                    var startY = this.offset("y", i) - half_height / 2;
+                    var group = chart.svg.group();
 
-                    for (var j = 0; j < this.brush.target.length; j++) {
-                        var value = data[this.brush.target[j]],
-                            tooltipX = this.axis.x(value),
-                            tooltipY = startY + bar_height / 2,
-                            position = tooltipX >= zeroX ? "right" : "left";
+                    var offsetY = this.offset("y", i),
+                        startY = offsetY - bar_height / 2,
+                        startX = axis.x(0),
+                        value = 0,
+                        sumValue = 0;
 
-                        // 최소 크기 설정
-                        if (Math.abs(zeroX - tooltipX) < this.brush.minSize) {
-                            tooltipX = position == "right" ? tooltipX + this.brush.minSize : tooltipX - this.brush.minSize;
+                    for (var j = 0; j < brush.target.length; j++) {
+                        var xValue = data[brush.target[j]] + value,
+                            endX = axis.x(xValue),
+                            opts = {
+                            x: startX < endX ? startX : endX,
+                            y: startY,
+                            width: Math.abs(startX - endX),
+                            height: bar_height
+                        },
+                            r = this.getBarElement(i, j).attr(opts);
+
+                        if (!this.edgeData[i]) {
+                            this.edgeData[i] = {};
                         }
 
-                        var width = Math.abs(zeroX - tooltipX),
-                            radius = width < style.borderRadius || bar_height < style.borderRadius ? 0 : style.borderRadius,
-                            r = this.getBarElement(i, j, {
-                            width: width,
-                            height: bar_height,
-                            value: value,
-                            tooltipX: tooltipX,
-                            tooltipY: tooltipY,
-                            position: position,
-                            max: points[j].max[i],
-                            min: points[j].min[i]
-                        });
+                        this.edgeData[i][j] = _.extend({
+                            color: this.color(j),
+                            dx: opts.width,
+                            dy: 0,
+                            ex: isReverse ? opts.width : 0,
+                            ey: 0
+                        }, opts);
 
-                        if (tooltipX >= zeroX) {
-                            r.round(width, bar_height, 0, radius, radius, 0);
-                            r.translate(zeroX, startY);
-                        } else {
-                            r.round(width, bar_height, radius, 0, 0, radius);
-                            r.translate(zeroX - width, startY);
-                        }
+                        startX = endX;
+                        value = xValue;
+                        sumValue += data[brush.target[j]];
 
-                        // 그룹에 컬럼 엘리먼트 추가
-                        g.append(r);
-
-                        // 다음 컬럼 좌표 설정
-                        startY += bar_height + this.brush.innerPadding;
+                        group.append(r);
                     }
+
+                    // min & max 인덱스 가져오기
+                    if (sumValue > maxValue) {
+                        maxValue = sumValue;
+                        maxIndex = i;
+                    }
+                    if (sumValue < minValue) {
+                        minValue = sumValue;
+                        minIndex = i;
+                    }
+
+                    this.drawStackTooltip(group, i, sumValue, startX, offsetY, isReverse ? "right" : "left");
+                    this.setActiveEventOption(group); // 액티브 엘리먼트 이벤트 설정
+                    this.addBarElement(group);
+                    g.append(group);
                 });
 
-                this.drawETC(g);
+                // 스탭 연결선 그리기
+                if (this.brush.edge) {
+                    this.drawStackEdge(g);
+                }
+
+                // 최소/최대/전체 값 표시하기
+                if (this.brush.display != null) {
+                    this.setActiveTooltips(minIndex, maxIndex);
+                }
+
+                // 액티브 엘리먼트 설정
+                this.setActiveEffectOption();
 
                 return g;
             };
-
-            this.drawAnimate = function (root) {
-                var svg = this.chart.svg,
-                    type = this.brush.animate;
-
-                root.append(svg.animate({
-                    attributeName: "opacity",
-                    from: "0",
-                    to: "1",
-                    begin: "0s",
-                    dur: "1.4s",
-                    repeatCount: "1",
-                    fill: "freeze"
-                }));
-
-                root.each(function (i, elem) {
-                    if (elem.is("util.svg.element.path")) {
-                        var xy = elem.data("translate").split(","),
-                            x = parseInt(xy[0]),
-                            y = parseInt(xy[1]),
-                            w = parseInt(elem.attr("width")),
-                            start = type == "right" ? x + w : x - w;
-
-                        elem.append(svg.animateTransform({
-                            attributeName: "transform",
-                            type: "translate",
-                            from: start + " " + y,
-                            to: x + " " + y,
-                            begin: "0s",
-                            dur: "0.7s",
-                            repeatCount: "1",
-                            fill: "freeze"
-                        }));
-                    }
-                });
-            };
         };
 
-        BarBrush.setup = function () {
+        StackBarBrush.setup = function () {
             return {
-                /** @cfg {Number} [size=0] Set a fixed size of the bar. */
-                size: 0,
-                /** @cfg {Number} [minSize=0] Sets the minimum size as it is not possible to draw a bar when the value is 0. */
-                minSize: 0,
-                /** @cfg {Number} [outerPadding=2] Determines the outer margin of a bar.  */
-                outerPadding: 2,
-                /** @cfg {Number} [innerPadding=1] Determines the inner margin of a bar. */
-                innerPadding: 1,
-                /** @cfg {Number} [active=null] Activates the bar of an applicable index. */
-                active: null,
-                /** @cfg {String} [activeEvent=null]  Activates the bar in question when a configured event occurs (click, mouseover, etc). */
-                activeEvent: null,
-                /** @cfg {"max"/"min"/"all"} [display=null]  Shows a tool tip on the bar for the minimum/maximum value.  */
-                display: null,
-                /** @cfg {Function} [format=null] Sets the format of the value that is displayed on the tool tip. */
-                format: null
+                /** @cfg {Number} [outerPadding=15] Determines the outer margin of a stack bar. */
+                outerPadding: 15,
+                /** @cfg {Boolean} [edge=false] */
+                edge: false
             };
         };
 
-        return BarBrush;
+        return StackBarBrush;
     }
 };
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1495,7 +1787,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _line = __webpack_require__(12);
+var _line = __webpack_require__(10);
 
 var _line2 = _interopRequireDefault(_line);
 
@@ -1544,7 +1836,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1622,7 +1914,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1665,7 +1957,116 @@ exports.default = {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _main = __webpack_require__(0);
+
+var _main2 = _interopRequireDefault(_main);
+
+var _line = __webpack_require__(10);
+
+var _line2 = _interopRequireDefault(_line);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_main2.default.use(_line2.default);
+
+exports.default = {
+    name: "chart.brush.area",
+    extend: "chart.brush.line",
+    component: function component() {
+        var _ = _main2.default.include("util.base");
+
+        var AreaBrush = function AreaBrush() {
+            this.drawArea = function (path) {
+                var g = this.chart.svg.group(),
+                    y = this.axis.y(this.brush.startZero ? 0 : this.axis.y.min()),
+                    opacity = _.typeCheck("number", this.brush.opacity) ? this.brush.opacity : this.chart.theme("areaBackgroundOpacity");
+
+                for (var k = 0; k < path.length; k++) {
+                    var children = this.createLine(path[k], k).children;
+
+                    for (var i = 0; i < children.length; i++) {
+                        var p = children[i];
+
+                        // opacity 옵션이 콜백함수 일때, 상위 클래스 설정을 따름.
+                        if (_.typeCheck("function", this.brush.opacity)) {
+                            opacity = p.attr("stroke-opacity");
+                        }
+
+                        if (path[k].length > 0) {
+                            p.LineTo(p.attr("x2"), y);
+                            p.LineTo(p.attr("x1"), y);
+                            p.ClosePath();
+                        }
+
+                        p.attr({
+                            fill: p.attr("stroke"),
+                            "fill-opacity": opacity,
+                            "stroke-width": 0
+                        });
+
+                        g.prepend(p);
+                    }
+
+                    if (this.brush.line) {
+                        g.prepend(this.createLine(path[k], k));
+                    }
+
+                    this.addEvent(g, null, k);
+                }
+
+                return g;
+            };
+
+            this.draw = function () {
+                return this.drawArea(this.getXY());
+            };
+
+            this.drawAnimate = function (root) {
+                root.append(this.chart.svg.animate({
+                    attributeName: "opacity",
+                    from: "0",
+                    to: "1",
+                    begin: "0s",
+                    dur: "1.5s",
+                    repeatCount: "1",
+                    fill: "freeze"
+                }));
+            };
+        };
+
+        AreaBrush.setup = function () {
+            return {
+                /** @cfg {"normal"/"curve"/"step"} [symbol="normal"] Sets the shape of a line (normal, curve, step). */
+                symbol: "normal", // normal, curve, step
+                /** @cfg {Number} [active=null] Activates the bar of an applicable index. */
+                active: null,
+                /** @cfg {String} [activeEvent=null]  Activates the bar in question when a configured event occurs (click, mouseover, etc). */
+                activeEvent: null,
+                /** @cfg {"max"/"min"} [display=null]  Shows a tool tip on the bar for the minimum/maximum value.  */
+                display: null,
+                /** @cfg {Boolean} [startZero=true]  The end of the area is zero point. */
+                startZero: true,
+                /** @cfg {Boolean} [line=true]  Visible line */
+                line: true
+            };
+        };
+
+        return AreaBrush;
+    }
+};
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1692,7 +2093,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1830,7 +2231,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1860,7 +2261,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1906,11 +2307,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _bar = __webpack_require__(14);
+var _bar = __webpack_require__(9);
 
 var _bar2 = _interopRequireDefault(_bar);
 
-var _column = __webpack_require__(22);
+var _column = __webpack_require__(24);
 
 var _column2 = _interopRequireDefault(_column);
 
@@ -1980,7 +2381,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1989,6 +2390,19 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = __webpack_require__(0);
+
+var _main2 = _interopRequireDefault(_main);
+
+var _bar = __webpack_require__(9);
+
+var _bar2 = _interopRequireDefault(_bar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_main2.default.use(_bar2.default);
+
 exports.default = {
     name: "chart.brush.column",
     extend: "chart.brush.bar",
@@ -2110,7 +2524,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2181,7 +2595,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2233,7 +2647,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2341,7 +2755,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2355,96 +2769,114 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
+var _stackbar = __webpack_require__(15);
+
+var _stackbar2 = _interopRequireDefault(_stackbar);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+_main2.default.use(_stackbar2.default);
+
 exports.default = {
-    name: "chart.brush.area",
-    extend: "chart.brush.line",
+    name: "chart.brush.fullstackbar",
+    extend: "chart.brush.stackbar",
     component: function component() {
         var _ = _main2.default.include("util.base");
 
-        var AreaBrush = function AreaBrush() {
-            this.drawArea = function (path) {
-                var g = this.chart.svg.group(),
-                    y = this.axis.y(this.brush.startZero ? 0 : this.axis.y.min()),
-                    opacity = _.typeCheck("number", this.brush.opacity) ? this.brush.opacity : this.chart.theme("areaBackgroundOpacity");
+        var FullStackBarBrush = function FullStackBarBrush(chart, axis, brush) {
+            var g, zeroX, height, bar_height;
 
-                for (var k = 0; k < path.length; k++) {
-                    var children = this.createLine(path[k], k).children;
+            this.drawBefore = function () {
+                g = chart.svg.group();
+                zeroX = axis.x(0);
+                height = axis.y.rangeBand();
+                bar_height = this.getTargetSize();
+            };
 
-                    for (var i = 0; i < children.length; i++) {
-                        var p = children[i];
+            this.drawText = function (percent, x, y) {
+                var text = this.chart.text({
+                    "font-size": this.chart.theme("barFontSize"),
+                    fill: this.chart.theme("barFontColor"),
+                    x: x,
+                    y: y,
+                    "text-anchor": "middle"
+                }, percent + "%");
 
-                        // opacity 옵션이 콜백함수 일때, 상위 클래스 설정을 따름.
-                        if (_.typeCheck("function", this.brush.opacity)) {
-                            opacity = p.attr("stroke-opacity");
-                        }
-
-                        if (path[k].length > 0) {
-                            p.LineTo(p.attr("x2"), y);
-                            p.LineTo(p.attr("x1"), y);
-                            p.ClosePath();
-                        }
-
-                        p.attr({
-                            fill: p.attr("stroke"),
-                            "fill-opacity": opacity,
-                            "stroke-width": 0
-                        });
-
-                        g.prepend(p);
-                    }
-
-                    if (this.brush.line) {
-                        g.prepend(this.createLine(path[k], k));
-                    }
-
-                    this.addEvent(g, null, k);
-                }
-
-                return g;
+                return text;
             };
 
             this.draw = function () {
-                return this.drawArea(this.getXY());
-            };
+                this.eachData(function (data, i) {
+                    var group = chart.svg.group();
 
-            this.drawAnimate = function (root) {
-                root.append(this.chart.svg.animate({
-                    attributeName: "opacity",
-                    from: "0",
-                    to: "1",
-                    begin: "0s",
-                    dur: "1.5s",
-                    repeatCount: "1",
-                    fill: "freeze"
-                }));
+                    var startY = this.offset("y", i) - bar_height / 2,
+                        sum = 0,
+                        list = [];
+
+                    for (var j = 0; j < brush.target.length; j++) {
+                        var width = data[brush.target[j]];
+
+                        sum += width;
+                        list.push(width);
+                    }
+
+                    var startX = 0,
+                        max = axis.x.max();
+
+                    for (var j = list.length - 1; j >= 0; j--) {
+                        var width = axis.x.rate(list[j], sum),
+                            r = this.getBarElement(i, j);
+
+                        r.attr({
+                            x: startX,
+                            y: startY,
+                            width: width,
+                            height: bar_height
+                        });
+
+                        group.append(r);
+
+                        // 퍼센트 노출 옵션 설정
+                        if (brush.showText) {
+                            var p = Math.round(list[j] / sum * max),
+                                x = startX + width / 2,
+                                y = startY + bar_height / 2 + 5;
+
+                            group.append(this.drawText(p, x, y));
+                        }
+
+                        // 액티브 엘리먼트 이벤트 설정
+                        this.setActiveEventOption(group);
+
+                        startX += width;
+                    }
+
+                    this.addBarElement(group);
+                    g.append(group);
+                });
+
+                // 액티브 엘리먼트 설정
+                this.setActiveEffectOption();
+
+                return g;
             };
         };
 
-        AreaBrush.setup = function () {
+        FullStackBarBrush.setup = function () {
             return {
-                /** @cfg {"normal"/"curve"/"step"} [symbol="normal"] Sets the shape of a line (normal, curve, step). */
-                symbol: "normal", // normal, curve, step
-                /** @cfg {Number} [active=null] Activates the bar of an applicable index. */
-                active: null,
-                /** @cfg {String} [activeEvent=null]  Activates the bar in question when a configured event occurs (click, mouseover, etc). */
-                activeEvent: null,
-                /** @cfg {"max"/"min"} [display=null]  Shows a tool tip on the bar for the minimum/maximum value.  */
-                display: null,
-                /** @cfg {Boolean} [startZero=true]  The end of the area is zero point. */
-                startZero: true,
-                /** @cfg {Boolean} [line=true]  Visible line */
-                line: true
+                /** @cfg {Number} [outerPadding=15] */
+                outerPadding: 15,
+                /** @cfg {Boolean} [showText=false] Configures settings to let the percent text of a full stack bar revealed. */
+                showText: false
             };
         };
 
-        return AreaBrush;
+        return FullStackBarBrush;
     }
 };
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2492,11 +2924,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _line = __webpack_require__(12);
+var _line = __webpack_require__(10);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _rangearea = __webpack_require__(28);
+var _rangearea = __webpack_require__(30);
 
 var _rangearea2 = _interopRequireDefault(_rangearea);
 
@@ -2555,7 +2987,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2615,7 +3047,437 @@ exports.default = {
 };
 
 /***/ }),
-/* 29 */
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _main = __webpack_require__(0);
+
+var _main2 = _interopRequireDefault(_main);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+    name: "chart.brush.pie",
+    extend: "chart.brush.core",
+    component: function component() {
+        var _ = _main2.default.include("util.base");
+        var math = _main2.default.include("util.math");
+        var ColorUtil = _main2.default.include("util.color");
+
+        var PieBrush = function PieBrush() {
+            var self = this,
+                textY = 3;
+            var preAngle = 0,
+                preRate = 0,
+                preOpacity = 1;
+            var g,
+                cache_active = {};
+
+            this.setActiveEvent = function (items, useOpacity) {
+                var isDisableAll = true,
+                    disabledOpacity = this.chart.theme("pieDisableBackgroundOpacity") || 0.5;
+
+                for (var key in items) {
+                    var data = items[key];
+
+                    if (data.active) {
+                        isDisableAll = false;
+                        break;
+                    }
+                }
+
+                for (var key in items) {
+                    var data = items[key];
+
+                    if (data.active) {
+                        var dist = this.chart.theme("pieActiveDistance"),
+                            tx = Math.cos(math.radian(data.centerAngle)) * dist,
+                            ty = Math.sin(math.radian(data.centerAngle)) * dist;
+
+                        data.pie.translate(data.centerX + tx, data.centerY + ty);
+                    } else {
+                        data.pie.translate(data.centerX, data.centerY);
+                    }
+
+                    if (useOpacity) {
+                        if (data.pie.children.length > 0) {
+                            data.pie.get(0).attr({ "opacity": isDisableAll || data.active ? 1 : disabledOpacity });
+                        }
+
+                        if (data.text.children.length > 0) {
+                            data.text.get(0).attr({ "opacity": isDisableAll || data.active ? 1 : disabledOpacity });
+                        }
+                    }
+                }
+            };
+
+            this.setActiveTextEvent = function (items) {
+                for (var key in items) {
+                    var data = items[key],
+                        dist = data.active ? this.chart.theme("pieActiveDistance") : 0,
+                        cx = data.centerX + Math.cos(math.radian(data.centerAngle)) * ((data.outerRadius + dist) / 2),
+                        cy = data.centerY + Math.sin(math.radian(data.centerAngle)) * ((data.outerRadius + dist) / 2);
+
+                    if (data.text.children.length > 0) {
+                        data.text.get(0).translate(cx, cy);
+                    }
+                }
+            };
+
+            this.getFormatText = function (target, value, max) {
+                var key = target;
+
+                if (typeof this.brush.format == "function") {
+                    return this.format(key, value, max);
+                } else {
+                    if (!value) {
+                        return key;
+                    }
+
+                    return key + ": " + this.format(value);
+                }
+            };
+
+            this.drawPie = function (centerX, centerY, outerRadius, startAngle, endAngle, color) {
+                var pie = this.chart.svg.group();
+
+                if (endAngle == 360) {
+                    // if pie is full size, draw a circle as pie brush
+                    var circle = this.chart.svg.circle({
+                        cx: centerX,
+                        cy: centerY,
+                        r: outerRadius,
+                        fill: color,
+                        stroke: this.chart.theme("pieBorderColor") || color,
+                        "stroke-width": this.chart.theme("pieBorderWidth")
+                    });
+
+                    pie.append(circle);
+
+                    return pie;
+                }
+
+                var path = this.chart.svg.path({
+                    fill: color,
+                    stroke: this.chart.theme("pieBorderColor") || color,
+                    "stroke-width": this.chart.theme("pieBorderWidth")
+                });
+
+                // 바깥 지름 부터 그림
+                var obj = math.rotate(0, -outerRadius, math.radian(startAngle)),
+                    startX = obj.x,
+                    startY = obj.y;
+
+                // 시작 하는 위치로 옮김
+                path.MoveTo(startX, startY);
+
+                // outer arc 에 대한 지점 설정
+                obj = math.rotate(startX, startY, math.radian(endAngle));
+
+                pie.translate(centerX, centerY);
+
+                // arc 그림
+                path.Arc(outerRadius, outerRadius, 0, endAngle > 180 ? 1 : 0, 1, obj.x, obj.y).LineTo(0, 0).ClosePath();
+
+                pie.append(path);
+                pie.order = 1;
+
+                return pie;
+            };
+
+            this.drawPie3d = function (centerX, centerY, outerRadius, startAngle, endAngle, color) {
+                var pie = this.chart.svg.group(),
+                    path = this.chart.svg.path({
+                    fill: color,
+                    stroke: this.chart.theme("pieBorderColor") || color,
+                    "stroke-width": this.chart.theme("pieBorderWidth")
+                });
+
+                // 바깥 지름 부터 그림
+                var obj = math.rotate(0, -outerRadius, math.radian(startAngle)),
+                    startX = obj.x,
+                    startY = obj.y;
+
+                // 시작 하는 위치로 옮김
+                path.MoveTo(startX, startY);
+
+                // outer arc 에 대한 지점 설정
+                obj = math.rotate(startX, startY, math.radian(endAngle));
+
+                pie.translate(centerX, centerY);
+
+                // arc 그림
+                path.Arc(outerRadius, outerRadius, 0, endAngle > 180 ? 1 : 0, 1, obj.x, obj.y);
+
+                var y = obj.y + 10,
+                    x = obj.x + 5,
+                    targetX = startX + 5,
+                    targetY = startY + 10;
+
+                path.LineTo(x, y);
+                path.Arc(outerRadius, outerRadius, 0, endAngle > 180 ? 1 : 0, 0, targetX, targetY);
+                path.ClosePath();
+
+                pie.append(path);
+                pie.order = 1;
+
+                return pie;
+            };
+
+            this.drawText = function (centerX, centerY, centerAngle, outerRadius, text) {
+                var g = this.svg.group({
+                    visibility: !this.brush.showText ? "hidden" : "visible"
+                }),
+                    isLeft = centerAngle + 90 > 180 ? true : false;
+
+                if (text === "" || !text) {
+                    return g;
+                }
+
+                if (this.brush.showText == "inside") {
+                    var cx = centerX + Math.cos(math.radian(centerAngle)) * (outerRadius / 2),
+                        cy = centerY + Math.sin(math.radian(centerAngle)) * (outerRadius / 2);
+
+                    var text = this.chart.text({
+                        "font-size": this.chart.theme("pieInnerFontSize"),
+                        fill: this.chart.theme("pieInnerFontColor"),
+                        "text-anchor": "middle",
+                        y: textY
+                    }, text);
+
+                    text.translate(cx, cy);
+
+                    g.append(text);
+                    g.order = 2;
+                } else {
+                    // TODO: 각도가 좁을 때, 텍스트와 라인을 보정하는 코드 개선 필요
+
+                    var rate = this.chart.theme("pieOuterLineRate"),
+                        diffAngle = Math.abs(centerAngle - preAngle);
+
+                    if (diffAngle < 2) {
+                        if (preRate == 0) {
+                            preRate = rate;
+                        }
+
+                        var tick = rate * 0.05;
+                        preRate -= tick;
+                        preOpacity -= 0.25;
+                    } else {
+                        preRate = rate;
+                        preOpacity = 1;
+                    }
+
+                    if (preRate > 1.2) {
+                        var dist = this.chart.theme("pieOuterLineSize"),
+                            r = outerRadius * preRate,
+                            cx = centerX + Math.cos(math.radian(centerAngle)) * outerRadius,
+                            cy = centerY + Math.sin(math.radian(centerAngle)) * outerRadius,
+                            tx = centerX + Math.cos(math.radian(centerAngle)) * r,
+                            ty = centerY + Math.sin(math.radian(centerAngle)) * r,
+                            ex = isLeft ? tx - dist : tx + dist;
+
+                        var path = this.svg.path({
+                            fill: "transparent",
+                            stroke: this.chart.theme("pieOuterLineColor"),
+                            "stroke-width": this.chart.theme("pieOuterLineWidth"),
+                            "stroke-opacity": preOpacity
+                        });
+
+                        path.MoveTo(cx, cy).LineTo(tx, ty).LineTo(ex, ty);
+
+                        var text = this.chart.text({
+                            "font-size": this.chart.theme("pieOuterFontSize"),
+                            "fill": this.chart.theme("pieOuterFontColor"),
+                            "fill-opacity": preOpacity,
+                            "text-anchor": isLeft ? "end" : "start",
+                            y: textY
+                        }, text);
+
+                        text.translate(ex + (isLeft ? -3 : 3), ty);
+
+                        g.append(text);
+                        g.append(path);
+                        g.order = 0;
+
+                        preAngle = centerAngle;
+                    }
+                }
+
+                return g;
+            };
+
+            this.drawUnit = function (index, data, g) {
+                var props = this.getProperty(index),
+                    centerX = props.centerX,
+                    centerY = props.centerY,
+                    outerRadius = props.outerRadius;
+
+                var target = this.brush.target,
+                    active = this.brush.active,
+                    all = 360,
+                    startAngle = 0,
+                    max = 0;
+
+                for (var i = 0; i < target.length; i++) {
+                    max += data[target[i]];
+                }
+
+                for (var i = 0; i < target.length; i++) {
+                    if (data[target[i]] == 0) continue;
+
+                    var value = data[target[i]],
+                        endAngle = all * (value / max);
+
+                    if (this.brush['3d']) {
+                        var pie3d = this.drawPie3d(centerX, centerY, outerRadius, startAngle, endAngle, ColorUtil.darken(this.color(i), 0.5));
+                        g.append(pie3d);
+                    }
+
+                    startAngle += endAngle;
+                }
+
+                startAngle = 0;
+
+                for (var i = 0; i < target.length; i++) {
+                    var value = data[target[i]],
+                        endAngle = all * (value / max),
+                        centerAngle = startAngle + endAngle / 2 - 90,
+                        isOnlyOne = Math.abs(startAngle - endAngle) == 360,
+                        pie = this.drawPie(centerX, centerY, outerRadius, startAngle, endAngle, this.color(i)),
+                        text = this.drawText(centerX, centerY, centerAngle, outerRadius, this.getFormatText(target[i], value, max));
+
+                    // 파이 액티브상태 캐싱하는 객체
+                    cache_active[centerAngle] = {
+                        active: false,
+                        pie: pie,
+                        text: text,
+                        centerX: centerX,
+                        centerY: centerY,
+                        centerAngle: centerAngle,
+                        outerRadius: outerRadius
+                    };
+
+                    // TODO: 파이가 한개일 경우, 액티브 처리를 할 필요가 없다.
+                    if (!isOnlyOne) {
+                        // 설정된 키 활성화
+                        if (active == target[i] || _.inArray(target[i], active) != -1) {
+                            cache_active[centerAngle].active = true;
+                        } else {
+                            cache_active[centerAngle].active = false;
+                        }
+
+                        // 파이 및 텍스트 액티브 상태 처리
+                        if (this.brush.showText == "inside") {
+                            this.setActiveTextEvent(cache_active);
+                        }
+
+                        // 파이 및 텍스트 액티브 상태 처리
+                        this.setActiveEvent(cache_active, true);
+
+                        // 활성화 이벤트 설정
+                        if (this.brush.activeEvent != null) {
+                            (function (p, t, cx, cy, ca, r) {
+                                p.on(self.brush.activeEvent, function (e) {
+                                    if (!cache_active[ca].active) {
+                                        cache_active[ca].active = true;
+                                    } else {
+                                        cache_active[ca].active = false;
+                                    }
+
+                                    if (self.brush.showText == "inside") {
+                                        self.setActiveTextEvent(cache_active);
+                                    }
+
+                                    self.setActiveEvent(cache_active, true);
+                                });
+
+                                p.attr({ cursor: "pointer" });
+                            })(pie, text.get(0), centerX, centerY, centerAngle, outerRadius);
+                        }
+                    }
+
+                    self.addEvent(pie, index, i);
+                    g.append(pie);
+                    g.append(text);
+
+                    startAngle += endAngle;
+                }
+            };
+
+            this.drawNoData = function (g) {
+                var props = this.getProperty(0);
+
+                g.append(this.drawPie(props.centerX, props.centerY, props.outerRadius, 0, 360, this.chart.theme("pieNoDataBackgroundColor")));
+            };
+
+            this.drawBefore = function () {
+                g = this.chart.svg.group();
+            };
+
+            this.draw = function () {
+                if (this.listData().length == 0) {
+                    this.drawNoData(g);
+                } else {
+                    this.eachData(function (data, i) {
+                        this.drawUnit(i, data, g);
+                    });
+                }
+
+                return g;
+            };
+
+            this.getProperty = function (index) {
+                var obj = this.axis.c(index);
+
+                var width = obj.width,
+                    height = obj.height,
+                    x = obj.x,
+                    y = obj.y,
+                    min = width;
+
+                if (height < min) {
+                    min = height;
+                }
+
+                return {
+                    centerX: width / 2 + x,
+                    centerY: height / 2 + y,
+                    outerRadius: min / 2
+                };
+            };
+        };
+
+        PieBrush.setup = function () {
+            return {
+                /** @cfg {Boolean} [clip=false] If the brush is drawn outside of the chart, cut the area. */
+                clip: false,
+                /** @cfg {String} [showText=null] Set the text appear. (outside or inside)  */
+                showText: null,
+                /** @cfg {Function} [format=null] Returns a value from the format callback function of a defined option. */
+                format: null,
+                /** @cfg {Boolean} [3d=false] check 3d support */
+                "3d": false,
+                /** @cfg {String|Array} [active=null] Activates the pie of an applicable property's name. */
+                active: null,
+                /** @cfg {String} [activeEvent=null]  Activates the pie in question when a configured event occurs (click, mouseover, etc). */
+                activeEvent: null
+            };
+        };
+
+        return PieBrush;
+    }
+};
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2892,7 +3754,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2973,13 +3835,13 @@ exports.default = {
 };
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _main = __webpack_require__(32);
+var _main = __webpack_require__(35);
 
 var _main2 = _interopRequireDefault(_main);
 
@@ -2990,7 +3852,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 } /* bundling type : vue-graph + juijs */
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3000,71 +3862,71 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bar = __webpack_require__(21);
+var _bar = __webpack_require__(23);
 
 var _bar2 = _interopRequireDefault(_bar);
 
-var _bar3d = __webpack_require__(40);
+var _bar3d = __webpack_require__(43);
 
 var _bar3d2 = _interopRequireDefault(_bar3d);
 
-var _stackbar = __webpack_require__(42);
+var _stackbar = __webpack_require__(45);
 
 var _stackbar2 = _interopRequireDefault(_stackbar);
 
-var _rangebar = __webpack_require__(47);
+var _rangebar = __webpack_require__(48);
 
 var _rangebar2 = _interopRequireDefault(_rangebar);
 
-var _line = __webpack_require__(15);
+var _line = __webpack_require__(16);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _line3d = __webpack_require__(50);
+var _line3d = __webpack_require__(51);
 
 var _line3d2 = _interopRequireDefault(_line3d);
 
-var _lineDateblock = __webpack_require__(52);
+var _lineDateblock = __webpack_require__(53);
 
 var _lineDateblock2 = _interopRequireDefault(_lineDateblock);
 
-var _lineTimerange = __webpack_require__(53);
+var _lineTimerange = __webpack_require__(54);
 
 var _lineTimerange2 = _interopRequireDefault(_lineTimerange);
 
-var _scatter = __webpack_require__(54);
+var _scatter = __webpack_require__(55);
 
 var _scatter2 = _interopRequireDefault(_scatter);
 
-var _bubble = __webpack_require__(56);
+var _bubble = __webpack_require__(57);
 
 var _bubble2 = _interopRequireDefault(_bubble);
 
-var _area = __webpack_require__(13);
+var _area = __webpack_require__(14);
 
 var _area2 = _interopRequireDefault(_area);
 
-var _areaDateblock = __webpack_require__(59);
+var _areaDateblock = __webpack_require__(60);
 
 var _areaDateblock2 = _interopRequireDefault(_areaDateblock);
 
-var _areaTimerange = __webpack_require__(60);
+var _areaTimerange = __webpack_require__(61);
 
 var _areaTimerange2 = _interopRequireDefault(_areaTimerange);
 
-var _rangearea = __webpack_require__(27);
+var _rangearea = __webpack_require__(29);
 
 var _rangearea2 = _interopRequireDefault(_rangearea);
 
-var _rangeareaDateblock = __webpack_require__(61);
+var _rangeareaDateblock = __webpack_require__(62);
 
 var _rangeareaDateblock2 = _interopRequireDefault(_rangeareaDateblock);
 
-var _rangeareaTimerange = __webpack_require__(62);
+var _rangeareaTimerange = __webpack_require__(63);
 
 var _rangeareaTimerange2 = _interopRequireDefault(_rangeareaTimerange);
 
-var _pie = __webpack_require__(63);
+var _pie = __webpack_require__(64);
 
 var _pie2 = _interopRequireDefault(_pie);
 
@@ -3151,7 +4013,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6411,6 +7273,150 @@ var CanvasUtil = {
         };
 
         return CanvasBase;
+    }
+};
+
+var pixelRatio = function () {
+    var canvas = document.createElement('canvas'),
+        context = canvas.getContext('2d'),
+        backingStore = context && (context.backingStorePixelRatio || context.webkitBackingStorePixelRatio || context.mozBackingStorePixelRatio || context.msBackingStorePixelRatio || context.oBackingStorePixelRatio || context.backingStorePixelRatio) || 1;
+
+    return (window.devicePixelRatio || 1) / backingStore;
+}();
+
+function polyfillForCanvasRenderingContext2D(prototype) {
+    var forEach = function forEach(obj, func) {
+        for (var p in obj) {
+            if (obj.hasOwnProperty(p)) {
+                func(obj[p], p);
+            }
+        }
+    },
+        ratioArgs = {
+        'fillRect': 'all',
+        'clearRect': 'all',
+        'strokeRect': 'all',
+        'moveTo': 'all',
+        'lineTo': 'all',
+        'arc': [0, 1, 2],
+        'arcTo': 'all',
+        'bezierCurveTo': 'all',
+        'isPointinPath': 'all',
+        'isPointinStroke': 'all',
+        'quadraticCurveTo': 'all',
+        'rect': 'all',
+        'translate': 'all',
+        'createRadialGradient': 'all',
+        'createLinearGradient': 'all'
+    };
+
+    if (pixelRatio === 1) return;
+
+    forEach(ratioArgs, function (value, key) {
+        prototype[key] = function (_super) {
+            return function () {
+                var i = void 0,
+                    len = void 0,
+                    args = Array.prototype.slice.call(arguments);
+
+                if (value === 'all') {
+                    args = args.map(function (a) {
+                        return a * pixelRatio;
+                    });
+                } else if (Array.isArray(value)) {
+                    for (i = 0, len = value.length; i < len; i++) {
+                        args[value[i]] *= pixelRatio;
+                    }
+                }
+
+                return _super.apply(this, args);
+            };
+        }(prototype[key]);
+    });
+
+    // Stroke lineWidth adjustment
+    prototype.stroke = function (_super) {
+        return function () {
+            this.lineWidth *= pixelRatio;
+            _super.apply(this, arguments);
+            this.lineWidth /= pixelRatio;
+        };
+    }(prototype.stroke);
+
+    // Text
+    //
+    prototype.fillText = function (_super) {
+        return function () {
+            var args = Array.prototype.slice.call(arguments);
+
+            args[1] *= pixelRatio; // x
+            args[2] *= pixelRatio; // y
+
+            this.font = this.font.replace(/(\d+)(px|em|rem|pt)/g, function (w, m, u) {
+                return m * pixelRatio + u;
+            });
+
+            _super.apply(this, args);
+
+            this.font = this.font.replace(/(\d+)(px|em|rem|pt)/g, function (w, m, u) {
+                return m / pixelRatio + u;
+            });
+        };
+    }(prototype.fillText);
+
+    prototype.strokeText = function (_super) {
+        return function () {
+            var args = Array.prototype.slice.call(arguments);
+
+            args[1] *= pixelRatio; // x
+            args[2] *= pixelRatio; // y
+
+            this.font = this.font.replace(/(\d+)(px|em|rem|pt)/g, function (w, m, u) {
+                return m * pixelRatio + u;
+            });
+
+            _super.apply(this, args);
+
+            this.font = this.font.replace(/(\d+)(px|em|rem|pt)/g, function (w, m, u) {
+                return m / pixelRatio + u;
+            });
+        };
+    }(prototype.strokeText);
+}
+
+function polyfillForHTMLCanvasElement(prototype) {
+    prototype.getContext = function (_super) {
+        return function (type) {
+            var context = _super.call(this, type);
+
+            if (type === '2d') {
+                if (pixelRatio > 1) {
+                    this.style.height = this.height + 'px';
+                    this.style.width = this.width + 'px';
+                    this.width *= pixelRatio;
+                    this.height *= pixelRatio;
+                }
+            }
+
+            return context;
+        };
+    }(prototype.getContext);
+}
+
+var CanvasHidpiUtil = {
+    name: "util.canvas.hidpi",
+    extend: null,
+    component: function component() {
+        return {
+            polyfills: function polyfills() {
+                polyfillForCanvasRenderingContext2D(CanvasRenderingContext2D.prototype);
+                polyfillForHTMLCanvasElement(HTMLCanvasElement.prototype);
+            },
+            apply: function apply(context) {
+                polyfillForCanvasRenderingContext2D(context);
+            },
+            pixelRatio: pixelRatio
+        };
     }
 };
 
@@ -10711,6 +11717,7 @@ var JUIBuilder = {
         var SVGUtil = jui$1.include("util.svg");
         var ColorUtil = jui$1.include("util.color");
         var Axis = jui$1.include("chart.axis");
+        var HidpiUtil = jui$1.include("util.canvas.hidpi");
 
         _.resize(function () {
             var call_list = jui$1.get("chart.builder");
@@ -11219,19 +12226,22 @@ var JUIBuilder = {
 
             function initCanvasElement(self) {
                 var size = getCanvasRealSize(self);
+                var ratio = HidpiUtil.pixelRatio;
 
-                for (var key in _canvas) {
+                var _loop = function _loop(key) {
                     var elem = document.createElement("CANVAS");
-
-                    elem.setAttribute("width", size.width);
-                    elem.setAttribute("height", size.height);
+                    elem.width = size.width * ratio;
+                    elem.height = size.height * ratio;
                     elem.style.position = "absolute";
                     elem.style.left = "0px";
                     elem.style.top = "0px";
+                    elem.style.width = size.width + "px";
+                    elem.style.height = size.height + "px";
 
                     // Context 설정하기
                     if (elem.getContext) {
                         _canvas[key] = elem.getContext("2d");
+                        HidpiUtil.apply(_canvas[key]);
 
                         if (key != "buffer") {
                             self.root.appendChild(elem);
@@ -11251,15 +12261,20 @@ var JUIBuilder = {
                             return this;
                         };
                     }
+                };
+
+                for (var key in _canvas) {
+                    _loop(key);
                 }
             }
 
             function resetCanvasElement(self, type) {
-                var size = getCanvasRealSize(self),
+                var ratio = HidpiUtil.pixelRatio,
+                    size = getCanvasRealSize(self),
                     context = _canvas[type];
 
                 context.restore();
-                context.clearRect(0, 0, size.width, size.height);
+                context.clearRect(0, 0, size.width * ratio, size.height * ratio);
                 context.save();
 
                 if (type == "main") {
@@ -11693,12 +12708,15 @@ var JUIBuilder = {
 
                 // Resize canvas
                 if (_options.canvas) {
-                    var list = $.find(this.root, "CANVAS"),
+                    var ratio = HidpiUtil.pixelRatio,
+                        list = $.find(this.root, "CANVAS"),
                         size = getCanvasRealSize(this);
 
                     for (var i = 0; i < list.length; i++) {
-                        list[i].setAttribute("width", size.width);
-                        list[i].setAttribute("height", size.height);
+                        list[i].width = size.width * ratio;
+                        list[i].height = size.height * ratio;
+                        list[i].style.width = size.width + "px";
+                        list[i].style.height = size.height + "px";
                     }
                 }
 
@@ -15963,7 +16981,7 @@ var CanvasCoreWidget = {
     }
 };
 
-jui$1.use([dom, math, color, collection, manager, UICore, time, transform, CanvasUtil, JUISvgElement, JUISvgTransformElement, JUISvgPathElement, JUISvgPathRectElement, JUISvgPathSymbolElement, JUISvgPolyElement, JUISvgBase, JUISvgBase3d, svg, LinearScaleUtil, CircleScaleUtil, LogScaleUtil, OrdinalScaleUtil, TimeScaleUtil, scale, vector, draw, axis, Map, JUIBuilder, Plane, Animation, core, grid$1, line, point, CubePolygon, draw2d, draw3d, CoreGrid, BlockGrid, DateGrid, DateBlockGrid, FullBlockGrid, RadarGrid, RangeGrid, LogGrid, RuleGrid, PanelGrid, TableGrid, OverlapGrid, Grid3dGrid, CoreBrush, MapCoreBrush, PolygonCoreBrush, CanvasCoreBrush, CoreWidget, MapCoreWidget, PolygonCoreWidget, CanvasCoreWidget]);
+jui$1.use([dom, math, color, collection, manager, UICore, time, transform, CanvasUtil, CanvasHidpiUtil, JUISvgElement, JUISvgTransformElement, JUISvgPathElement, JUISvgPathRectElement, JUISvgPathSymbolElement, JUISvgPolyElement, JUISvgBase, JUISvgBase3d, svg, LinearScaleUtil, CircleScaleUtil, LogScaleUtil, OrdinalScaleUtil, TimeScaleUtil, scale, vector, draw, axis, Map, JUIBuilder, Plane, Animation, core, grid$1, line, point, CubePolygon, draw2d, draw3d, CoreGrid, BlockGrid, DateGrid, DateBlockGrid, FullBlockGrid, RadarGrid, RangeGrid, LogGrid, RuleGrid, PanelGrid, TableGrid, OverlapGrid, Grid3dGrid, CoreBrush, MapCoreBrush, PolygonCoreBrush, CanvasCoreBrush, CoreWidget, MapCoreWidget, PolygonCoreWidget, CanvasCoreWidget]);
 
 var _$1 = jui$1.include("util.base"),
     manager$1 = jui$1.include("manager");
@@ -15973,7 +16991,7 @@ _$1.extend(jui$1, manager$1, true);
 exports.default = jui$1;
 
 /***/ }),
-/* 34 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16248,20 +17266,19 @@ exports.default = {
             scrollBackgroundColor: "#dcdcdc",
             scrollThumbBackgroundColor: "#b2b2b2",
             scrollThumbBorderColor: "#9f9fa4",
-            // zoomBackgroundColor : "#ff0000",
-            // zoomFocusColor : "#808080",
-            // zoomScrollBackgroundSize : 45,
-            // zoomScrollButtonImage : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAACXBIWXMAAAsTAAALEwEAmpwYAAABL2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY69SsNQHEfPbUXBIYgEN+HiIC7ix9YxaUsRHGoUSbI1yaWKNrncXD86+RI+hIOLo6BvUHEQnHwEN0EcHBwiZHAQwTOd/xn+/KCx4nX8bmMORrk1Qc+XYRTLmUemaQLAIC211+9vA+RFrvjB+zMC4GnV6/hd/sZsqo0FPoHNTJUpiHUgO7PagrgE3ORIWxBXgGv2gjaIO8AZVj4BnKTyF8AxYRSDeAXcYRjF0ABwk8pdwLXq3AK0Cz02h8MDKzdarZb0siJRcndcWjUq5VaeFkYXZmBVBlT7qt2e1sdKBj2f/yWMYlnZ2w4CEAuTutWkJ+b0W4V4+P2uf4zvwQtg6rZu+x9wvQaLzbotL8H8BdzoL/HAUD36i+bmAAA7VmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxMTEgNzkuMTU4MzI1LCAyMDE1LzA5LzEwLTAxOjEwOjIwICAgICAgICAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgICAgICAgICB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIgogICAgICAgICAgICB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPHhtcDpDcmVhdG9yVG9vbD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwveG1wOkNyZWF0b3JUb29sPgogICAgICAgICA8eG1wOkNyZWF0ZURhdGU+MjAxNi0wMi0yM1QyMjoxMDowOSswOTowMDwveG1wOkNyZWF0ZURhdGU+CiAgICAgICAgIDx4bXA6TWV0YWRhdGFEYXRlPjIwMTYtMDItMjNUMjI6MTA6MDkrMDk6MDA8L3htcDpNZXRhZGF0YURhdGU+CiAgICAgICAgIDx4bXA6TW9kaWZ5RGF0ZT4yMDE2LTAyLTIzVDIyOjEwOjA5KzA5OjAwPC94bXA6TW9kaWZ5RGF0ZT4KICAgICAgICAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDoxZjEyZjk2NS02OTgxLTQxZTktYTU3Ny0zMmMwMDg2NjBhMjM8L3htcE1NOkluc3RhbmNlSUQ+CiAgICAgICAgIDx4bXBNTTpEb2N1bWVudElEPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDoyNjNlNTQzMi0xYWJkLTExNzktYjc1Ny1lYmNlZjk1ZGNmOGE8L3htcE1NOkRvY3VtZW50SUQ+CiAgICAgICAgIDx4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ+eG1wLmRpZDpjMjgwNGJmNi0zZTI5LTQ4NTQtOGRhMi05MjAyMDVkNDAzMDY8L3htcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOkhpc3Rvcnk+CiAgICAgICAgICAgIDxyZGY6U2VxPgogICAgICAgICAgICAgICA8cmRmOmxpIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmFjdGlvbj5jcmVhdGVkPC9zdEV2dDphY3Rpb24+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6YzI4MDRiZjYtM2UyOS00ODU0LThkYTItOTIwMjA1ZDQwMzA2PC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE2LTAyLTIzVDIyOjEwOjA5KzA5OjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPnNhdmVkPC9zdEV2dDphY3Rpb24+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6MWYxMmY5NjUtNjk4MS00MWU5LWE1NzctMzJjMDA4NjYwYTIzPC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE2LTAyLTIzVDIyOjEwOjA5KzA5OjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOlNlcT4KICAgICAgICAgPC94bXBNTTpIaXN0b3J5PgogICAgICAgICA8cGhvdG9zaG9wOkRvY3VtZW50QW5jZXN0b3JzPgogICAgICAgICAgICA8cmRmOkJhZz4KICAgICAgICAgICAgICAgPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6OTkxNzEzNDYtMTllNS0xMTc5LTg1YjUtZjAwOGZkMGY4OTgyPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGk+eG1wLmRpZDozNWYyZjJkMC0xNmY3LTQ1YjktYjI3MS0zY2VkNTgwZmNjNmE8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6QmFnPgogICAgICAgICA8L3Bob3Rvc2hvcDpEb2N1bWVudEFuY2VzdG9ycz4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgICAgPHBob3Rvc2hvcDpJQ0NQcm9maWxlPkFwcGxlIFJHQjwvcGhvdG9zaG9wOklDQ1Byb2ZpbGU+CiAgICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2UvcG5nPC9kYzpmb3JtYXQ+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDx0aWZmOlhSZXNvbHV0aW9uPjcyMDAwMC8xMDAwMDwvdGlmZjpYUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6WVJlc29sdXRpb24+NzIwMDAwLzEwMDAwPC90aWZmOllSZXNvbHV0aW9uPgogICAgICAgICA8dGlmZjpSZXNvbHV0aW9uVW5pdD4yPC90aWZmOlJlc29sdXRpb25Vbml0PgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjY1NTM1PC9leGlmOkNvbG9yU3BhY2U+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj44MDwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj44MDwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+32DD9QAAACBjSFJNAAB6JQAAgIMAAPQlAACE0QAAbV8AAOhsAAA8iwAAG1iD5wd4AABkYElEQVR4AQBQZK+bAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAAAAAAAAAAAA/wAAAAAAAAD/AAAAAAAAAAAAAAD/AAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAP8AAAD/AAAAAAAAAP8AAAD/AAAAAAAAAP8AAAD/AAAAAAAAAAAAAAD/AAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAABAQEBAAAAAAAAAAAAAAABAAAAAAAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAAAAAAAAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAA/wAAAAAAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAP////8BAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAQAAAAAAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAQAAAAJ5eXkLaGhoNw8PDykFBQUmBQUFJAEBARgCAgILAQEBDQEBAQz////0////8/7+/vX9/f3p+vr63fb29tzt7e3WiYmJzKKiovYAAAD/AAAA/wAAAP4AAAD/AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD+AAAAAAAAAP8AAAD/AAAAAAEBAQAAAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wAAAAABAAAAAQAAAAIAAAADAAAABAAAAAUAAAAGAAAACAAAAAnR0dEy8/Pzhfv7+8X////5/////////////////////////////////////////////////////////////////////////////////v7++vf398jr6+uKtLS0OgAAABMAAAASAAAAEAAAAA4AAAAMAAAACwAAAAkAAAAIAAAABgAAAAUAAAAEAAAAAwAAAAIAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAQAAAAEAAAACAAAAAgAAAAQAAAAFAAAABgAAAAifn58Y8vLydPv7+8////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////n5+dHi4uJ8ampqJAAAABQAAAASAAAAEAAAAA0AAAALAAAACgAAAAgAAAAGAAAABQAAAAQAAAACAAAAAgAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAIAAAADAAAABAAAAAYAAAAItra2HPT09In+/v7x/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////f398ujo6JB5eXkqAAAAFQAAABMAAAAQAAAADgAAAAwAAAAJAAAACAAAAAYAAAAEAAAAAwAAAAIAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAQAAAAFAAAAB2ZmZg/z8/OA/v7+9f/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/v715eXliTMzMx4AAAAWAAAAEwAAABAAAAAOAAAACwAAAAkAAAAHAAAABQAAAAQAAAADAAAAAgAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAIAAAADAAAABAAAAAYAAAAI5+fnS/39/dr///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////n5+d7Dw8NZAAAAGQAAABYAAAASAAAADwAAAAwAAAAKAAAACAAAAAYAAAAEAAAAAwAAAAIAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAMAAAAFAAAABmJiYg329vaT/////v/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+6OjonCgoKCAAAAAYAAAAFQAAABEAAAAOAAAACwAAAAgAAAAGAAAABQAAAAMAAAACAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAACAAAABAAAAAUAAAAHzc3NKfv7+8z///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////b29tGMjIw8AAAAGwAAABcAAAATAAAADwAAAAwAAAAJAAAABwAAAAUAAAAEAAAAAgAAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAIAAAAEAAAABQAAAAfc3Nw7/v7+6f/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7+/vsp6enTgAAAB0AAAAYAAAAFAAAABAAAAANAAAACgAAAAcAAAAFAAAABAAAAAIAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAQAAAAFAAAAB+fn50r+/v7z/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////f399La2tl4AAAAfAAAAGgAAABUAAAARAAAADQAAAAoAAAAHAAAABQAAAAQAAAACAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAACAAAABAAAAAUAAAAH5+fnSf////n///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7+/vqzs7NeAAAAIAAAABsAAAAWAAAAEgAAAA4AAAAKAAAABwAAAAUAAAAEAAAAAgAAAAEAAAABAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAgAAAALc3NwzHR0dsAEBAQoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQMjIyNFISEhybGxsesAAAABAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAEAAAACAAAAAsjIyCMsLCy5AQEBEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAgIGLCwsRv///73CwsLyAAAAAAAAAP8AAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAwAAAAQAAAAGgICAEv39/dD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////T09NgwMDAwAAAAIgAAABwAAAAWAAAAEQAAAA0AAAAJAAAABgAAAAQAAAADAAAAAgAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAIAAAAC9/f3kwgICGQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADj4+OqHh4efwAAAPkAAAD6AAAA+gAAAPsAAAD8AAAA/AAAAP4AAAD+AAAA/gAAAP8AAAD/AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQAAAALk5ORECAgIYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdHR1VqqqqPgAAAAYAAAAFAAAABQAAAAQAAAADAAAAAwAAAAIAAAABAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAIAAAAEAAAAB2lpaRH9/f3b////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9vb24CMjIzMAAAAmAAAAHwAAABgAAAATAAAADgAAAAoAAAAHAAAABAAAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAQAAAAGAAAACfPz84H//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9PT05UAAAArAAAAJAAAAB0AAAAXAAAAEQAAAAwAAAAJAAAABgAAAAQAAAACAwAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAQAAAAIAAAADsrKyGSwsLKUBAQEFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQUFCzY2Ni01dXV9QAAAP8AAAD/AAAA/wAAAAAAAAD/AAAAAAAAAP8AAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAIAAAAD9fX1iwoKCmsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADb29unJiYmiAAAAPkAAAD4AAAA+QAAAPoAAAD8AAAA+wAAAP0AAAD+BAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAKXl5cSCQkJYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/f39AMDAwAD9/f0AAAAAAAAAAAAAAAAAAAAAAAMDAwBAQEAAAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/f39AMDAwAD9/f0AAAAAAAAAAAAAAAAAAAAAAAMDAwBAQEAAAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiJQPz8/m8HBwesAAAD9AAAA/QAAAP4AAAD+AAAAAwAAAP8AAAD/AgAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQAAAAJXV1deAQEBCwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QD9/f0A/f39AP39/QD9/f0A/f39AP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QD9/f0A/f39AP39/QD9/f0A/f39AP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMJiIiIUAAAAAQAAAAEAAAABAAAAAMAAAADAAAAAgAAAAIAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAINDQ1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALS0tTgAAAAUAAAAFAAAABAAAAAQAAAADAAAAAgAAAAIAAAACAgAAAAAAAAABAAAAAQAAAAEAAAABAAAAAc/Pzy4EBAQnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwsLIICAgCkAAAAEAAAABAAAAAMAAAADAAAAAwAAAAIAAAABAgAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAiEhIVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE9PT0IAAAAEAAAABAAAAAQAAAADAAAAAgAAAAIAAAACAgAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQoKCkMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8fHzgAAAAEAAAABAAAAAMAAAADAAAAAwAAAAIAAAABAgAAAAAAAAABAAAAAAAAAAEAAAAChISEDwUFBS8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAQECUyMjIOAAAABAAAAAQAAAADAAAAAgAAAAIAAAACAgAAAAEAAAAAAAAAAQAAAAEAAAABVVVVNQAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQJlZWUsAAAAAwAAAAMAAAADAAAAAwAAAAIAAAACAgAAAAAAAAAAAAAAAAAAAAEAAAABERERJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnJychAAAAAwAAAAMAAAADAAAAAgAAAAIAAAACAgAAAAAAAAABAAAAAQAAAAEAAAACCAgIJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXFxceAAAAAgAAAAIAAAACAAAAAgAAAAIAAAABAgAAAAAAAAAAAAAAAQAAAAEAAAABBgYGJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUFBQdAAAAAwAAAAMAAAACAAAAAwAAAAIAAAABAgAAAAEAAAABAAAAAQAAAAEAAAABAgICFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICAgRAAAAAgAAAAIAAAACAAAAAQAAAAEAAAACAgAAAAAAAAAAAAAAAAAAAAEAAAABAgICDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQKAAAAAQAAAAIAAAACAAAAAgAAAAEAAAABAgAAAAAAAAAAAAAAAQAAAAAAAAABAgICDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGBgYKAAAAAgAAAAEAAAACAAAAAQAAAAIAAAABAgAAAAAAAAABAAAAAAAAAAEAAAAAAQEBDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMJAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAAB////9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD9/f35AAAAAQAAAAIAAAABAAAAAQAAAAEAAAABAgAAAAAAAAAAAAAAAQAAAAEAAAAA////+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+/v77AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAB/f397wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD5+fn0AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAA/Pz85wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD19fXsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAAA9/f33QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADr6+vkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AgAAAAAAAAAAAAAAAAAAAAAAAAAA8/Pz3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADk5OTlAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAP8AAAD/5+fn2wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADV1dXjAAAA/wAAAAAAAAD/AAAA/wAAAAAAAAAAAgAAAAAAAAAAAAAA/wAAAAAAAAD/l5eXzwAAAP0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////6enp7aAAAA/wAAAP4AAAD/AAAA/wAAAP8AAAD/AgAAAAAAAAD/AAAAAAAAAP8AAAAAoqKi8vf399UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO3t7d/X19f1AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AgAAAAAAAAAAAAAA/wAAAAAAAAD/AAAA/+/v78AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANjY2M4AAAD+AAAA/gAAAP8AAAD+AAAA/wAAAP4AAAD/AgAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/8TExLYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKioqMYAAAD/AAAA/wAAAP4AAAD+AAAA/gAAAP8AAAD/AgAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/ldXV9X5+fndAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8PDw5JWVld4AAAD+AAAA/gAAAP4AAAD+AAAA/wAAAP8AAAD+AgAAAAAAAAAAAAAA/wAAAP8AAAD/AAAA/wAAAP7i4uKoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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/QAAAP0AAAD9AAAA/AAAAPwAAAD8AAAA+wAAAPwAAAD7AAAA/AAAAPwAAAD8AAAA/AAAAP0AAAD9AAAA/gAAAP4AAAD/AAAA/gAAAAAAAAD/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAAAAAAAAAAAA/gAAAAEAAAAAAAAA/wAAAP8AAAD/AAAA/wAAAP4AAAD+AAAA/QAAAP0AAAAEAAAABAAAAPwAAAAEAAAABAAAAAQAAAADAAAAAwAAAAIAAAADAAAAAgAAAAEAAAACAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAP4AAAD/AAAA/gAAAP0AAAD+AAAA/QAAAP0AAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/QAAAPwAAAD9AAAA/QAAAP0AAAD+AAAA/wAAAP4AAAD/AAAA/wAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAABAAAA/wAAAAAAAAD+AAAAAQAAAAAAAAAAAAAA/wAAAP4AAAD+AAAAAwAAAP4AAAD9AAAA/QAAAPwAAAAEAAAAAwAAAAMAAAAEAAAAAgAAAAMAAAADAAAAAgAAAAIAAAABAAAAAQAAAAIAAAAAAAAAAAAAAAEAAAD/AAAAAAAAAAAAAAD+AAAA/wAAAP8AAAD+AAAA/gAAAP0AAAD9AAAA/gAAAPwAAAD9AAAA/QAAAPwAAAD9AAAA/AAAAP0AAAD8AAAA/QAAAP0AAAD+AAAA/gAAAP4AAAD+AAAA/wAAAP8AAAD/AAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAQAAAP8AAAAAAAAAAAAAAP4AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP4AAAADAAAA/QAAAAMAAAD8AAAAAwAAAAMAAAADAAAAAwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAP4AAAD+AAAA/gAAAP4AAAD+AAAA/QAAAP0AAAD9AAAA/QAAAP0AAAD9AAAA/QAAAP0AAAD+AAAA/QAAAP4AAAD+AAAA/gAAAP8AAAD/AAAA/wAAAP8AAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAABAAAAAQAAAAIAAAACAAAAAQAAAAMAAAACAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAgAAAAIAAAACAAAAAgAAAAIAAAABAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAP8AAAD+AAAA/gAAAP4AAAD+AAAA/gAAAP0AAAD+AAAA/QAAAP4AAAD9AAAA/gAAAP4AAAD9AAAA/wAAAP4AAAD+AAAA/wAAAP8AAAAAAAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAA/wAAAAAAAAD/AAAAAQAAAP8AAAACAAAAAQAAAP0AAAADAAAA/QAAAAIAAAACAAAAAgAAAAIAAAABAAAAAgAAAAEAAAACAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAA/wAAAP4AAAD/AAAA/gAAAP8AAAD+AAAA/gAAAP4AAAD+AAAA/gAAAP0AAAD+AAAA/wAAAP4AAAD+AAAA/wAAAP8AAAD+AAAAAAAAAP8AAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA//+C+dbJggW+VAAAAABJRU5ErkJggg==",
-            // zoomScrollButtonSize : 18,
-            // zoomScrollAreaBackgroundColor : "#fff",
-            // zoomScrollAreaBackgroundOpacity : 0.7,
-            // zoomScrollAreaBorderColor : "#d4d4d4",
-            // zoomScrollAreaBorderWidth : 1,
-            // zoomScrollAreaBorderRadius : 3,
-            // zoomScrollGridFontSize : 10,
-            // zoomScrollGridTickPadding : 4,
-            // zoomScrollBrushAreaBackgroundOpacity : 0.7,
-            // zoomScrollBrushLineBorderWidth : 1,
+            zoomBackgroundColor: "#ff0000",
+            zoomFocusColor: "#808080",
+            zoomScrollBackgroundSize: 45,
+            zoomScrollButtonSize: 18,
+            zoomScrollAreaBackgroundColor: "#fff",
+            zoomScrollAreaBackgroundOpacity: 0.7,
+            zoomScrollAreaBorderColor: "#d4d4d4",
+            zoomScrollAreaBorderWidth: 1,
+            zoomScrollAreaBorderRadius: 3,
+            zoomScrollGridFontSize: 10,
+            zoomScrollGridTickPadding: 4,
+            zoomScrollBrushAreaBackgroundOpacity: 0.7,
+            zoomScrollBrushLineBorderWidth: 1,
             crossBorderColor: "#a9a9a9",
             crossBorderWidth: 1,
             crossBorderOpacity: 0.8,
@@ -16344,7 +17361,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 35 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16621,20 +17638,19 @@ exports.default = {
             scrollBackgroundColor: "#3e3e3e",
             scrollThumbBackgroundColor: "#666666",
             scrollThumbBorderColor: "#686868",
-            // zoomBackgroundColor : "#ff0000",
-            // zoomFocusColor : "#808080",
-            // zoomScrollBackgroundSize : 45,
-            // zoomScrollButtonImage : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAACXBIWXMAAAsTAAALEwEAmpwYAAABL2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjarY69SsNQHEfPbUXBIYgEN+HiIC7ix9YxaUsRHGoUSbI1yaWKNrncXD86+RI+hIOLo6BvUHEQnHwEN0EcHBwiZHAQwTOd/xn+/KCx4nX8bmMORrk1Qc+XYRTLmUemaQLAIC211+9vA+RFrvjB+zMC4GnV6/hd/sZsqo0FPoHNTJUpiHUgO7PagrgE3ORIWxBXgGv2gjaIO8AZVj4BnKTyF8AxYRSDeAXcYRjF0ABwk8pdwLXq3AK0Cz02h8MDKzdarZb0siJRcndcWjUq5VaeFkYXZmBVBlT7qt2e1sdKBj2f/yWMYlnZ2w4CEAuTutWkJ+b0W4V4+P2uf4zvwQtg6rZu+x9wvQaLzbotL8H8BdzoL/HAUD36i+bmAAA7VmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxMTEgNzkuMTU4MzI1LCAyMDE1LzA5LzEwLTAxOjEwOjIwICAgICAgICAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgICAgICAgICB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIgogICAgICAgICAgICB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPHhtcDpDcmVhdG9yVG9vbD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwveG1wOkNyZWF0b3JUb29sPgogICAgICAgICA8eG1wOkNyZWF0ZURhdGU+MjAxNi0wMi0yM1QyMjoxMDowOSswOTowMDwveG1wOkNyZWF0ZURhdGU+CiAgICAgICAgIDx4bXA6TWV0YWRhdGFEYXRlPjIwMTYtMDItMjNUMjI6MTA6MDkrMDk6MDA8L3htcDpNZXRhZGF0YURhdGU+CiAgICAgICAgIDx4bXA6TW9kaWZ5RGF0ZT4yMDE2LTAyLTIzVDIyOjEwOjA5KzA5OjAwPC94bXA6TW9kaWZ5RGF0ZT4KICAgICAgICAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDoxZjEyZjk2NS02OTgxLTQxZTktYTU3Ny0zMmMwMDg2NjBhMjM8L3htcE1NOkluc3RhbmNlSUQ+CiAgICAgICAgIDx4bXBNTTpEb2N1bWVudElEPmFkb2JlOmRvY2lkOnBob3Rvc2hvcDoyNjNlNTQzMi0xYWJkLTExNzktYjc1Ny1lYmNlZjk1ZGNmOGE8L3htcE1NOkRvY3VtZW50SUQ+CiAgICAgICAgIDx4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ+eG1wLmRpZDpjMjgwNGJmNi0zZTI5LTQ4NTQtOGRhMi05MjAyMDVkNDAzMDY8L3htcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOkhpc3Rvcnk+CiAgICAgICAgICAgIDxyZGY6U2VxPgogICAgICAgICAgICAgICA8cmRmOmxpIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmFjdGlvbj5jcmVhdGVkPC9zdEV2dDphY3Rpb24+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6YzI4MDRiZjYtM2UyOS00ODU0LThkYTItOTIwMjA1ZDQwMzA2PC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE2LTAyLTIzVDIyOjEwOjA5KzA5OjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6YWN0aW9uPnNhdmVkPC9zdEV2dDphY3Rpb24+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6MWYxMmY5NjUtNjk4MS00MWU5LWE1NzctMzJjMDA4NjYwYTIzPC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDE2LTAyLTIzVDIyOjEwOjA5KzA5OjAwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoTWFjaW50b3NoKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOlNlcT4KICAgICAgICAgPC94bXBNTTpIaXN0b3J5PgogICAgICAgICA8cGhvdG9zaG9wOkRvY3VtZW50QW5jZXN0b3JzPgogICAgICAgICAgICA8cmRmOkJhZz4KICAgICAgICAgICAgICAgPHJkZjpsaT5hZG9iZTpkb2NpZDpwaG90b3Nob3A6OTkxNzEzNDYtMTllNS0xMTc5LTg1YjUtZjAwOGZkMGY4OTgyPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGk+eG1wLmRpZDozNWYyZjJkMC0xNmY3LTQ1YjktYjI3MS0zY2VkNTgwZmNjNmE8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6QmFnPgogICAgICAgICA8L3Bob3Rvc2hvcDpEb2N1bWVudEFuY2VzdG9ycz4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgICAgPHBob3Rvc2hvcDpJQ0NQcm9maWxlPkFwcGxlIFJHQjwvcGhvdG9zaG9wOklDQ1Byb2ZpbGU+CiAgICAgICAgIDxkYzpmb3JtYXQ+aW1hZ2UvcG5nPC9kYzpmb3JtYXQ+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDx0aWZmOlhSZXNvbHV0aW9uPjcyMDAwMC8xMDAwMDwvdGlmZjpYUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6WVJlc29sdXRpb24+NzIwMDAwLzEwMDAwPC90aWZmOllSZXNvbHV0aW9uPgogICAgICAgICA8dGlmZjpSZXNvbHV0aW9uVW5pdD4yPC90aWZmOlJlc29sdXRpb25Vbml0PgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjY1NTM1PC9leGlmOkNvbG9yU3BhY2U+CiAgICAgICAgIDxleGlmOlBpeGVsWERpbWVuc2lvbj44MDwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj44MDwvZXhpZjpQaXhlbFlEaW1lbnNpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+32DD9QAAACBjSFJNAAB6JQAAgIMAAPQlAACE0QAAbV8AAOhsAAA8iwAAG1iD5wd4AABkYElEQVR4AQBQZK+bAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAAAAAAAAAAAA/wAAAAAAAAD/AAAAAAAAAAAAAAD/AAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAEAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAP8AAAD/AAAAAAAAAP8AAAD/AAAAAAAAAP8AAAD/AAAAAAAAAAAAAAD/AAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAAAAAAAAAAAAAAAAAAAAAAABAQEBAAAAAAAAAAAAAAABAAAAAAAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAAAAAAAAQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAAAAAAA/wAAAAAAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAP////8BAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEBAQAAAAAAAAABAAAAAAAAAAEAAAABAAAAAAAAAAIAAAABAAAAAQAAAAJ5eXkLaGhoNw8PDykFBQUmBQUFJAEBARgCAgILAQEBDQEBAQz////0////8/7+/vX9/f3p+vr63fb29tzt7e3WiYmJzKKiovYAAAD/AAAA/wAAAP4AAAD/AAAA/wAAAP8AAAD+AAAA/wAAAP8AAAD+AAAAAAAAAP8AAAD/AAAAAAEBAQAAAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wAAAAABAAAAAQAAAAIAAAADAAAABAAAAAUAAAAGAAAACAAAAAnR0dEy8/Pzhfv7+8X////5/////////////////////////////////////////////////////////////////////////////////v7++vf398jr6+uKtLS0OgAAABMAAAASAAAAEAAAAA4AAAAMAAAACwAAAAkAAAAIAAAABgAAAAUAAAAEAAAAAwAAAAIAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAAQAAAAEAAAACAAAAAgAAAAQAAAAFAAAABgAAAAifn58Y8vLydPv7+8////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////n5+dHi4uJ8ampqJAAAABQAAAASAAAAEAAAAA0AAAALAAAACgAAAAgAAAAGAAAABQAAAAQAAAACAAAAAgAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAIAAAADAAAABAAAAAYAAAAItra2HPT09In+/v7x/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////f398ujo6JB5eXkqAAAAFQAAABMAAAAQAAAADgAAAAwAAAAJAAAACAAAAAYAAAAEAAAAAwAAAAIAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAACAAAAAgAAAAQAAAAFAAAAB2ZmZg/z8/OA/v7+9f/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+/v715eXliTMzMx4AAAAWAAAAEwAAABAAAAAOAAAACwAAAAkAAAAHAAAABQAAAAQAAAADAAAAAgAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAIAAAADAAAABAAAAAYAAAAI5+fnS/39/dr///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////n5+d7Dw8NZAAAAGQAAABYAAAASAAAADwAAAAwAAAAKAAAACAAAAAYAAAAEAAAAAwAAAAIAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAMAAAAFAAAABmJiYg329vaT/////v/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+6OjonCgoKCAAAAAYAAAAFQAAABEAAAAOAAAACwAAAAgAAAAGAAAABQAAAAMAAAACAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAACAAAABAAAAAUAAAAHzc3NKfv7+8z///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////b29tGMjIw8AAAAGwAAABcAAAATAAAADwAAAAwAAAAJAAAABwAAAAUAAAAEAAAAAgAAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAIAAAAEAAAABQAAAAfc3Nw7/v7+6f/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7+/vsp6enTgAAAB0AAAAYAAAAFAAAABAAAAANAAAACgAAAAcAAAAFAAAABAAAAAIAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAQAAAAFAAAAB+fn50r+/v7z/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////f399La2tl4AAAAfAAAAGgAAABUAAAARAAAADQAAAAoAAAAHAAAABQAAAAQAAAACAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAACAAAABAAAAAUAAAAH5+fnSf////n///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7+/vqzs7NeAAAAIAAAABsAAAAWAAAAEgAAAA4AAAAKAAAABwAAAAUAAAAEAAAAAgAAAAEAAAABAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAgAAAALc3NwzHR0dsAEBAQoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQMjIyNFISEhybGxsesAAAABAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAEAAAACAAAAAsjIyCMsLCy5AQEBEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAgIGLCwsRv///73CwsLyAAAAAAAAAP8AAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAwAAAAQAAAAGgICAEv39/dD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////T09NgwMDAwAAAAIgAAABwAAAAWAAAAEQAAAA0AAAAJAAAABgAAAAQAAAADAAAAAgAAAAEAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAIAAAAC9/f3kwgICGQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADj4+OqHh4efwAAAPkAAAD6AAAA+gAAAPsAAAD8AAAA/AAAAP4AAAD+AAAA/gAAAP8AAAD/AgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQAAAALk5ORECAgIYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAdHR1VqqqqPgAAAAYAAAAFAAAABQAAAAQAAAADAAAAAwAAAAIAAAABAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAIAAAAEAAAAB2lpaRH9/f3b////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9vb24CMjIzMAAAAmAAAAHwAAABgAAAATAAAADgAAAAoAAAAHAAAABAAAAAIAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAQAAAAGAAAACfPz84H//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////9PT05UAAAArAAAAJAAAAB0AAAAXAAAAEQAAAAwAAAAJAAAABgAAAAQAAAACAwAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAQAAAAIAAAADsrKyGSwsLKUBAQEFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQUFCzY2Ni01dXV9QAAAP8AAAD/AAAA/wAAAAAAAAD/AAAAAAAAAP8AAAAAAQAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAgAAAAIAAAAD9fX1iwoKCmsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADb29unJiYmiAAAAPkAAAD4AAAA+QAAAPoAAAD8AAAA+wAAAP0AAAD+BAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAKXl5cSCQkJYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/f39AMDAwAD9/f0AAAAAAAAAAAAAAAAAAAAAAAMDAwBAQEAAAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/f39AMDAwAD9/f0AAAAAAAAAAAAAAAAAAAAAAAMDAwBAQEAAAwMDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAiIiJQPz8/m8HBwesAAAD9AAAA/QAAAP4AAAD+AAAAAwAAAP8AAAD/AgAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQAAAAJXV1deAQEBCwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QD9/f0A/f39AP39/QD9/f0A/f39AP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP39/QD9/f0A/f39AP39/QD9/f0A/f39AP39/QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMJiIiIUAAAAAQAAAAEAAAABAAAAAMAAAADAAAAAgAAAAIAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAgAAAAINDQ1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALS0tTgAAAAUAAAAFAAAABAAAAAQAAAADAAAAAgAAAAIAAAACAgAAAAAAAAABAAAAAQAAAAEAAAABAAAAAc/Pzy4EBAQnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwsLIICAgCkAAAAEAAAABAAAAAMAAAADAAAAAwAAAAIAAAABAgAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAiEhIVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE9PT0IAAAAEAAAABAAAAAQAAAADAAAAAgAAAAIAAAACAgAAAAAAAAAAAAAAAQAAAAEAAAABAAAAAQoKCkMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8fHzgAAAAEAAAABAAAAAMAAAADAAAAAwAAAAIAAAABAgAAAAAAAAABAAAAAAAAAAEAAAAChISEDwUFBS8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAQECUyMjIOAAAABAAAAAQAAAADAAAAAgAAAAIAAAACAgAAAAEAAAAAAAAAAQAAAAEAAAABVVVVNQAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQJlZWUsAAAAAwAAAAMAAAADAAAAAwAAAAIAAAACAgAAAAAAAAAAAAAAAAAAAAEAAAABERERJwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnJychAAAAAwAAAAMAAAADAAAAAgAAAAIAAAACAgAAAAAAAAABAAAAAQAAAAEAAAACCAgIJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXFxceAAAAAgAAAAIAAAACAAAAAgAAAAIAAAABAgAAAAAAAAAAAAAAAQAAAAEAAAABBgYGJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUFBQdAAAAAwAAAAMAAAACAAAAAwAAAAIAAAABAgAAAAEAAAABAAAAAQAAAAEAAAABAgICFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICAgRAAAAAgAAAAIAAAACAAAAAQAAAAEAAAACAgAAAAAAAAAAAAAAAAAAAAEAAAABAgICDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBAQKAAAAAQAAAAIAAAACAAAAAgAAAAEAAAABAgAAAAAAAAAAAAAAAQAAAAAAAAABAgICDQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGBgYKAAAAAgAAAAEAAAACAAAAAQAAAAIAAAABAgAAAAAAAAABAAAAAAAAAAEAAAAAAQEBDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAwMJAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAAB////9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD9/f35AAAAAQAAAAIAAAABAAAAAQAAAAEAAAABAgAAAAAAAAAAAAAAAQAAAAEAAAAA////+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD+/v77AAAAAQAAAAAAAAABAAAAAQAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAB/f397wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD5+fn0AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAA/Pz85wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD19fXsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAgAAAAAAAAAAAAAAAAAAAAAAAAAA9/f33QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADr6+vkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AgAAAAAAAAAAAAAAAAAAAAAAAAAA8/Pz3AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADk5OTlAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAP8AAAD/5+fn2wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADV1dXjAAAA/wAAAAAAAAD/AAAA/wAAAAAAAAAAAgAAAAAAAAAAAAAA/wAAAAAAAAD/l5eXzwAAAP0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP////6enp7aAAAA/wAAAP4AAAD/AAAA/wAAAP8AAAD/AgAAAAAAAAD/AAAAAAAAAP8AAAAAoqKi8vf399UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAO3t7d/X19f1AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AgAAAAAAAAAAAAAA/wAAAAAAAAD/AAAA/+/v78AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANjY2M4AAAD+AAAA/gAAAP8AAAD+AAAA/wAAAP4AAAD/AgAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/8TExLYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKioqMYAAAD/AAAA/wAAAP4AAAD+AAAA/gAAAP8AAAD/AgAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/ldXV9X5+fndAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8PDw5JWVld4AAAD+AAAA/gAAAP4AAAD+AAAA/wAAAP8AAAD+AgAAAAAAAAAAAAAA/wAAAP8AAAD/AAAA/wAAAP7i4uKoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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/QAAAP0AAAD9AAAA/AAAAPwAAAD8AAAA+wAAAPwAAAD7AAAA/AAAAPwAAAD8AAAA/AAAAP0AAAD9AAAA/gAAAP4AAAD/AAAA/gAAAAAAAAD/AAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wAAAAAAAAAAAAAA/gAAAAEAAAAAAAAA/wAAAP8AAAD/AAAA/wAAAP4AAAD+AAAA/QAAAP0AAAAEAAAABAAAAPwAAAAEAAAABAAAAAQAAAADAAAAAwAAAAIAAAADAAAAAgAAAAEAAAACAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAP4AAAD/AAAA/gAAAP0AAAD+AAAA/QAAAP0AAAD8AAAA/AAAAPwAAAD8AAAA/AAAAPwAAAD8AAAA/QAAAPwAAAD9AAAA/QAAAP0AAAD+AAAA/wAAAP4AAAD/AAAA/wAAAAAAAAD/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAABAAAA/wAAAAAAAAD+AAAAAQAAAAAAAAAAAAAA/wAAAP4AAAD+AAAAAwAAAP4AAAD9AAAA/QAAAPwAAAAEAAAAAwAAAAMAAAAEAAAAAgAAAAMAAAADAAAAAgAAAAIAAAABAAAAAQAAAAIAAAAAAAAAAAAAAAEAAAD/AAAAAAAAAAAAAAD+AAAA/wAAAP8AAAD+AAAA/gAAAP0AAAD9AAAA/gAAAPwAAAD9AAAA/QAAAPwAAAD9AAAA/AAAAP0AAAD8AAAA/QAAAP0AAAD+AAAA/gAAAP4AAAD+AAAA/wAAAP8AAAD/AAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAQAAAP8AAAAAAAAAAAAAAP4AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP4AAAADAAAA/QAAAAMAAAD8AAAAAwAAAAMAAAADAAAAAwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAP4AAAD+AAAA/gAAAP4AAAD+AAAA/QAAAP0AAAD9AAAA/QAAAP0AAAD9AAAA/QAAAP0AAAD+AAAA/QAAAP4AAAD+AAAA/gAAAP8AAAD/AAAA/wAAAP8AAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAABAAAAAQAAAAIAAAACAAAAAQAAAAMAAAACAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAgAAAAIAAAACAAAAAgAAAAIAAAABAAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAP8AAAD/AAAA/wAAAP8AAAD+AAAA/gAAAP4AAAD+AAAA/gAAAP0AAAD+AAAA/QAAAP4AAAD9AAAA/gAAAP4AAAD9AAAA/wAAAP4AAAD+AAAA/wAAAP8AAAAAAAAA/wAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAAAAAAAAAAAAAAAAA/wAAAAAAAAD/AAAAAQAAAP8AAAACAAAAAQAAAP0AAAADAAAA/QAAAAIAAAACAAAAAgAAAAIAAAABAAAAAgAAAAEAAAACAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAA/wAAAP4AAAD/AAAA/gAAAP8AAAD+AAAA/gAAAP4AAAD+AAAA/gAAAP0AAAD+AAAA/wAAAP4AAAD+AAAA/wAAAP8AAAD+AAAAAAAAAP8AAAAAAAAA/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA//+C+dbJggW+VAAAAABJRU5ErkJggg==",
-            // zoomScrollButtonSize : 18,
-            // zoomScrollAreaBackgroundColor : "#fff",
-            // zoomScrollAreaBackgroundOpacity : 0.7,
-            // zoomScrollAreaBorderColor : "#d4d4d4",
-            // zoomScrollAreaBorderWidth : 1,
-            // zoomScrollAreaBorderRadius : 3,
-            // zoomScrollGridFontSize : 10,
-            // zoomScrollGridTickPadding : 4,
-            // zoomScrollBrushAreaBackgroundOpacity : 0.7,
-            // zoomScrollBrushLineBorderWidth : 1,
+            zoomBackgroundColor: "#ff0000",
+            zoomFocusColor: "#808080",
+            zoomScrollBackgroundSize: 45,
+            zoomScrollButtonSize: 18,
+            zoomScrollAreaBackgroundColor: "#fff",
+            zoomScrollAreaBackgroundOpacity: 0.7,
+            zoomScrollAreaBorderColor: "#d4d4d4",
+            zoomScrollAreaBorderWidth: 1,
+            zoomScrollAreaBorderRadius: 3,
+            zoomScrollGridFontSize: 10,
+            zoomScrollGridTickPadding: 4,
+            zoomScrollBrushAreaBackgroundOpacity: 0.7,
+            zoomScrollBrushLineBorderWidth: 1,
             crossBorderColor: "#a9a9a9",
             crossBorderWidth: 1,
             crossBorderOpacity: 0.8,
@@ -16717,7 +17733,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 36 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16838,7 +17854,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 37 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17179,7 +18195,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 38 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17486,7 +18502,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 39 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17670,7 +18686,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17700,7 +18716,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsBlock3d = __webpack_require__(23);
+var _propsBlock3d = __webpack_require__(25);
 
 var _propsBlock3d2 = _interopRequireDefault(_propsBlock3d);
 
@@ -17708,7 +18724,7 @@ var _methods = __webpack_require__(5);
 
 var _methods2 = _interopRequireDefault(_methods);
 
-var _methodsBlock3d = __webpack_require__(24);
+var _methodsBlock3d = __webpack_require__(26);
 
 var _methodsBlock3d2 = _interopRequireDefault(_methodsBlock3d);
 
@@ -17716,11 +18732,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _column3d = __webpack_require__(41);
+var _column3d = __webpack_require__(44);
 
 var _column3d2 = _interopRequireDefault(_column3d);
 
-var _rotate3d = __webpack_require__(25);
+var _rotate3d = __webpack_require__(27);
 
 var _rotate3d2 = _interopRequireDefault(_rotate3d);
 
@@ -17752,7 +18768,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17858,7 +18874,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17904,27 +18920,27 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _bar = __webpack_require__(14);
+var _bar = __webpack_require__(9);
 
 var _bar2 = _interopRequireDefault(_bar);
 
-var _stackbar = __webpack_require__(43);
+var _stackbar = __webpack_require__(15);
 
 var _stackbar2 = _interopRequireDefault(_stackbar);
 
-var _fullstackbar = __webpack_require__(44);
+var _fullstackbar = __webpack_require__(28);
 
 var _fullstackbar2 = _interopRequireDefault(_fullstackbar);
 
-var _column = __webpack_require__(22);
+var _column = __webpack_require__(24);
 
 var _column2 = _interopRequireDefault(_column);
 
-var _stackcolumn = __webpack_require__(45);
+var _stackcolumn = __webpack_require__(46);
 
 var _stackcolumn2 = _interopRequireDefault(_stackcolumn);
 
-var _fullstackcolumn = __webpack_require__(46);
+var _fullstackcolumn = __webpack_require__(47);
 
 var _fullstackcolumn2 = _interopRequireDefault(_fullstackcolumn);
 
@@ -18026,7 +19042,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18040,408 +19056,13 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _stackbar = __webpack_require__(15);
 
-exports.default = {
-    name: "chart.brush.stackbar",
-    extend: "chart.brush.bar",
-    component: function component() {
-        var _ = _main2.default.include("util.base");
-
-        var StackBarBrush = function StackBarBrush(chart, axis, brush) {
-            var g, height, bar_height;
-
-            this.addBarElement = function (elem) {
-                if (this.barList == null) {
-                    this.barList = [];
-                }
-
-                this.barList.push(elem);
-            };
-
-            this.getBarElement = function (dataIndex, targetIndex) {
-                var style = this.getBarStyle(),
-                    color = this.color(targetIndex),
-                    value = this.getData(dataIndex)[this.brush.target[targetIndex]];
-
-                var r = this.chart.svg.rect({
-                    fill: color,
-                    stroke: style.borderColor,
-                    "stroke-width": style.borderWidth,
-                    "stroke-opacity": style.borderOpacity
-                });
-
-                // 데이타가 0이면 화면에 표시하지 않음.
-                if (value == 0) {
-                    r.attr({ display: 'none' });
-                }
-
-                if (value != 0) {
-                    this.addEvent(r, dataIndex, targetIndex);
-                }
-
-                return r;
-            };
-
-            this.setActiveEffect = function (group) {
-                var style = this.getBarStyle(),
-                    columns = this.barList,
-                    tooltips = this.stackTooltips;
-
-                for (var i = 0; i < columns.length; i++) {
-                    var opacity = group == columns[i] ? 1 : style.disableOpacity;
-
-                    if (tooltips) {
-                        // bar 가 그려지지 않으면 tooltips 객체가 없을 수 있음.
-                        if (opacity == 1 || _.inArray(i, this.tooltipIndexes) != -1) {
-                            tooltips[i].attr({ opacity: 1 });
-                        } else {
-                            tooltips[i].attr({ opacity: 0 });
-                        }
-                    }
-
-                    columns[i].attr({ opacity: opacity });
-                }
-            };
-
-            this.setActiveEffectOption = function () {
-                var active = this.brush.active;
-
-                if (this.barList && this.barList[active]) {
-                    this.setActiveEffect(this.barList[active]);
-                }
-            };
-
-            this.setActiveEvent = function (group) {
-                var self = this;
-
-                group.on(self.brush.activeEvent, function (e) {
-                    self.setActiveEffect(group);
-                });
-            };
-
-            this.setActiveEventOption = function (group) {
-                if (this.brush.activeEvent != null) {
-                    this.setActiveEvent(group);
-                    group.attr({ cursor: "pointer" });
-                }
-            };
-
-            this.getTargetSize = function () {
-                var height = this.axis.y.rangeBand();
-
-                if (this.brush.size > 0) {
-                    return this.brush.size;
-                } else {
-                    var size = height - this.brush.outerPadding * 2;
-                    return size < this.brush.minSize ? this.brush.minSize : size;
-                }
-            };
-
-            this.setActiveTooltips = function (minIndex, maxIndex) {
-                var type = this.brush.display,
-                    activeIndex = type == "min" ? minIndex : maxIndex;
-
-                for (var i = 0; i < this.stackTooltips.length; i++) {
-                    if (i == activeIndex || type == "all") {
-                        this.stackTooltips[i].css({
-                            opacity: 1
-                        });
-
-                        this.tooltipIndexes.push(i);
-                    }
-                }
-            };
-
-            this.drawStackTooltip = function (group, index, value, x, y, pos) {
-                var fontSize = this.chart.theme("tooltipPointFontSize"),
-                    orient = "middle",
-                    dx = 0,
-                    dy = 0;
-
-                if (pos == "left") {
-                    orient = "start";
-                    dx = 3;
-                    dy = fontSize / 3;
-                } else if (pos == "right") {
-                    orient = "end";
-                    dx = -3;
-                    dy = fontSize / 3;
-                } else if (pos == "top") {
-                    dy = -(fontSize / 3);
-                } else {
-                    dy = fontSize;
-                }
-
-                var tooltip = this.chart.text({
-                    fill: this.chart.theme("tooltipPointFontColor"),
-                    "font-size": fontSize,
-                    "font-weight": this.chart.theme("tooltipPointFontWeight"),
-                    "text-anchor": orient,
-                    dx: dx,
-                    dy: dy,
-                    opacity: 0
-                }).text(this.format(value)).translate(x, y);
-
-                this.stackTooltips[index] = tooltip;
-                group.append(tooltip);
-            };
-
-            this.drawStackEdge = function (g) {
-                var borderWidth = this.chart.theme("barStackEdgeBorderWidth");
-
-                for (var i = 1; i < this.edgeData.length; i++) {
-                    var pre = this.edgeData[i - 1],
-                        now = this.edgeData[i];
-
-                    for (var j = 0; j < this.brush.target.length; j++) {
-                        if (now[j].width > 0 && now[j].height > 0) {
-                            g.append(this.svg.line({
-                                x1: pre[j].x + pre[j].width - pre[j].ex,
-                                x2: now[j].x + now[j].dx - now[j].ex,
-                                y1: pre[j].y + pre[j].height - pre[j].ey,
-                                y2: now[j].y + now[j].dy,
-                                stroke: now[j].color,
-                                "stroke-width": borderWidth
-                            }));
-                        }
-                    }
-                }
-            };
-
-            this.drawBefore = function () {
-                g = chart.svg.group();
-                height = axis.y.rangeBand();
-                bar_height = this.getTargetSize();
-
-                this.stackTooltips = [];
-                this.tooltipIndexes = [];
-                this.edgeData = [];
-            };
-
-            this.draw = function () {
-                var maxIndex = null,
-                    maxValue = 0,
-                    minIndex = null,
-                    minValue = this.axis.x.max(),
-                    isReverse = this.axis.get("x").reverse;
-
-                this.eachData(function (data, i) {
-                    var group = chart.svg.group();
-
-                    var offsetY = this.offset("y", i),
-                        startY = offsetY - bar_height / 2,
-                        startX = axis.x(0),
-                        value = 0,
-                        sumValue = 0;
-
-                    for (var j = 0; j < brush.target.length; j++) {
-                        var xValue = data[brush.target[j]] + value,
-                            endX = axis.x(xValue),
-                            opts = {
-                            x: startX < endX ? startX : endX,
-                            y: startY,
-                            width: Math.abs(startX - endX),
-                            height: bar_height
-                        },
-                            r = this.getBarElement(i, j).attr(opts);
-
-                        if (!this.edgeData[i]) {
-                            this.edgeData[i] = {};
-                        }
-
-                        this.edgeData[i][j] = _.extend({
-                            color: this.color(j),
-                            dx: opts.width,
-                            dy: 0,
-                            ex: isReverse ? opts.width : 0,
-                            ey: 0
-                        }, opts);
-
-                        startX = endX;
-                        value = xValue;
-                        sumValue += data[brush.target[j]];
-
-                        group.append(r);
-                    }
-
-                    // min & max 인덱스 가져오기
-                    if (sumValue > maxValue) {
-                        maxValue = sumValue;
-                        maxIndex = i;
-                    }
-                    if (sumValue < minValue) {
-                        minValue = sumValue;
-                        minIndex = i;
-                    }
-
-                    this.drawStackTooltip(group, i, sumValue, startX, offsetY, isReverse ? "right" : "left");
-                    this.setActiveEventOption(group); // 액티브 엘리먼트 이벤트 설정
-                    this.addBarElement(group);
-                    g.append(group);
-                });
-
-                // 스탭 연결선 그리기
-                if (this.brush.edge) {
-                    this.drawStackEdge(g);
-                }
-
-                // 최소/최대/전체 값 표시하기
-                if (this.brush.display != null) {
-                    this.setActiveTooltips(minIndex, maxIndex);
-                }
-
-                // 액티브 엘리먼트 설정
-                this.setActiveEffectOption();
-
-                return g;
-            };
-        };
-
-        StackBarBrush.setup = function () {
-            return {
-                /** @cfg {Number} [outerPadding=15] Determines the outer margin of a stack bar. */
-                outerPadding: 15,
-                /** @cfg {Boolean} [edge=false] */
-                edge: false
-            };
-        };
-
-        return StackBarBrush;
-    }
-};
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _main = __webpack_require__(0);
-
-var _main2 = _interopRequireDefault(_main);
+var _stackbar2 = _interopRequireDefault(_stackbar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = {
-    name: "chart.brush.fullstackbar",
-    extend: "chart.brush.stackbar",
-    component: function component() {
-        var _ = _main2.default.include("util.base");
-
-        var FullStackBarBrush = function FullStackBarBrush(chart, axis, brush) {
-            var g, zeroX, height, bar_height;
-
-            this.drawBefore = function () {
-                g = chart.svg.group();
-                zeroX = axis.x(0);
-                height = axis.y.rangeBand();
-                bar_height = this.getTargetSize();
-            };
-
-            this.drawText = function (percent, x, y) {
-                var text = this.chart.text({
-                    "font-size": this.chart.theme("barFontSize"),
-                    fill: this.chart.theme("barFontColor"),
-                    x: x,
-                    y: y,
-                    "text-anchor": "middle"
-                }, percent + "%");
-
-                return text;
-            };
-
-            this.draw = function () {
-                this.eachData(function (data, i) {
-                    var group = chart.svg.group();
-
-                    var startY = this.offset("y", i) - bar_height / 2,
-                        sum = 0,
-                        list = [];
-
-                    for (var j = 0; j < brush.target.length; j++) {
-                        var width = data[brush.target[j]];
-
-                        sum += width;
-                        list.push(width);
-                    }
-
-                    var startX = 0,
-                        max = axis.x.max();
-
-                    for (var j = list.length - 1; j >= 0; j--) {
-                        var width = axis.x.rate(list[j], sum),
-                            r = this.getBarElement(i, j);
-
-                        r.attr({
-                            x: startX,
-                            y: startY,
-                            width: width,
-                            height: bar_height
-                        });
-
-                        group.append(r);
-
-                        // 퍼센트 노출 옵션 설정
-                        if (brush.showText) {
-                            var p = Math.round(list[j] / sum * max),
-                                x = startX + width / 2,
-                                y = startY + bar_height / 2 + 5;
-
-                            group.append(this.drawText(p, x, y));
-                        }
-
-                        // 액티브 엘리먼트 이벤트 설정
-                        this.setActiveEventOption(group);
-
-                        startX += width;
-                    }
-
-                    this.addBarElement(group);
-                    g.append(group);
-                });
-
-                // 액티브 엘리먼트 설정
-                this.setActiveEffectOption();
-
-                return g;
-            };
-        };
-
-        FullStackBarBrush.setup = function () {
-            return {
-                /** @cfg {Number} [outerPadding=15] */
-                outerPadding: 15,
-                /** @cfg {Boolean} [showText=false] Configures settings to let the percent text of a full stack bar revealed. */
-                showText: false
-            };
-        };
-
-        return FullStackBarBrush;
-    }
-};
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _main = __webpack_require__(0);
-
-var _main2 = _interopRequireDefault(_main);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+_main2.default.use(_stackbar2.default);
 
 exports.default = {
     name: "chart.brush.stackcolumn",
@@ -18558,7 +19179,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18567,6 +19188,19 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = __webpack_require__(0);
+
+var _main2 = _interopRequireDefault(_main);
+
+var _fullstackbar = __webpack_require__(28);
+
+var _fullstackbar2 = _interopRequireDefault(_fullstackbar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_main2.default.use(_fullstackbar2.default);
+
 exports.default = {
     name: "chart.brush.fullstackcolumn",
     extend: "chart.brush.fullstackbar",
@@ -18666,7 +19300,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18712,11 +19346,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _rangebar = __webpack_require__(48);
+var _rangebar = __webpack_require__(49);
 
 var _rangebar2 = _interopRequireDefault(_rangebar);
 
-var _rangecolumn = __webpack_require__(49);
+var _rangecolumn = __webpack_require__(50);
 
 var _rangecolumn2 = _interopRequireDefault(_rangecolumn);
 
@@ -18751,7 +19385,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18832,7 +19466,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18910,7 +19544,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18940,7 +19574,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsBlock3d = __webpack_require__(23);
+var _propsBlock3d = __webpack_require__(25);
 
 var _propsBlock3d2 = _interopRequireDefault(_propsBlock3d);
 
@@ -18948,7 +19582,7 @@ var _methods = __webpack_require__(5);
 
 var _methods2 = _interopRequireDefault(_methods);
 
-var _methodsBlock3d = __webpack_require__(24);
+var _methodsBlock3d = __webpack_require__(26);
 
 var _methodsBlock3d2 = _interopRequireDefault(_methodsBlock3d);
 
@@ -18956,11 +19590,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _line3d = __webpack_require__(51);
+var _line3d = __webpack_require__(52);
 
 var _line3d2 = _interopRequireDefault(_line3d);
 
-var _rotate3d = __webpack_require__(25);
+var _rotate3d = __webpack_require__(27);
 
 var _rotate3d2 = _interopRequireDefault(_rotate3d);
 
@@ -18992,7 +19626,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19086,7 +19720,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19096,15 +19730,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _line = __webpack_require__(15);
+var _line = __webpack_require__(16);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _propsDateblock = __webpack_require__(16);
+var _propsDateblock = __webpack_require__(17);
 
 var _propsDateblock2 = _interopRequireDefault(_propsDateblock);
 
-var _methodsDateblock = __webpack_require__(17);
+var _methodsDateblock = __webpack_require__(18);
 
 var _methodsDateblock2 = _interopRequireDefault(_methodsDateblock);
 
@@ -19116,7 +19750,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19126,15 +19760,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _line = __webpack_require__(15);
+var _line = __webpack_require__(16);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _propsTimerange = __webpack_require__(9);
+var _propsTimerange = __webpack_require__(11);
 
 var _propsTimerange2 = _interopRequireDefault(_propsTimerange);
 
-var _methodsTimerange = __webpack_require__(10);
+var _methodsTimerange = __webpack_require__(12);
 
 var _methodsTimerange2 = _interopRequireDefault(_methodsTimerange);
 
@@ -19159,7 +19793,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19189,7 +19823,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsTimerange = __webpack_require__(9);
+var _propsTimerange = __webpack_require__(11);
 
 var _propsTimerange2 = _interopRequireDefault(_propsTimerange);
 
@@ -19197,7 +19831,7 @@ var _methods = __webpack_require__(5);
 
 var _methods2 = _interopRequireDefault(_methods);
 
-var _methodsTimerange = __webpack_require__(10);
+var _methodsTimerange = __webpack_require__(12);
 
 var _methodsTimerange2 = _interopRequireDefault(_methodsTimerange);
 
@@ -19205,7 +19839,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _scatter = __webpack_require__(55);
+var _scatter = __webpack_require__(56);
 
 var _scatter2 = _interopRequireDefault(_scatter);
 
@@ -19262,7 +19896,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19574,7 +20208,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19604,7 +20238,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsTimerange = __webpack_require__(9);
+var _propsTimerange = __webpack_require__(11);
 
 var _propsTimerange2 = _interopRequireDefault(_propsTimerange);
 
@@ -19612,7 +20246,7 @@ var _methods = __webpack_require__(5);
 
 var _methods2 = _interopRequireDefault(_methods);
 
-var _methodsTimerange = __webpack_require__(10);
+var _methodsTimerange = __webpack_require__(12);
 
 var _methodsTimerange2 = _interopRequireDefault(_methodsTimerange);
 
@@ -19620,7 +20254,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _bubble = __webpack_require__(57);
+var _bubble = __webpack_require__(58);
 
 var _bubble2 = _interopRequireDefault(_bubble);
 
@@ -19667,7 +20301,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19863,7 +20497,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19877,7 +20511,13 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
+var _area = __webpack_require__(19);
+
+var _area2 = _interopRequireDefault(_area);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_main2.default.use(_area2.default);
 
 exports.default = {
     name: "chart.brush.stackarea",
@@ -19894,7 +20534,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19904,15 +20544,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _area = __webpack_require__(13);
+var _area = __webpack_require__(14);
 
 var _area2 = _interopRequireDefault(_area);
 
-var _propsDateblock = __webpack_require__(16);
+var _propsDateblock = __webpack_require__(17);
 
 var _propsDateblock2 = _interopRequireDefault(_propsDateblock);
 
-var _methodsDateblock = __webpack_require__(17);
+var _methodsDateblock = __webpack_require__(18);
 
 var _methodsDateblock2 = _interopRequireDefault(_methodsDateblock);
 
@@ -19924,7 +20564,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19934,15 +20574,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _area = __webpack_require__(13);
+var _area = __webpack_require__(14);
 
 var _area2 = _interopRequireDefault(_area);
 
-var _propsTimerange = __webpack_require__(9);
+var _propsTimerange = __webpack_require__(11);
 
 var _propsTimerange2 = _interopRequireDefault(_propsTimerange);
 
-var _methodsTimerange = __webpack_require__(10);
+var _methodsTimerange = __webpack_require__(12);
 
 var _methodsTimerange2 = _interopRequireDefault(_methodsTimerange);
 
@@ -19965,7 +20605,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19975,15 +20615,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _rangearea = __webpack_require__(27);
+var _rangearea = __webpack_require__(29);
 
 var _rangearea2 = _interopRequireDefault(_rangearea);
 
-var _propsDateblock = __webpack_require__(16);
+var _propsDateblock = __webpack_require__(17);
 
 var _propsDateblock2 = _interopRequireDefault(_propsDateblock);
 
-var _methodsDateblock = __webpack_require__(17);
+var _methodsDateblock = __webpack_require__(18);
 
 var _methodsDateblock2 = _interopRequireDefault(_methodsDateblock);
 
@@ -19995,7 +20635,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20027,7 +20667,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsTimerange = __webpack_require__(9);
+var _propsTimerange = __webpack_require__(11);
 
 var _propsTimerange2 = _interopRequireDefault(_propsTimerange);
 
@@ -20035,7 +20675,7 @@ var _methods = __webpack_require__(5);
 
 var _methods2 = _interopRequireDefault(_methods);
 
-var _methodsTimerange = __webpack_require__(10);
+var _methodsTimerange = __webpack_require__(12);
 
 var _methodsTimerange2 = _interopRequireDefault(_methodsTimerange);
 
@@ -20043,11 +20683,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _line = __webpack_require__(12);
+var _line = __webpack_require__(10);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _rangearea = __webpack_require__(28);
+var _rangearea = __webpack_require__(30);
 
 var _rangearea2 = _interopRequireDefault(_rangearea);
 
@@ -20093,7 +20733,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20131,7 +20771,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _pie = __webpack_require__(64);
+var _pie = __webpack_require__(31);
 
 var _pie2 = _interopRequireDefault(_pie);
 
@@ -20236,436 +20876,6 @@ exports.default = {
 };
 
 /***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _main = __webpack_require__(0);
-
-var _main2 = _interopRequireDefault(_main);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    name: "chart.brush.pie",
-    extend: "chart.brush.core",
-    component: function component() {
-        var _ = _main2.default.include("util.base");
-        var math = _main2.default.include("util.math");
-        var ColorUtil = _main2.default.include("util.color");
-
-        var PieBrush = function PieBrush() {
-            var self = this,
-                textY = 3;
-            var preAngle = 0,
-                preRate = 0,
-                preOpacity = 1;
-            var g,
-                cache_active = {};
-
-            this.setActiveEvent = function (items, useOpacity) {
-                var isDisableAll = true,
-                    disabledOpacity = this.chart.theme("pieDisableBackgroundOpacity") || 0.5;
-
-                for (var key in items) {
-                    var data = items[key];
-
-                    if (data.active) {
-                        isDisableAll = false;
-                        break;
-                    }
-                }
-
-                for (var key in items) {
-                    var data = items[key];
-
-                    if (data.active) {
-                        var dist = this.chart.theme("pieActiveDistance"),
-                            tx = Math.cos(math.radian(data.centerAngle)) * dist,
-                            ty = Math.sin(math.radian(data.centerAngle)) * dist;
-
-                        data.pie.translate(data.centerX + tx, data.centerY + ty);
-                    } else {
-                        data.pie.translate(data.centerX, data.centerY);
-                    }
-
-                    if (useOpacity) {
-                        if (data.pie.children.length > 0) {
-                            data.pie.get(0).attr({ "opacity": isDisableAll || data.active ? 1 : disabledOpacity });
-                        }
-
-                        if (data.text.children.length > 0) {
-                            data.text.get(0).attr({ "opacity": isDisableAll || data.active ? 1 : disabledOpacity });
-                        }
-                    }
-                }
-            };
-
-            this.setActiveTextEvent = function (items) {
-                for (var key in items) {
-                    var data = items[key],
-                        dist = data.active ? this.chart.theme("pieActiveDistance") : 0,
-                        cx = data.centerX + Math.cos(math.radian(data.centerAngle)) * ((data.outerRadius + dist) / 2),
-                        cy = data.centerY + Math.sin(math.radian(data.centerAngle)) * ((data.outerRadius + dist) / 2);
-
-                    if (data.text.children.length > 0) {
-                        data.text.get(0).translate(cx, cy);
-                    }
-                }
-            };
-
-            this.getFormatText = function (target, value, max) {
-                var key = target;
-
-                if (typeof this.brush.format == "function") {
-                    return this.format(key, value, max);
-                } else {
-                    if (!value) {
-                        return key;
-                    }
-
-                    return key + ": " + this.format(value);
-                }
-            };
-
-            this.drawPie = function (centerX, centerY, outerRadius, startAngle, endAngle, color) {
-                var pie = this.chart.svg.group();
-
-                if (endAngle == 360) {
-                    // if pie is full size, draw a circle as pie brush
-                    var circle = this.chart.svg.circle({
-                        cx: centerX,
-                        cy: centerY,
-                        r: outerRadius,
-                        fill: color,
-                        stroke: this.chart.theme("pieBorderColor") || color,
-                        "stroke-width": this.chart.theme("pieBorderWidth")
-                    });
-
-                    pie.append(circle);
-
-                    return pie;
-                }
-
-                var path = this.chart.svg.path({
-                    fill: color,
-                    stroke: this.chart.theme("pieBorderColor") || color,
-                    "stroke-width": this.chart.theme("pieBorderWidth")
-                });
-
-                // 바깥 지름 부터 그림
-                var obj = math.rotate(0, -outerRadius, math.radian(startAngle)),
-                    startX = obj.x,
-                    startY = obj.y;
-
-                // 시작 하는 위치로 옮김
-                path.MoveTo(startX, startY);
-
-                // outer arc 에 대한 지점 설정
-                obj = math.rotate(startX, startY, math.radian(endAngle));
-
-                pie.translate(centerX, centerY);
-
-                // arc 그림
-                path.Arc(outerRadius, outerRadius, 0, endAngle > 180 ? 1 : 0, 1, obj.x, obj.y).LineTo(0, 0).ClosePath();
-
-                pie.append(path);
-                pie.order = 1;
-
-                return pie;
-            };
-
-            this.drawPie3d = function (centerX, centerY, outerRadius, startAngle, endAngle, color) {
-                var pie = this.chart.svg.group(),
-                    path = this.chart.svg.path({
-                    fill: color,
-                    stroke: this.chart.theme("pieBorderColor") || color,
-                    "stroke-width": this.chart.theme("pieBorderWidth")
-                });
-
-                // 바깥 지름 부터 그림
-                var obj = math.rotate(0, -outerRadius, math.radian(startAngle)),
-                    startX = obj.x,
-                    startY = obj.y;
-
-                // 시작 하는 위치로 옮김
-                path.MoveTo(startX, startY);
-
-                // outer arc 에 대한 지점 설정
-                obj = math.rotate(startX, startY, math.radian(endAngle));
-
-                pie.translate(centerX, centerY);
-
-                // arc 그림
-                path.Arc(outerRadius, outerRadius, 0, endAngle > 180 ? 1 : 0, 1, obj.x, obj.y);
-
-                var y = obj.y + 10,
-                    x = obj.x + 5,
-                    targetX = startX + 5,
-                    targetY = startY + 10;
-
-                path.LineTo(x, y);
-                path.Arc(outerRadius, outerRadius, 0, endAngle > 180 ? 1 : 0, 0, targetX, targetY);
-                path.ClosePath();
-
-                pie.append(path);
-                pie.order = 1;
-
-                return pie;
-            };
-
-            this.drawText = function (centerX, centerY, centerAngle, outerRadius, text) {
-                var g = this.svg.group({
-                    visibility: !this.brush.showText ? "hidden" : "visible"
-                }),
-                    isLeft = centerAngle + 90 > 180 ? true : false;
-
-                if (text === "" || !text) {
-                    return g;
-                }
-
-                if (this.brush.showText == "inside") {
-                    var cx = centerX + Math.cos(math.radian(centerAngle)) * (outerRadius / 2),
-                        cy = centerY + Math.sin(math.radian(centerAngle)) * (outerRadius / 2);
-
-                    var text = this.chart.text({
-                        "font-size": this.chart.theme("pieInnerFontSize"),
-                        fill: this.chart.theme("pieInnerFontColor"),
-                        "text-anchor": "middle",
-                        y: textY
-                    }, text);
-
-                    text.translate(cx, cy);
-
-                    g.append(text);
-                    g.order = 2;
-                } else {
-                    // TODO: 각도가 좁을 때, 텍스트와 라인을 보정하는 코드 개선 필요
-
-                    var rate = this.chart.theme("pieOuterLineRate"),
-                        diffAngle = Math.abs(centerAngle - preAngle);
-
-                    if (diffAngle < 2) {
-                        if (preRate == 0) {
-                            preRate = rate;
-                        }
-
-                        var tick = rate * 0.05;
-                        preRate -= tick;
-                        preOpacity -= 0.25;
-                    } else {
-                        preRate = rate;
-                        preOpacity = 1;
-                    }
-
-                    if (preRate > 1.2) {
-                        var dist = this.chart.theme("pieOuterLineSize"),
-                            r = outerRadius * preRate,
-                            cx = centerX + Math.cos(math.radian(centerAngle)) * outerRadius,
-                            cy = centerY + Math.sin(math.radian(centerAngle)) * outerRadius,
-                            tx = centerX + Math.cos(math.radian(centerAngle)) * r,
-                            ty = centerY + Math.sin(math.radian(centerAngle)) * r,
-                            ex = isLeft ? tx - dist : tx + dist;
-
-                        var path = this.svg.path({
-                            fill: "transparent",
-                            stroke: this.chart.theme("pieOuterLineColor"),
-                            "stroke-width": this.chart.theme("pieOuterLineWidth"),
-                            "stroke-opacity": preOpacity
-                        });
-
-                        path.MoveTo(cx, cy).LineTo(tx, ty).LineTo(ex, ty);
-
-                        var text = this.chart.text({
-                            "font-size": this.chart.theme("pieOuterFontSize"),
-                            "fill": this.chart.theme("pieOuterFontColor"),
-                            "fill-opacity": preOpacity,
-                            "text-anchor": isLeft ? "end" : "start",
-                            y: textY
-                        }, text);
-
-                        text.translate(ex + (isLeft ? -3 : 3), ty);
-
-                        g.append(text);
-                        g.append(path);
-                        g.order = 0;
-
-                        preAngle = centerAngle;
-                    }
-                }
-
-                return g;
-            };
-
-            this.drawUnit = function (index, data, g) {
-                var props = this.getProperty(index),
-                    centerX = props.centerX,
-                    centerY = props.centerY,
-                    outerRadius = props.outerRadius;
-
-                var target = this.brush.target,
-                    active = this.brush.active,
-                    all = 360,
-                    startAngle = 0,
-                    max = 0;
-
-                for (var i = 0; i < target.length; i++) {
-                    max += data[target[i]];
-                }
-
-                for (var i = 0; i < target.length; i++) {
-                    if (data[target[i]] == 0) continue;
-
-                    var value = data[target[i]],
-                        endAngle = all * (value / max);
-
-                    if (this.brush['3d']) {
-                        var pie3d = this.drawPie3d(centerX, centerY, outerRadius, startAngle, endAngle, ColorUtil.darken(this.color(i), 0.5));
-                        g.append(pie3d);
-                    }
-
-                    startAngle += endAngle;
-                }
-
-                startAngle = 0;
-
-                for (var i = 0; i < target.length; i++) {
-                    var value = data[target[i]],
-                        endAngle = all * (value / max),
-                        centerAngle = startAngle + endAngle / 2 - 90,
-                        isOnlyOne = Math.abs(startAngle - endAngle) == 360,
-                        pie = this.drawPie(centerX, centerY, outerRadius, startAngle, endAngle, this.color(i)),
-                        text = this.drawText(centerX, centerY, centerAngle, outerRadius, this.getFormatText(target[i], value, max));
-
-                    // 파이 액티브상태 캐싱하는 객체
-                    cache_active[centerAngle] = {
-                        active: false,
-                        pie: pie,
-                        text: text,
-                        centerX: centerX,
-                        centerY: centerY,
-                        centerAngle: centerAngle,
-                        outerRadius: outerRadius
-                    };
-
-                    // TODO: 파이가 한개일 경우, 액티브 처리를 할 필요가 없다.
-                    if (!isOnlyOne) {
-                        // 설정된 키 활성화
-                        if (active == target[i] || _.inArray(target[i], active) != -1) {
-                            cache_active[centerAngle].active = true;
-                        } else {
-                            cache_active[centerAngle].active = false;
-                        }
-
-                        // 파이 및 텍스트 액티브 상태 처리
-                        if (this.brush.showText == "inside") {
-                            this.setActiveTextEvent(cache_active);
-                        }
-
-                        // 파이 및 텍스트 액티브 상태 처리
-                        this.setActiveEvent(cache_active, true);
-
-                        // 활성화 이벤트 설정
-                        if (this.brush.activeEvent != null) {
-                            (function (p, t, cx, cy, ca, r) {
-                                p.on(self.brush.activeEvent, function (e) {
-                                    if (!cache_active[ca].active) {
-                                        cache_active[ca].active = true;
-                                    } else {
-                                        cache_active[ca].active = false;
-                                    }
-
-                                    if (self.brush.showText == "inside") {
-                                        self.setActiveTextEvent(cache_active);
-                                    }
-
-                                    self.setActiveEvent(cache_active, true);
-                                });
-
-                                p.attr({ cursor: "pointer" });
-                            })(pie, text.get(0), centerX, centerY, centerAngle, outerRadius);
-                        }
-                    }
-
-                    self.addEvent(pie, index, i);
-                    g.append(pie);
-                    g.append(text);
-
-                    startAngle += endAngle;
-                }
-            };
-
-            this.drawNoData = function (g) {
-                var props = this.getProperty(0);
-
-                g.append(this.drawPie(props.centerX, props.centerY, props.outerRadius, 0, 360, this.chart.theme("pieNoDataBackgroundColor")));
-            };
-
-            this.drawBefore = function () {
-                g = this.chart.svg.group();
-            };
-
-            this.draw = function () {
-                if (this.listData().length == 0) {
-                    this.drawNoData(g);
-                } else {
-                    this.eachData(function (data, i) {
-                        this.drawUnit(i, data, g);
-                    });
-                }
-
-                return g;
-            };
-
-            this.getProperty = function (index) {
-                var obj = this.axis.c(index);
-
-                var width = obj.width,
-                    height = obj.height,
-                    x = obj.x,
-                    y = obj.y,
-                    min = width;
-
-                if (height < min) {
-                    min = height;
-                }
-
-                return {
-                    centerX: width / 2 + x,
-                    centerY: height / 2 + y,
-                    outerRadius: min / 2
-                };
-            };
-        };
-
-        PieBrush.setup = function () {
-            return {
-                /** @cfg {Boolean} [clip=false] If the brush is drawn outside of the chart, cut the area. */
-                clip: false,
-                /** @cfg {String} [showText=null] Set the text appear. (outside or inside)  */
-                showText: null,
-                /** @cfg {Function} [format=null] Returns a value from the format callback function of a defined option. */
-                format: null,
-                /** @cfg {Boolean} [3d=false] check 3d support */
-                "3d": false,
-                /** @cfg {String|Array} [active=null] Activates the pie of an applicable property's name. */
-                active: null,
-                /** @cfg {String} [activeEvent=null]  Activates the pie in question when a configured event occurs (click, mouseover, etc). */
-                activeEvent: null
-            };
-        };
-
-        return PieBrush;
-    }
-};
-
-/***/ }),
 /* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -20680,7 +20890,13 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
+var _pie = __webpack_require__(31);
+
+var _pie2 = _interopRequireDefault(_pie);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_main2.default.use(_pie2.default);
 
 exports.default = {
     name: "chart.brush.donut",
@@ -21041,7 +21257,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _bar = __webpack_require__(21);
+var _bar = __webpack_require__(23);
 
 var _bar2 = _interopRequireDefault(_bar);
 
@@ -21049,7 +21265,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _bar3 = __webpack_require__(14);
+var _bar3 = __webpack_require__(9);
 
 var _bar4 = _interopRequireDefault(_bar3);
 
@@ -21129,7 +21345,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _area = __webpack_require__(13);
+var _area = __webpack_require__(14);
 
 var _area2 = _interopRequireDefault(_area);
 
@@ -21137,7 +21353,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _area3 = __webpack_require__(26);
+var _area3 = __webpack_require__(19);
 
 var _area4 = _interopRequireDefault(_area3);
 
@@ -22167,7 +22383,7 @@ var _watch = __webpack_require__(2);
 
 var _watch2 = _interopRequireDefault(_watch);
 
-var _watchAnimation = __webpack_require__(18);
+var _watchAnimation = __webpack_require__(20);
 
 var _watchAnimation2 = _interopRequireDefault(_watchAnimation);
 
@@ -22175,7 +22391,7 @@ var _created = __webpack_require__(3);
 
 var _created2 = _interopRequireDefault(_created);
 
-var _mountedAnimation = __webpack_require__(19);
+var _mountedAnimation = __webpack_require__(21);
 
 var _mountedAnimation2 = _interopRequireDefault(_mountedAnimation);
 
@@ -22183,7 +22399,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsAnimation = __webpack_require__(20);
+var _propsAnimation = __webpack_require__(22);
 
 var _propsAnimation2 = _interopRequireDefault(_propsAnimation);
 
@@ -22648,7 +22864,7 @@ var _watch = __webpack_require__(2);
 
 var _watch2 = _interopRequireDefault(_watch);
 
-var _watchAnimation = __webpack_require__(18);
+var _watchAnimation = __webpack_require__(20);
 
 var _watchAnimation2 = _interopRequireDefault(_watchAnimation);
 
@@ -22656,7 +22872,7 @@ var _created = __webpack_require__(3);
 
 var _created2 = _interopRequireDefault(_created);
 
-var _mountedAnimation = __webpack_require__(19);
+var _mountedAnimation = __webpack_require__(21);
 
 var _mountedAnimation2 = _interopRequireDefault(_mountedAnimation);
 
@@ -22664,7 +22880,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsAnimation = __webpack_require__(20);
+var _propsAnimation = __webpack_require__(22);
 
 var _propsAnimation2 = _interopRequireDefault(_propsAnimation);
 
@@ -22973,11 +23189,11 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _base = __webpack_require__(29);
+var _base = __webpack_require__(32);
 
 var _base2 = _interopRequireDefault(_base);
 
-var _kinetic = __webpack_require__(30);
+var _kinetic = __webpack_require__(33);
 
 var _kinetic2 = _interopRequireDefault(_kinetic);
 
@@ -23064,7 +23280,7 @@ var _watch = __webpack_require__(2);
 
 var _watch2 = _interopRequireDefault(_watch);
 
-var _watchAnimation = __webpack_require__(18);
+var _watchAnimation = __webpack_require__(20);
 
 var _watchAnimation2 = _interopRequireDefault(_watchAnimation);
 
@@ -23072,7 +23288,7 @@ var _created = __webpack_require__(3);
 
 var _created2 = _interopRequireDefault(_created);
 
-var _mountedAnimation = __webpack_require__(19);
+var _mountedAnimation = __webpack_require__(21);
 
 var _mountedAnimation2 = _interopRequireDefault(_mountedAnimation);
 
@@ -23080,7 +23296,7 @@ var _props = __webpack_require__(4);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _propsAnimation = __webpack_require__(20);
+var _propsAnimation = __webpack_require__(22);
 
 var _propsAnimation2 = _interopRequireDefault(_propsAnimation);
 
@@ -23381,11 +23597,11 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _base = __webpack_require__(29);
+var _base = __webpack_require__(32);
 
 var _base2 = _interopRequireDefault(_base);
 
-var _kinetic = __webpack_require__(30);
+var _kinetic = __webpack_require__(33);
 
 var _kinetic2 = _interopRequireDefault(_kinetic);
 
@@ -23446,7 +23662,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _core = __webpack_require__(11);
+var _core = __webpack_require__(13);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -23554,7 +23770,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _core = __webpack_require__(11);
+var _core = __webpack_require__(13);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -23628,7 +23844,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _core = __webpack_require__(11);
+var _core = __webpack_require__(13);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -23686,7 +23902,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _core = __webpack_require__(11);
+var _core = __webpack_require__(13);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -23772,7 +23988,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _core = __webpack_require__(11);
+var _core = __webpack_require__(13);
 
 var _core2 = _interopRequireDefault(_core);
 
