@@ -1,4 +1,5 @@
 module.exports = {
+    "setupFiles": [ "./test/setup.js" ],
     "moduleFileExtensions": [
         "js",
         "json",
