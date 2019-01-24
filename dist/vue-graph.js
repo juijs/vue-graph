@@ -283,6 +283,16 @@ exports.default = {
             type: Number,
             required: false,
             default: 50
+        },
+        focusStart: {
+            type: Number,
+            required: false,
+            default: -1
+        },
+        focusEnd: {
+            type: Number,
+            required: false,
+            default: -1
         }
     }
 };
@@ -352,6 +362,8 @@ exports.default = {
 
                     this.chart.addBrush(brush);
                 }
+
+                // 포커스 브러쉬는 기본 옵션으로 구현하였음
             } catch (err) {
                 _didIteratorError = true;
                 _iteratorError = err;
@@ -365,6 +377,14 @@ exports.default = {
                         throw _iteratorError;
                     }
                 }
+            }
+
+            if (this.focusStart != -1 && this.focusEnd != -1) {
+                this.chart.addBrush({
+                    type: 'focus',
+                    start: this.focusStart,
+                    end: this.focusEnd
+                });
             }
         },
         initGraphWidgets: function initGraphWidgets() {
@@ -414,6 +434,10 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
+var _focus = __webpack_require__(43);
+
+var _focus2 = _interopRequireDefault(_focus);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
@@ -428,6 +452,8 @@ exports.default = {
         if (this.brushes.length == 0) {
             throw new Error('[Vue Graph error]: At least one brush must be added to \'brushes\' variable.');
         }
+
+        _juijsChart2.default.use(_focus2.default);
 
         this.chart = _juijsChart2.default.create('chart.builder', this.$el, {
             width: this.realWidth,
@@ -1393,7 +1419,7 @@ var _area = __webpack_require__(19);
 
 var _area2 = _interopRequireDefault(_area);
 
-var _stackarea = __webpack_require__(59);
+var _stackarea = __webpack_require__(60);
 
 var _stackarea2 = _interopRequireDefault(_stackarea);
 
@@ -2107,11 +2133,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _raycast = __webpack_require__(71);
+var _raycast = __webpack_require__(72);
 
 var _raycast2 = _interopRequireDefault(_raycast);
 
-var _picker = __webpack_require__(72);
+var _picker = __webpack_require__(73);
 
 var _picker2 = _interopRequireDefault(_picker);
 
@@ -3866,15 +3892,15 @@ var _bar = __webpack_require__(23);
 
 var _bar2 = _interopRequireDefault(_bar);
 
-var _bar3d = __webpack_require__(43);
+var _bar3d = __webpack_require__(44);
 
 var _bar3d2 = _interopRequireDefault(_bar3d);
 
-var _stackbar = __webpack_require__(45);
+var _stackbar = __webpack_require__(46);
 
 var _stackbar2 = _interopRequireDefault(_stackbar);
 
-var _rangebar = __webpack_require__(48);
+var _rangebar = __webpack_require__(49);
 
 var _rangebar2 = _interopRequireDefault(_rangebar);
 
@@ -3882,23 +3908,23 @@ var _line = __webpack_require__(16);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _line3d = __webpack_require__(51);
+var _line3d = __webpack_require__(52);
 
 var _line3d2 = _interopRequireDefault(_line3d);
 
-var _lineDateblock = __webpack_require__(53);
+var _lineDateblock = __webpack_require__(54);
 
 var _lineDateblock2 = _interopRequireDefault(_lineDateblock);
 
-var _lineTimerange = __webpack_require__(54);
+var _lineTimerange = __webpack_require__(55);
 
 var _lineTimerange2 = _interopRequireDefault(_lineTimerange);
 
-var _scatter = __webpack_require__(55);
+var _scatter = __webpack_require__(56);
 
 var _scatter2 = _interopRequireDefault(_scatter);
 
-var _bubble = __webpack_require__(57);
+var _bubble = __webpack_require__(58);
 
 var _bubble2 = _interopRequireDefault(_bubble);
 
@@ -3906,11 +3932,11 @@ var _area = __webpack_require__(14);
 
 var _area2 = _interopRequireDefault(_area);
 
-var _areaDateblock = __webpack_require__(60);
+var _areaDateblock = __webpack_require__(61);
 
 var _areaDateblock2 = _interopRequireDefault(_areaDateblock);
 
-var _areaTimerange = __webpack_require__(61);
+var _areaTimerange = __webpack_require__(62);
 
 var _areaTimerange2 = _interopRequireDefault(_areaTimerange);
 
@@ -3918,59 +3944,59 @@ var _rangearea = __webpack_require__(29);
 
 var _rangearea2 = _interopRequireDefault(_rangearea);
 
-var _rangeareaDateblock = __webpack_require__(62);
+var _rangeareaDateblock = __webpack_require__(63);
 
 var _rangeareaDateblock2 = _interopRequireDefault(_rangeareaDateblock);
 
-var _rangeareaTimerange = __webpack_require__(63);
+var _rangeareaTimerange = __webpack_require__(64);
 
 var _rangeareaTimerange2 = _interopRequireDefault(_rangeareaTimerange);
 
-var _pie = __webpack_require__(64);
+var _pie = __webpack_require__(65);
 
 var _pie2 = _interopRequireDefault(_pie);
 
-var _comparisonbar = __webpack_require__(66);
+var _comparisonbar = __webpack_require__(67);
 
 var _comparisonbar2 = _interopRequireDefault(_comparisonbar);
 
-var _comparisonarea = __webpack_require__(67);
+var _comparisonarea = __webpack_require__(68);
 
 var _comparisonarea2 = _interopRequireDefault(_comparisonarea);
 
-var _treemap = __webpack_require__(68);
+var _treemap = __webpack_require__(69);
 
 var _treemap2 = _interopRequireDefault(_treemap);
 
-var _equalizer = __webpack_require__(70);
+var _equalizer = __webpack_require__(71);
 
 var _equalizer2 = _interopRequireDefault(_equalizer);
 
-var _activebubble = __webpack_require__(74);
+var _activebubble = __webpack_require__(75);
 
 var _activebubble2 = _interopRequireDefault(_activebubble);
 
-var _bubblecloud = __webpack_require__(77);
+var _bubblecloud = __webpack_require__(78);
 
 var _bubblecloud2 = _interopRequireDefault(_bubblecloud);
 
-var _note = __webpack_require__(80);
+var _note = __webpack_require__(81);
 
 var _note2 = _interopRequireDefault(_note);
 
-var _tooltip = __webpack_require__(81);
+var _tooltip = __webpack_require__(82);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
-var _guideline = __webpack_require__(82);
+var _guideline = __webpack_require__(83);
 
 var _guideline2 = _interopRequireDefault(_guideline);
 
-var _legends = __webpack_require__(83);
+var _legends = __webpack_require__(84);
 
 var _legends2 = _interopRequireDefault(_legends);
 
-var _rotate3d = __webpack_require__(84);
+var _rotate3d = __webpack_require__(85);
 
 var _rotate3d2 = _interopRequireDefault(_rotate3d);
 
@@ -18084,7 +18110,7 @@ exports.default = {
                     // brushSync가 true일 경우, 한번만 실행함
                     if (widget.brushSync && i > 0) continue;
 
-                    var brush = chart.get("brush", brushes[index]),
+                    var brush = chart.get("brush", index),
                         arr = this.getLegendIcon(brush);
 
                     for (var k = 0; k < arr.length; k++) {
@@ -18697,6 +18723,118 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = {
+    name: "chart.brush.focus",
+    extend: "chart.brush.core",
+    component: function component() {
+        var FocusBrush = function FocusBrush() {
+            var self = this;
+            var g = void 0,
+                grid = void 0;
+
+            this.drawFocus = function (start, end) {
+                var borderColor = this.chart.theme("focusBorderColor"),
+                    borderSize = this.chart.theme("focusBorderWidth"),
+                    bgColor = this.chart.theme("focusBackgroundColor"),
+                    bgOpacity = this.chart.theme("focusBackgroundOpacity");
+
+                var width = this.axis.area("width"),
+                    height = this.axis.area("height"),
+                    x = this.axis.area("x"),
+                    y = this.axis.area("y");
+
+                g = this.svg.group({}, function () {
+                    if (self.brush.hide || self.axis.data.length == 0) return;
+
+                    var a = self.svg.line({
+                        stroke: borderColor,
+                        "stroke-width": borderSize,
+                        x1: 0,
+                        y1: 0,
+                        x2: grid == "x" ? 0 : width,
+                        y2: grid == "x" ? height : 0
+                    });
+
+                    var b = self.svg.rect({
+                        width: grid == "x" ? Math.abs(end - start) : width,
+                        height: grid == "x" ? height : Math.abs(end - start),
+                        fill: bgColor,
+                        opacity: bgOpacity
+                    });
+
+                    var c = self.svg.line({
+                        stroke: borderColor,
+                        "stroke-width": borderSize,
+                        x1: 0,
+                        y1: 0,
+                        x2: grid == "x" ? 0 : width,
+                        y2: grid == "x" ? height : 0
+                    });
+
+                    if (grid == "x") {
+                        a.translate(start, y);
+                        b.translate(start, y);
+                        c.translate(end, y);
+                    } else {
+                        a.translate(x, start);
+                        b.translate(x, start);
+                        c.translate(x, end);
+                    }
+                });
+
+                return g;
+            };
+
+            this.drawBefore = function () {
+                grid = this.axis.y.type == "range" ? "x" : "y";
+            };
+
+            this.draw = function () {
+                var start = 0,
+                    end = 0;
+
+                if (this.brush.start == -1 || this.brush.end == -1) {
+                    return this.svg.g();
+                }
+
+                if (this.axis[grid].type == "block") {
+                    var size = this.axis[grid].rangeBand();
+
+                    start = this.axis[grid](this.brush.start) - size / 2;
+                    end = this.axis[grid](this.brush.end) + size / 2;
+                } else {
+                    start = this.axis[grid](this.brush.start);
+                    end = this.axis[grid](this.brush.end);
+                }
+
+                return this.drawFocus(start, end);
+            };
+        };
+
+        FocusBrush.setup = function () {
+            return {
+                /** @cfg {Integer} [start=-1] Sets a focus start index.*/
+                start: -1,
+
+                /** @cfg {Integer} [end=-1] Sets a focus end index. */
+                end: -1
+            };
+        };
+
+        return FocusBrush;
+    }
+};
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _core = __webpack_require__(1);
 
@@ -18734,7 +18872,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _column3d = __webpack_require__(44);
+var _column3d = __webpack_require__(45);
 
 var _column3d2 = _interopRequireDefault(_column3d);
 
@@ -18770,7 +18908,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18876,7 +19014,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18938,11 +19076,11 @@ var _column = __webpack_require__(24);
 
 var _column2 = _interopRequireDefault(_column);
 
-var _stackcolumn = __webpack_require__(46);
+var _stackcolumn = __webpack_require__(47);
 
 var _stackcolumn2 = _interopRequireDefault(_stackcolumn);
 
-var _fullstackcolumn = __webpack_require__(47);
+var _fullstackcolumn = __webpack_require__(48);
 
 var _fullstackcolumn2 = _interopRequireDefault(_fullstackcolumn);
 
@@ -19044,7 +19182,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19181,7 +19319,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19302,7 +19440,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19348,11 +19486,11 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _rangebar = __webpack_require__(49);
+var _rangebar = __webpack_require__(50);
 
 var _rangebar2 = _interopRequireDefault(_rangebar);
 
-var _rangecolumn = __webpack_require__(50);
+var _rangecolumn = __webpack_require__(51);
 
 var _rangecolumn2 = _interopRequireDefault(_rangecolumn);
 
@@ -19387,7 +19525,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19468,7 +19606,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19546,7 +19684,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19592,7 +19730,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _line3d = __webpack_require__(52);
+var _line3d = __webpack_require__(53);
 
 var _line3d2 = _interopRequireDefault(_line3d);
 
@@ -19628,7 +19766,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19722,7 +19860,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19752,7 +19890,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19795,7 +19933,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19841,7 +19979,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _scatter = __webpack_require__(56);
+var _scatter = __webpack_require__(57);
 
 var _scatter2 = _interopRequireDefault(_scatter);
 
@@ -19898,7 +20036,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20210,7 +20348,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20256,7 +20394,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _bubble = __webpack_require__(58);
+var _bubble = __webpack_require__(59);
 
 var _bubble2 = _interopRequireDefault(_bubble);
 
@@ -20303,7 +20441,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20499,7 +20637,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20536,7 +20674,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20566,7 +20704,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20607,7 +20745,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20637,7 +20775,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20735,7 +20873,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20777,7 +20915,7 @@ var _pie = __webpack_require__(31);
 
 var _pie2 = _interopRequireDefault(_pie);
 
-var _donut = __webpack_require__(65);
+var _donut = __webpack_require__(66);
 
 var _donut2 = _interopRequireDefault(_donut);
 
@@ -20878,7 +21016,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21249,7 +21387,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21337,7 +21475,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21445,7 +21583,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21483,7 +21621,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _treemap = __webpack_require__(69);
+var _treemap = __webpack_require__(70);
 
 var _treemap2 = _interopRequireDefault(_treemap);
 
@@ -21576,7 +21714,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22367,7 +22505,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22421,7 +22559,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _equalizercolumn = __webpack_require__(73);
+var _equalizercolumn = __webpack_require__(74);
 
 var _equalizercolumn2 = _interopRequireDefault(_equalizercolumn);
 
@@ -22474,7 +22612,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22558,7 +22696,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22639,7 +22777,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22848,7 +22986,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22894,7 +23032,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _activebubble = __webpack_require__(75);
+var _activebubble = __webpack_require__(76);
 
 var _activebubble2 = _interopRequireDefault(_activebubble);
 
@@ -22962,7 +23100,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22978,7 +23116,7 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _mortalbubble = __webpack_require__(76);
+var _mortalbubble = __webpack_require__(77);
 
 var _mortalbubble2 = _interopRequireDefault(_mortalbubble);
 
@@ -23177,7 +23315,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23264,7 +23402,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23310,7 +23448,7 @@ var _juijsChart = __webpack_require__(0);
 
 var _juijsChart2 = _interopRequireDefault(_juijsChart);
 
-var _bubblecloud = __webpack_require__(78);
+var _bubblecloud = __webpack_require__(79);
 
 var _bubblecloud2 = _interopRequireDefault(_bubblecloud);
 
@@ -23358,7 +23496,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23374,7 +23512,7 @@ var _main = __webpack_require__(0);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _bubble2 = __webpack_require__(79);
+var _bubble2 = __webpack_require__(80);
 
 var _bubble3 = _interopRequireDefault(_bubble2);
 
@@ -23585,7 +23723,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23654,7 +23792,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23762,7 +23900,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23834,7 +23972,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23894,7 +24032,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23980,7 +24118,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

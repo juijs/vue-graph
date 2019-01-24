@@ -146,6 +146,8 @@ There are many charts that have not yet been migrated. We are going to continue.
 | paddingRight | Number | false | false | 50 | Right padding of the chart |
 | paddingBottom | Number | false | false | 50 | Bottom padding of the chart |
 | paddingLeft | Number | false | false | 50 | Left padding of the chart |
+| focusStart | Number | false | false | -1 | The starting index of the focus area (the criterion is slightly different depending on the type of axis) |
+| focusEnd | Number | false | false | -1 | The ending index of the focus area (the criterion is slightly different depending on the type of axis) |
 | labels | Array | false | true | `undefined` | Label of chart data |
 | values | Array | false | true | `undefined` | It is a chart data value, and the format may be different for each chart type |
 

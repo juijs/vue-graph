@@ -58,6 +58,16 @@ export default {
             type: Number,
             required: false,
             default: 50
+        },
+        focusStart: {
+            type: Number,
+            required: false,
+            default: -1
+        },
+        focusEnd: {
+            type: Number,
+            required: false,
+            default: -1
         }
     }
 }

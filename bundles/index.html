@@ -6,20 +6,19 @@
 <body>
 
 <div id="app">
-    <graph-stackbar
+    <graph-bar
+            :width="600"
             :height="400"
+            :axis-min="0"
+            :axis-max="50"
+            :focus-start="1"
+            :focus-end="1"
             :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-            :full-mode="true"
-            :show-text="true"
-            :names="names"
-            :values="values"
-            :active-index="active"
-            :text-rotate-x="20"
-            :format="baseFormat"
-            @legends#filter="onFilter">
+            :values="values">
+        <note :text="'Bar Chart'"></note>
+        <tooltip :names="names" :position="'left'"></tooltip>
         <legends :names="names" :filter="true"></legends>
-        <tooltip :names="names" :position="'right'"></tooltip>
-    </graph-stackbar>
+    </graph-bar>
 </div>
 
 </body>

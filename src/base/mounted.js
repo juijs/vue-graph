@@ -1,4 +1,5 @@
 import JUI from 'juijs-chart'
+import FocusBrush from 'juijs-chart/src/brush/focus.js'
 
 export default {
     computed: {
@@ -12,6 +13,8 @@ export default {
         if(this.brushes.length == 0) {
             throw new Error('[Vue Graph error]: At least one brush must be added to \'brushes\' variable.')
         }
+
+        JUI.use(FocusBrush);
 
         this.chart = JUI.create('chart.builder', this.$el, {
             width: this.realWidth,
