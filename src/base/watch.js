@@ -23,6 +23,24 @@ export default {
         axisMax: function(newVal, oldVal) {
             this.chart.axis(0).set(this.axisReverse ? 'x' : 'y', { domain: [ this.axisMin, newVal ] });
             this.chart.render();
-        }
+        },
+        focusStart: function(newVal, oldVal) {
+            if(newVal == oldVal) return;
+            this.brushes.forEach((brush, index) => {
+                if(brush.type == 'focus') {
+                    this.chart.updateBrush(index, { start: newVal });
+                    this.chart.render();
+                }
+            });
+        },
+        focusEnd: function(newVal, oldVal) {
+            if(newVal == oldVal) return;
+            this.brushes.forEach((brush, index) => {
+                if(brush.type == 'focus') {
+                    this.chart.updateBrush(index, { end: newVal });
+                    this.chart.render();
+                }
+            });
+        },
     }
 }

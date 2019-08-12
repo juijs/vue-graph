@@ -45,11 +45,14 @@ export default {
 
             // 포커스 브러쉬는 기본 옵션으로 구현하였음
             if(this.focusStart != -1 && this.focusEnd != -1) {
-                this.chart.addBrush({
+                const brush = {
                     type: 'focus',
                     start: this.focusStart,
                     end: this.focusEnd
-                });
+                };
+
+                this.brushes.push(brush);
+                this.chart.addBrush(brush);
             }
         },
         initGraphWidgets: function() {

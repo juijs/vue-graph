@@ -17,6 +17,7 @@ window.vm = new Vue({
         names: [ "MS", "Apple", "Google" ],
         values: [
             [ 0, 0, 0, 0 ]
-        ]
+        ],
+        focus: 1
     }
 });
