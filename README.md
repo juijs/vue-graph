@@ -166,8 +166,8 @@ There are many charts that have not yet been migrated. We are going to continue.
 | axisMin | Number | false | false | 0 | Miniimum value for the chart axis |
 | axisMax | Number | false | false | 0 | Maximum value for the chart axis |
 | axisStep | Number | false | false | 10 | Display interval of chart axis value |
-| axisXStyle | String | false | false | `solid` | Line style for chart x-axis area (**solid**, **dotted**, **gradient**, **hidden**) |
-| axisYStyle | String | false | false | `solid` | Line style for chart y-axis area (**solid**, **dotted**, **gradient**, **hidden**) 
+| axisXStyle | String | false | false | `solid` | Line style for chart x-axis area (**solid**, **dotted**, **gradient**, **none**, **hidden**) |
+| axisYStyle | String | false | false | `solid` | Line style for chart y-axis area (**solid**, **dotted**, **gradient**, **none**, **hidden**) 
 | axisXPosition | String | false | false | `bottom` | Chart x-axis position (**bottom**, **top**) |
 | axisYPosition | String | false | false | `left` | Chart y-axis position (**left**, **right**) |
 | axisReverse | Boolean | false | false | false | Replace the x and y axis positions |
