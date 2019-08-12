@@ -16,7 +16,7 @@ window.vm = new Vue({
     data: {
         names: [ "MS", "Apple", "Google" ],
         values: [
-            [ 10, 5, 5, 5 ]
+            [ 0, 0, 0, 0 ]
         ]
     }
 });

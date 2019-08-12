@@ -34,7 +34,8 @@ export default {
             }
 
             return function(data) {
-                return Math.max.apply(null, Object.values(data));
+                const max = Math.max.apply(null, Object.values(data));
+                return max == 0 ? 1 : max;
             }
         },
         initGraphBrushes: function() {
