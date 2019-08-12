@@ -9,9 +9,8 @@
     <graph-bar
             :width="600"
             :height="400"
-            :focus-start="focus"
-            :focus-end="focus"
-            :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
+            :labels="[ '1Q', ' ', '3Q', ' ' ]"
+            :axis-x-style="'none'"
             :values="values">
         <note :text="'Bar Chart'"></note>
         <tooltip :names="names" :position="'left'"></tooltip>
