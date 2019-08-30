@@ -192,6 +192,28 @@ exports.default = {
         axisMax: function axisMax(newVal, oldVal) {
             this.chart.axis(0).set(this.axisReverse ? 'x' : 'y', { domain: [this.axisMin, newVal] });
             this.chart.render();
+        },
+        focusStart: function focusStart(newVal, oldVal) {
+            var _this = this;
+
+            if (newVal == oldVal) return;
+            this.brushes.forEach(function (brush, index) {
+                if (brush.type == 'focus') {
+                    _this.chart.updateBrush(index, { start: newVal });
+                    _this.chart.render();
+                }
+            });
+        },
+        focusEnd: function focusEnd(newVal, oldVal) {
+            var _this2 = this;
+
+            if (newVal == oldVal) return;
+            this.brushes.forEach(function (brush, index) {
+                if (brush.type == 'focus') {
+                    _this2.chart.updateBrush(index, { end: newVal });
+                    _this2.chart.render();
+                }
+            });
         }
     }
 };
@@ -348,7 +370,8 @@ exports.default = {
             }
 
             return function (data) {
-                return Math.max.apply(null, Object.values(data));
+                var max = Math.max.apply(null, Object.values(data));
+                return max == 0 ? 1 : max;
             };
         },
         initGraphBrushes: function initGraphBrushes() {
@@ -380,11 +403,14 @@ exports.default = {
             }
 
             if (this.focusStart != -1 && this.focusEnd != -1) {
-                this.chart.addBrush({
+                var _brush = {
                     type: 'focus',
                     start: this.focusStart,
                     end: this.focusEnd
-                });
+                };
+
+                this.brushes.push(_brush);
+                this.chart.addBrush(_brush);
             }
         },
         initGraphWidgets: function initGraphWidgets() {
@@ -971,6 +997,27 @@ exports.default = {
                 }
             };
 
+            this.setActiveEffects = function () {
+                var lines = this.lineList,
+                    active = this.brush.active;
+
+                for (var i = 0; i < lines.length; i++) {
+                    var target = this.brush.target[i],
+                        opacity = disableOpacity,
+                        color = lines[i].element.get(0).attr("stroke");
+
+                    if (active === null || active === target || _.typeCheck("array", active) && active.includes(target)) {
+                        opacity = lineBorderOpacity;
+                    }
+
+                    if (lines[i].tooltip != null) {
+                        lines[i].tooltip.style(color, circleColor, opacity);
+                    }
+
+                    lines[i].element.attr({ opacity: opacity });
+                }
+            };
+
             this.addLineElement = function (elem) {
                 if (!this.lineList) {
                     this.lineList = [];
@@ -1114,10 +1161,8 @@ exports.default = {
                 }
 
                 // 액티브 라인 설정
-                for (var k = 0; k < path.length; k++) {
-                    if (this.brush.active == this.brush.target[k]) {
-                        this.setActiveEffect(this.lineList[k].element);
-                    }
+                if (this.brush.active != null) {
+                    this.setActiveEffects();
                 }
 
                 return g;
@@ -1444,6 +1489,10 @@ exports.default = {
             type: Boolean,
             required: false,
             default: true
+        },
+        display: { // "max", "min", "all"
+            type: String,
+            required: false
         }
     },
     methods: {
@@ -1469,7 +1518,8 @@ exports.default = {
             colors: this.colors,
             symbol: this.shape,
             opacity: this.opacity,
-            line: this.borderLine
+            line: this.borderLine,
+            display: this.display
         }];
     }
 };
@@ -2044,7 +2094,17 @@ exports.default = {
                     }
 
                     if (this.brush.line) {
-                        g.prepend(this.createLine(path[k], k));
+                        var p = this.createLine(path[k], k);
+                        g.prepend(p);
+
+                        this.addLineElement({
+                            element: p,
+                            tooltip: null
+                        });
+
+                        if (this.brush.display) {
+                            this.createTooltip(g, path[k], k);
+                        }
                     }
 
                     this.addEvent(g, null, k);
@@ -2820,7 +2880,9 @@ exports.default = {
             };
 
             this.drawText = function (percent, x, y) {
-                if (isNaN(percent) || isNaN(x) || isNaN(y)) return null;
+                if (percent === 0 || isNaN(percent)) return null;
+
+                var result = _.typeCheck("function", this.brush.showText) ? this.brush.showText.call(this, percent) : percent + "%";
 
                 var text = this.chart.text({
                     "font-size": this.chart.theme("barFontSize"),
@@ -2828,7 +2890,7 @@ exports.default = {
                     x: x,
                     y: y,
                     "text-anchor": "middle"
-                }, percent + "%");
+                }, result);
 
                 return text;
             };
@@ -2851,9 +2913,11 @@ exports.default = {
                     var startX = 0,
                         max = axis.x.max();
 
-                    for (var j = list.length - 1; j >= 0; j--) {
+                    for (var j = 0; j < list.length; j++) {
                         var width = axis.x.rate(list[j], sum),
                             r = this.getBarElement(i, j);
+
+                        if (isNaN(width)) continue;
 
                         r.attr({
                             x: startX,
@@ -2865,7 +2929,7 @@ exports.default = {
                         group.append(r);
 
                         // 퍼센트 노출 옵션 설정
-                        if (brush.showText) {
+                        if (brush.showText !== false) {
                             var p = Math.round(list[j] / sum * max),
                                 x = startX + width / 2,
                                 y = startY + bar_height / 2 + 5,
@@ -17320,6 +17384,25 @@ exports.default = {
             dragSelectBorderColor: "#7BBAE7",
             dragSelectBorderWidth: 1,
 
+            guidelineBorderColor: "#a9a9a9",
+            guidelineBorderWidth: 1,
+            guidelineBorderOpacity: 0.8,
+            guidelineBalloonFontSize: 11,
+            guidelineBalloonFontColor: "#fff",
+            guidelineBalloonBackgroundColor: "#000",
+            guidelineBalloonBackgroundOpacity: 0.5,
+            guidelineBorderDashArray: "2,2",
+            guidelinePointRadius: 3,
+            guidelinePointBorderColor: "#fff",
+            guidelinePointBorderWidth: 1,
+            guidelineTooltipFontColor: "#333",
+            guidelineTooltipFontSize: 12,
+            guidelineTooltipPointRadius: 3,
+            guidelineTooltipBackgroundColor: "#fff",
+            guidelineTooltipBackgroundOpacity: 0.7,
+            guidelineTooltipBorderColor: "#a9a9a9",
+            guidelineTooltipBorderWidth: 1,
+
             // mapPathBackgroundColor : "#67B7DC",
             // mapPathBackgroundOpacity : 1,
             // mapPathBorderColor : "#fff",
@@ -17384,7 +17467,10 @@ exports.default = {
             // Animation Brushes
             bubbleCloudFontColor: "#fff",
             bubbleCloudFontSize: 11,
-            bubbleCloudFontWeight: "bold"
+            bubbleCloudFontWeight: "bold",
+
+            equalizerColumnErrorBackgroundColor: "#ff0000",
+            equalizerColumnErrorFontColor: "#fff"
         };
     }
 };
@@ -17692,6 +17778,25 @@ exports.default = {
             dragSelectBorderColor: "#7BBAE7",
             dragSelectBorderWidth: 1,
 
+            guidelineBorderColor: "#a9a9a9",
+            guidelineBorderWidth: 1,
+            guidelineBorderOpacity: 0.8,
+            guidelineBalloonFontSize: 11,
+            guidelineBalloonFontColor: "#fff",
+            guidelineBalloonBackgroundColor: "#000",
+            guidelineBalloonBackgroundOpacity: 0.5,
+            guidelineBorderDashArray: "2,2",
+            guidelinePointRadius: 3,
+            guidelinePointBorderColor: "#fff",
+            guidelinePointBorderWidth: 1,
+            guidelineTooltipFontColor: "#333",
+            guidelineTooltipFontSize: 12,
+            guidelineTooltipPointRadius: 3,
+            guidelineTooltipBackgroundColor: "#fff",
+            guidelineTooltipBackgroundOpacity: 0.7,
+            guidelineTooltipBorderColor: "#a9a9a9",
+            guidelineTooltipBorderWidth: 1,
+
             // mapPathBackgroundColor : "#67B7DC",
             // mapPathBackgroundOpacity : 1,
             // mapPathBorderColor : "#fff",
@@ -17756,7 +17861,10 @@ exports.default = {
             // Animation Brushes
             bubbleCloudFontColor: "#fff",
             bubbleCloudFontSize: 11,
-            bubbleCloudFontWeight: "bold"
+            bubbleCloudFontWeight: "bold",
+
+            equalizerColumnErrorBackgroundColor: "#ff0000",
+            equalizerColumnErrorFontColor: "#fff"
         };
     }
 };
@@ -17974,6 +18082,7 @@ exports.default = {
                     chart.render();
                 }
 
+                chart.setCache("legend_target", target);
                 chart.emit("legend.filter", [target]);
             }
 
@@ -20739,7 +20848,8 @@ exports.default = {
             colors: this.colors,
             symbol: this.shape,
             opacity: this.opacity,
-            line: this.borderLine
+            line: this.borderLine,
+            display: this.display
         }];
     }
 };
@@ -21575,7 +21685,8 @@ exports.default = {
             clip: this.clip,
             symbol: this.shape,
             opacity: this.opacity,
-            line: this.borderLine
+            line: this.borderLine,
+            display: this.display
         };
 
         this.brushes = [_.extend({ target: '0', axis: 0, colors: [colors[0]] }, options), _.extend({ target: '1', axis: 1, colors: [colors[1]] }, options)];
@@ -22821,7 +22932,11 @@ exports.default = {
                     color = this.color(targetIndex),
                     value = this.getData(dataIndex)[this.brush.target[targetIndex]],
                     active = this.brush.active,
-                    opacity = active === null || dataIndex === active ? 1 : style.disableOpacity;
+                    opacity = 1;
+
+                if (_.typeCheck("array", active) && !active.includes(dataIndex) || _.typeCheck("integer", active) && active !== dataIndex) {
+                    opacity = style.disableOpacity;
+                }
 
                 return {
                     fill: color,
@@ -22844,6 +22959,16 @@ exports.default = {
                 };
             };
 
+            this.isErrorColumn = function (i) {
+                var error = this.brush.error;
+
+                if (_.typeCheck("array", error) && !error.includes(i) || _.typeCheck("integer", error) && error !== i || error === null) {
+                    return false;
+                }
+
+                return true;
+            };
+
             this.drawBefore = function () {
                 zeroY = this.axis.y(0);
                 bar_width = this.getTargetSize();
@@ -22859,7 +22984,8 @@ exports.default = {
                     translateY = is_reverse ? 0 : -unit;
 
                 this.eachData(function (data, i) {
-                    var startX = this.offset("x", i) - bar_width / 2,
+                    var offsetX = this.offset("x", i),
+                        startX = offsetX - bar_width / 2,
                         startY = this.axis.y(0),
                         y = startY,
                         value = 0,
@@ -22871,29 +22997,62 @@ exports.default = {
                             targetHeight = Math.abs(startY - endY),
                             targetY = targetHeight;
 
-                        while (targetY >= height) {
-                            var r = _.extend(this.getBarElement(i, j), {
-                                x: startX,
-                                y: y + translateY,
-                                width: bar_width,
-                                height: unit
-                            });
+                        if (!this.isErrorColumn(i)) {
+                            while (targetY >= height) {
+                                var r = _.extend(this.getBarElement(i, j), {
+                                    x: startX,
+                                    y: y + translateY,
+                                    width: bar_width,
+                                    height: unit
+                                });
 
-                            targetY -= height;
-                            y += is_reverse ? height : -height;
+                                targetY -= height;
+                                y += is_reverse ? height : -height;
+
+                                this.canvas.save();
+                                this.canvas.globalAlpha = r["fill-opacity"];
+                                this.canvas.beginPath();
+                                this.canvas.fillStyle = r.fill;
+                                this.canvas.strokeStyle = r.stroke;
+                                this.canvas.strokeOpacity = r["stroke-opacity"];
+                                this.canvas.lineWidth = r["stroke-width"];
+                                this.canvas.rect(r.x, r.y, r.width, r.height);
+                                this.canvas.fill();
+                                this.canvas.restore();
+
+                                stackList.push(r);
+                            }
+                        } else {
+                            var size = Math.min(this.axis.x.rangeBand(), this.axis.area("height")) * 0.4;
+                            var _height = this.axis.area("height") * 0.5;
+                            var tick = size * 0.3;
+                            var _startX = offsetX - size / 2;
+                            var fontSize = _height / 5;
+                            var yt = y - tick;
+                            var yht = y - _height - tick;
+                            var round = 5;
 
                             this.canvas.save();
-                            this.canvas.globalAlpha = r["fill-opacity"];
                             this.canvas.beginPath();
-                            this.canvas.fillStyle = r.fill;
-                            this.canvas.strokeStyle = r.stroke;
-                            this.canvas.strokeOpacity = r["stroke-opacity"];
-                            this.canvas.lineWidth = r["stroke-width"];
-                            this.canvas.rect(r.x, r.y, r.width, r.height);
+                            this.canvas.fillStyle = this.chart.theme("equalizerColumnErrorBackgroundColor");
+                            this.canvas.moveTo(offsetX, y);
+                            this.canvas.lineTo(_startX, yt);
+                            this.canvas.lineTo(_startX, yht + round);
+                            this.canvas.arcTo(_startX, yht, _startX + round, yht, round);
+                            this.canvas.lineTo(_startX + size - round, yht);
+                            this.canvas.arcTo(_startX + size, yht, _startX + size, yht + round, round);
+                            this.canvas.lineTo(_startX + size, yt);
                             this.canvas.fill();
-                            this.canvas.restore();
 
-                            stackList.push(r);
+                            this.canvas.save();
+                            this.canvas.font = fontSize + "px " + this.chart.theme("fontFamily");
+                            this.canvas.translate(offsetX, y - _height - tick);
+                            this.canvas.rotate(Math.PI / 2);
+                            this.canvas.textAlign = "center";
+                            this.canvas.fillStyle = this.chart.theme("equalizerColumnErrorFontColor");
+                            this.canvas.fillText(this.brush.errorText, _height / 1.75, fontSize / 3, _height);
+
+                            this.canvas.restore();
                         }
 
                         startY = endY;
@@ -22922,55 +23081,57 @@ exports.default = {
                 var TOTAL_PADDING = -8;
 
                 this.eachData(function (data, i) {
-                    var r = this.chart.getCache("equalizer_" + i);
-                    var total = 0;
+                    if (!this.isErrorColumn(i)) {
+                        var r = this.chart.getCache("equalizer_" + i);
+                        var total = 0;
 
-                    for (var j = 0; j < this.brush.target.length; j++) {
-                        total += data[this.brush.target[j]];
-                    }
-
-                    if (r != null) {
-                        var tpf = this.chart.getCache("tpf", 1);
-                        var status = this.chart.getCache("equalizer_move_" + i, { direction: -1, distance: 0 });
-                        var speed = status.direction == -1 ? UP_SEC_PER_MOVE : DOWN_SEC_PER_MOVE;
-
-                        status.distance += status.direction * speed * tpf;
-
-                        // 애니메이션-바 방향 벡터 설정
-                        if (Math.abs(status.distance) >= MAX_DISTANCE) {
-                            status.direction = 1;
-                        } else if (status.distance >= 0) {
-                            status.direction = -1;
+                        for (var j = 0; j < this.brush.target.length; j++) {
+                            total += data[this.brush.target[j]];
                         }
 
-                        // 애니메이션-바 최소/최대 위치 설정
-                        if (status.distance < -MAX_DISTANCE) {
-                            status.distance = -MAX_DISTANCE;
-                        } else if (status.distance > 0) {
-                            status.distance = 0;
+                        if (r != null) {
+                            var tpf = this.chart.getCache("tpf", 1);
+                            var status = this.chart.getCache("equalizer_move_" + i, { direction: -1, distance: 0 });
+                            var speed = status.direction == -1 ? UP_SEC_PER_MOVE : DOWN_SEC_PER_MOVE;
+
+                            status.distance += status.direction * speed * tpf;
+
+                            // 애니메이션-바 방향 벡터 설정
+                            if (Math.abs(status.distance) >= MAX_DISTANCE) {
+                                status.direction = 1;
+                            } else if (status.distance >= 0) {
+                                status.direction = -1;
+                            }
+
+                            // 애니메이션-바 최소/최대 위치 설정
+                            if (status.distance < -MAX_DISTANCE) {
+                                status.distance = -MAX_DISTANCE;
+                            } else if (status.distance > 0) {
+                                status.distance = 0;
+                            }
+
+                            var ry = r.y + status.distance + TOP_PADDING;
+
+                            this.canvas.save();
+                            this.canvas.globalAlpha = r["fill-opacity"];
+                            this.canvas.strokeStyle = r.fill;
+                            this.canvas.lineWidth = r.height * 0.7;
+                            this.canvas.beginPath();
+                            this.canvas.moveTo(r.x, ry);
+                            this.canvas.lineTo(r.x + r.width, ry);
+                            this.canvas.closePath();
+                            this.canvas.stroke();
+
+                            this.canvas.fillStyle = this.chart.theme("barFontColor");
+                            this.canvas.font = this.chart.theme("barFontSize") + "px";
+                            this.canvas.textAlign = "center";
+                            this.canvas.textBaseline = "middle";
+                            this.canvas.fillText(total, r.x + r.width / 2, ry + TOTAL_PADDING);
+                            this.canvas.fill();
+                            this.canvas.restore();
+
+                            this.chart.setCache("equalizer_move_" + i, status);
                         }
-
-                        var ry = r.y + status.distance + TOP_PADDING;
-
-                        this.canvas.save();
-                        this.canvas.globalAlpha = r["fill-opacity"];
-                        this.canvas.strokeStyle = r.fill;
-                        this.canvas.lineWidth = r.height * 0.7;
-                        this.canvas.beginPath();
-                        this.canvas.moveTo(r.x, ry);
-                        this.canvas.lineTo(r.x + r.width, ry);
-                        this.canvas.closePath();
-                        this.canvas.stroke();
-
-                        this.canvas.fillStyle = this.chart.theme("barFontColor");
-                        this.canvas.font = this.chart.theme("barFontSize") + "px";
-                        this.canvas.textAlign = "center";
-                        this.canvas.textBaseline = "middle";
-                        this.canvas.fillText(total, r.x + r.width / 2, ry + TOTAL_PADDING);
-                        this.canvas.fill();
-                        this.canvas.restore();
-
-                        this.chart.setCache("equalizer_move_" + i, status);
                     }
                 });
             };
@@ -22988,8 +23149,11 @@ exports.default = {
                 innerPadding: 1,
                 /** @cfg {Number} [unit=5] Determines the reference value that represents the color.*/
                 unit: 1,
-                /** @cfg {Number} [active=null] Activates the bar of an applicable index. */
-                active: null
+                /** @cfg {Number | Array} [active=null] Activates the bar of an applicable index. */
+                active: null,
+                /** @cfg {Number | Array} [active=null] Activates the bar of an applicable index. */
+                error: null,
+                errorText: "Stopped"
             };
         };
 

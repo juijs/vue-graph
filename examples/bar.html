@@ -13,7 +13,8 @@
             :focus-start="1"
             :focus-end="1"
             :labels="[ '1Q', '2Q', '3Q', '4Q' ]"
-            :values="values">
+            :values="values"
+            :styles="{ barBorderColor: 'red', barBorderWidth: 1, barBorderOpacity: 1 }">
         <note :text="'Bar Chart'"></note>
         <tooltip :names="names" :position="'left'"></tooltip>
         <legends :names="names" :filter="true"></legends>

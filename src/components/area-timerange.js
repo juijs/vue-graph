@@ -13,7 +13,8 @@ export default {
             colors: this.colors,
             symbol: this.shape,
             opacity: this.opacity,
-            line: this.borderLine
+            line: this.borderLine,
+            display: this.display
         }];
     }
 }

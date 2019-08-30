@@ -79,7 +79,8 @@ export default {
             clip: this.clip,
             symbol: this.shape,
             opacity: this.opacity,
-            line: this.borderLine
+            line: this.borderLine,
+            display: this.display
         }
 
         this.brushes = [
