@@ -55,7 +55,7 @@
     "vue-template-compiler": "^2.6.7",
     "vue-test-utils": "^1.0.0-beta.11",
     "webpack": "^4.29.5",
-    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.2.1",
     "webpack-node-externals": "^1.7.2"
