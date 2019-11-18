@@ -16,7 +16,7 @@ exports[`comparisonarea.js snapshot 1`] = `
     >
       <defs>
         <clippath
-          id="axis-clip-id-0"
+          id="axis-clip-id-0.0"
         >
           <rect
             height="300"
@@ -36,7 +36,7 @@ exports[`comparisonarea.js snapshot 1`] = `
           />
         </clippath>
         <clippath
-          id="axis-clip-id-0"
+          id="axis-clip-id-0.1"
         >
           <rect
             height="300"

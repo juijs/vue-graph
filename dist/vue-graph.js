@@ -10836,7 +10836,7 @@ var axis = {
                 }
 
                 // _clipId = _.createId("clip-id-");
-                _clipId = "axis-clip-id-" + chart.index;
+                _clipId = "axis-clip-id-" + chart.index + "." + cloneAxis.index;
 
                 _clipPath = chart.svg.clipPath({
                     id: _clipId
@@ -17163,6 +17163,17 @@ exports.default = {
             barPointBorderColor: "#fff",
             barDisableBackgroundOpacity: 0.4,
             barStackEdgeBorderWidth: 1,
+            rateBarFontSize: 11,
+            rateBarFontColor: "#333",
+            rateBarBorderColor: "none",
+            rateBarBorderWidth: 0,
+            rateBarBorderOpacity: 0,
+            rateBarBorderRadius: 5,
+            rateBarDisableBackgroundOpacity: 0.7,
+            rateBarTooltipFontSize: 10,
+            rateBarTooltipFontColor: "#333",
+            rateBarTooltipBackgroundColor: "#fff",
+            rateBarTooltipBorderColor: "#666666",
             gaugeBackgroundColor: "#ececec",
             gaugeArrowColor: "#a9a9a9",
             gaugeFontColor: "#666666",
@@ -17556,6 +17567,17 @@ exports.default = {
             barPointBorderColor: "#fff",
             barDisableBackgroundOpacity: 0.4,
             barStackEdgeBorderWidth: 1,
+            rateBarFontSize: 11,
+            rateBarFontColor: "#868686",
+            rateBarBorderColor: "none",
+            rateBarBorderWidth: 0,
+            rateBarBorderOpacity: 0,
+            rateBarBorderRadius: 5,
+            rateBarDisableBackgroundOpacity: 0.7,
+            rateBarTooltipFontSize: 10,
+            rateBarTooltipFontColor: "#868686",
+            rateBarTooltipBackgroundColor: "#222",
+            rateBarTooltipBorderColor: "#666666",
             gaugeBackgroundColor: "#3e3e3e",
             gaugeArrowColor: "#a6a6a6",
             gaugeFontColor: "#c5c5c5",
