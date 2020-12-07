@@ -1,5 +1,9 @@
 export default {
-    template: '<span style="display: none;"></span>',
+    render: function (createElement) {
+        return createElement("span", {
+        attrs: { style: "display: none" },
+        });
+    },
     beforeMount: function(e) {
         if(!this.$parent || !this.$parent.$vnode || this.$parent.$vnode.tag.indexOf("graph-") == -1) {
             throw new Error('[Vue Graph error]: Can only be used as child nodes.');
@@ -12,4 +16,4 @@ export default {
             this.brushes.push(i);
         }
     }
-}
+};
