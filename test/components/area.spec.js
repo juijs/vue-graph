@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphArea from '@/components/area'
 
 describe('area.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphArea, {
-            propsData: {
+            props: {
                 width: 800,
                 height: 400,
                 axisFullMode: true,

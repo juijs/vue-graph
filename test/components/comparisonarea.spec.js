@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphComparisonArea from '@/components/comparisonarea'
 
 describe('comparisonarea.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphComparisonArea, {
-            propsData: {
+            props: {
                 width: 600,
                 height: 400,
                 shape: 'step',

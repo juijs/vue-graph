@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphRangeBar from '@/components/rangebar'
 
 describe('rangebar.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphRangeBar, {
-            propsData: {
+            props: {
                 width: 600,
                 height: 400,
                 axisMin: 0,

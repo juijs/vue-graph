@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import Graph3DBar from '@/components/bar3d'
 
 describe('bar3d.js', () => {
     it('snapshot', () => {
         const wrapper = mount(Graph3DBar, {
-            propsData: {
+            props: {
                 width: 800,
                 height: 600,
                 axisMin: 0,

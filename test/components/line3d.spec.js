@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import Graph3DLine from '@/components/line3d'
 
 describe('line3d.js', () => {
     it('snapshot', () => {
         const wrapper = mount(Graph3DLine, {
-            propsData: {
+            props: {
                 width: 800,
                 height: 600,
                 axisMin: 0,

@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphBubble from '@/components/bubble'
 
 describe('bubble.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphBubble, {
-            propsData: {
+            props: {
                 width: 600,
                 height: 400,
                 axisMin: 0,

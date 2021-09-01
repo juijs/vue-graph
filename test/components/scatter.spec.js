@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphScatter from '@/components/scatter'
 
 describe('scatter.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphScatter, {
-            propsData: {
+            props: {
                 width: 600,
                 height: 400,
                 shape: 'cross',

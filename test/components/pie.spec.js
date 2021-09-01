@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphPie from '@/components/pie'
 
 describe('pie.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphPie, {
-            propsData: {
+            props: {
                 width: 500,
                 height: 500,
                 activeIndex: [ 0, 2 ],

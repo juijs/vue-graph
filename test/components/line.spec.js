@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphLine from '@/components/line'
 
 describe('line.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphLine, {
-            propsData: {
+            props: {
                 width: 800,
                 height: 400,
                 axisFullMode: true,

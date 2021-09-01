@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphStackBar from '@/components/stackbar'
 
 describe('stackbar.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphStackBar, {
-            propsData: {
+            props: {
                 width: 600,
                 height: 400,
                 fullMode: false,

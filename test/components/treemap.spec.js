@@ -1,10 +1,10 @@
-import { mount } from 'vue-test-utils'
+import { mount } from '@vue/test-utils'
 import GraphTreeMap from '@/components/treemap'
 
 describe('treemap.js', () => {
     it('snapshot', () => {
         const wrapper = mount(GraphTreeMap, {
-            propsData: {
+            props: {
                 width: 800,
                 height: 800,
                 textAlign: 'right',
