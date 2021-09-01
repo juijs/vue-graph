@@ -1,10 +1,14 @@
+import { h } from 'vue';
+
 export default {
-    render: function (createElement) {
-        return createElement("span", {
-        attrs: { style: "display: none" },
+    render() {
+        return h("span", {
+            attrs: { 
+                style: "display: none" 
+            },
         });
     },
-    beforeMount: function(e) {
+    beforeMount() {
         if(!this.$parent || !this.$parent.$vnode || this.$parent.$vnode.tag.indexOf("graph-") == -1) {
             throw new Error('[Vue Graph error]: Can only be used as child nodes.');
         }

@@ -1,3 +1,4 @@
+import { h } from 'vue';
 import JUI from 'juijs-chart'
 import ClassicTheme from 'juijs-chart/src/theme/classic.js'
 import DarkTheme from 'juijs-chart/src/theme/dark.js'
@@ -9,10 +10,10 @@ import CrossWidget from 'juijs-chart/src/widget/cross.js'
 JUI.use(ClassicTheme, DarkTheme, TitleWidget, LegendWidget, TooltipWidget, CrossWidget);
 
 export default {
-    beforeMount: function(e) {
+    beforeMount() {
         this.index = this.brushes.length;
     },
-    render: function(createElement) {
-        return createElement('div', this.$slots.default);
+    render() {
+        return h('div', this.$slots.default);
     }
 }
