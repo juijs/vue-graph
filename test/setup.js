@@ -16,7 +16,7 @@ const FAKECanvasElement = {
  * Using Sinon to stub the createElement function call with the original method
  * unless we match the 'canvas' argument.  If that's the case, return the Fake
  * Canvas object.
- */
+ */ㅜ
 sinon.stub(global.document, 'createElement')
     .callsFake(createElement)
     .withArgs('canvas')
