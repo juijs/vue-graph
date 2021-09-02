@@ -20,4 +20,5 @@ module.exports = {
         },
     },
     plugins: ['@babel/plugin-syntax-jsx'],
+    exclude: [/\/core-js\//],
 };
