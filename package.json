@@ -1,7 +1,7 @@
 {
   "name": "vue-graph",
   "productionName": "Vue Graph",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A library that provides various visualization elements for Vue.js",
   "main": "bundles/index.js",
   "files": [
