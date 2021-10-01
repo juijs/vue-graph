@@ -6,7 +6,7 @@ import WidgetNote from '../src/widgets/note.js'
 import WidgetLegend from '../src/widgets/legends.js'
 import WidgetTooltip from '../src/widgets/tooltip.js'
 
-createApp({
+const app = createApp({
     components: {
         [GraphArea.name]: GraphArea,
         [WidgetNote.name]: WidgetNote,
@@ -23,4 +23,7 @@ createApp({
             ]
         }
     }
-}).mount("#app");
+});
+
+app.config.compilerOptions.whitespace = 'preserve';
+app.mount("#app");

@@ -19,14 +19,14 @@ export default {
                 this.chart.axis(0).set(this.axisReverse ? 'y' : 'x', { domain: newVal });
                 this.chart.render();
             }, 
-            deep: false
+            deep: true
         },
         values: {
             handler(newVal, oldVal) { // watch it
                 this.chart.axis(0).update(this.convertToData(newVal));
                 this.chart.render();
             },
-            deep: false
+            deep: true
         },
         axisMin: {
             handler(newVal, oldVal) {
