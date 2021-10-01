@@ -2,7 +2,8 @@
 
 exports[`stackbar.js snapshot 1`] = `
 <div
-  style="position: relative; -webkit-user-select: none;"
+  names="MS,Apple,Google"
+  style="position: relative; user-select: none; webkit-user-select: none;"
   unselectable="on"
 >
   <svg

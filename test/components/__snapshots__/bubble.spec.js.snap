@@ -2,7 +2,7 @@
 
 exports[`bubble.js snapshot 1`] = `
 <div
-  style="position: relative; -webkit-user-select: none;"
+  style="position: relative; user-select: none; webkit-user-select: none;"
   unselectable="on"
 >
   <svg
