@@ -76,6 +76,7 @@ export default {
                 },
                 'click': function(obj, e) {
                     self.$emit('click', obj, e);
+                    self.$emit('select', obj, e);
                 },
                 'dblclick': function(obj, e) {
                     self.$emit('dblclick', obj, e);
